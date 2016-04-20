@@ -1,0 +1,136 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="tabs_height_dp">54dp</dimen>
+
+    <dimen name="list_divider_height">10dp</dimen>
+
+    <dimen name="txt_max_big_size_sp">28sp</dimen>
+    <dimen name="txt_big_size_sp">26sp</dimen>
+    <dimen name="txt_normal_size_sp">16sp</dimen>
+    <dimen name="txt_small_size_sp">12sp</dimen>
+
+    <dimen name="division_line_height">2dp</dimen>
+
+    <dimen name="img_margin_dp">2dp</dimen>
+    <dimen name="txt_margin_dp">1dp</dimen>
+    <dimen name="item_padding_dp">2dp</dimen>
+    <dimen name="item_icon_size">100dp</dimen>
+
+
+    <dimen name="item_height_dp">40dp</dimen>
+
+
+    <!-- item 之间的间距 -->
+    <dimen name="item_margin_normal">15dp</dimen>
+    <dimen name="item_margin_small">12dp</dimen>
+    <dimen name="item_margin_small_most">5dp</dimen>
+
+    <!-- icon 大小 -->
+    <dimen name="item_icon_size_normal">68dp</dimen>
+
+    <dimen name="item_icon_size_smaill">42dp</dimen>
+    <dimen name="item_icon_size_smaill_most">22dp</dimen>
+
+    <dimen name="item_icon_rect_width">101dp</dimen>
+    <dimen name="item_icon_rect_height">75dp</dimen>
+
+    <!-- item的高度 -->
+    <dimen name="item_height_normal">50dp</dimen>
+    <dimen name="item_height_small">22dp</dimen>
+
+    <!-- Preference -->
+    <dimen name="preference_padding_horizontal">15dp</dimen>
+    <dimen name="preference_category_height">46dp</dimen>
+
+    <dimen name="input_height">27dp</dimen>
+    <dimen name="input_padding_horizontal">@dimen/input_bg_radius</dimen>
+    <dimen name="input_padding_vertical">5dp</dimen>
+    <dimen name="input_bg_radius">13.5dp</dimen>
+
+    <dimen name="round_rectangle_large_radius">20dp</dimen>
+    <dimen name="round_rectangle_large_height">40dp</dimen>
+
+    <dimen name="title_bar_button_padding">5dp</dimen>
+
+    <dimen name="title_tab_height">48dp</dimen>
+    <dimen name="title_tab_indicator_padding_horizontal">48dp</dimen>
+    <dimen name="title_tab_indicator_padding_top">45dp</dimen>
+
+    <dimen name="home_item_padding_horizontal">12dp</dimen>
+    <dimen name="home_item_title_height">45dp</dimen>
+
+    <dimen name="tag_padding_horizontal">4dp</dimen>
+    <dimen name="tag_space_horizontal">6dp</dimen>
+
+    <dimen name="content_padding_horizontal">16dp</dimen>
+
+    <dimen name="action_bar_padding_horizontal">15dp</dimen>
+
+    <dimen name="text_pager_indicator_height">48dp</dimen>
+
+    <dimen name="pager_item_space_horizontal">10dp</dimen>
+    <dimen name="pager_item_space_vertical">22dp</dimen>
+
+    <dimen name="home_item_space_horizontal">10dp</dimen>
+    <dimen name="home_item_space_vertical">10dp</dimen>
+
+    <dimen name="area_item_thumb_width">164dp</dimen>
+    <dimen name="home_area_item_height">123.3dp</dimen>
+
+    <dimen name="merchant_info_padding">10dp</dimen>
+
+    <dimen name="user_info_small_space">6dp</dimen>
+
+    <dimen name="user_shares_padding_left">24dp</dimen>
+    <dimen name="user_shares_action_space">5dp</dimen>
+    <dimen name="user_shares_action_drawable_padding">2dp</dimen>
+
+    <dimen name="detail_item_content_padding_horizontal">10dp</dimen>
+    <dimen name="detail_item_content_padding_vertical">25dp</dimen>
+    <dimen name="shares_detail_summary_space_vertical">28dp</dimen>
+
+    <dimen name="payment_selection_layout_height">58dp</dimen>
+
+    <!-- Text size -->
+    <dimen name="text_size_normal">16sp</dimen>
+
+    <dimen name="merchant_rate_text">10sp</dimen>
+
+    <dimen name="user_name_text_small">13sp</dimen>
+
+    <dimen name="user_shares_action_text">11sp</dimen>
+
+    <dimen name="title_text">20sp</dimen>
+
+    <dimen name="goods_info_text">13sp</dimen>
+
+    <!-- 友盟 -->
+    <dimen name="body_padding_medium">10dp</dimen>
+    <dimen name="body_padding_large">10dp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_medium">18sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_xlarge">18sp</dimen>
+    <dimen name="speaker_image_size">36dp</dimen>
+    <dimen name="speaker_image_padding">8dp</dimen>
+    <dimen name="vendor_image_size">100dp</dimen>
+
+    <dimen name="actionbar_height">45dip</dimen>
+    <dimen name="actionbar_item_height">45dip</dimen>
+    <dimen name="actionbar_item_width">45dip</dimen>
+
+    <dimen name="top_filter_height">40dp</dimen>
+    <dimen name="top_filter_divider_padding">10dp</dimen>
+    <dimen name="top_filter_drop_item_height">45dp</dimen>
+
+    <!-- 字体-->
+    <dimen name="line_txt_size_big">15sp</dimen>
+    <dimen name="line_txt_size_normal">12sp</dimen>
+    <dimen name="line_txt_size_small">9sp</dimen>
+
+    <dimen name="title_bar_height">50dp</dimen>
+
+</resources>

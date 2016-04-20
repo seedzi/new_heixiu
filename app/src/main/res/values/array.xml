@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="tabs_names" tools:ignore="MissingTranslation">
+        <item>发现</item>
+        <item>消息</item>
+        <item>我的</item>
+    </string-array>
+</resources>

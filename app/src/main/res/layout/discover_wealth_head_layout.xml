@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.gougou.discover.CharmHeadLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:id="@+id/first_viewgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal">
+        <com.gougou.widget.CircleImageView
+            android:id="@+id/head_img_1"
+            android:layout_width="118dp"
+            android:layout_height="118dp"
+            android:src="@drawable/head_default"/>
+        <TextView
+            android:id="@+id/user_name_1"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安妮贝贝"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/charm_value_1"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/vip_grade_1"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="魅v11"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="#ffff00"
+            android:textSize="12sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/second_viewgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toLeftOf="@id/first_viewgroup"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="5dp"
+        android:gravity="center_horizontal">
+        <com.gougou.widget.CircleImageView
+            android:id="@+id/head_img_2"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:src="@drawable/head_default"/>
+        <TextView
+            android:id="@+id/user_name_2"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安妮贝贝"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/charm_value_2"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/vip_grade_2"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="魅v11"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="#ffff00"
+            android:textSize="12sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/thrid_viewgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/first_viewgroup"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_horizontal">
+        <com.gougou.widget.CircleImageView
+            android:id="@+id/head_img_3"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:src="@drawable/head_default"/>
+        <TextView
+            android:id="@+id/user_name_3"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="安妮贝贝"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/charm_value_3"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9999"
+            android:layout_alignParentRight="true"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/vip_grade_3"
+            android:layout_marginTop="5dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="魅v11"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="#ffff00"
+            android:textSize="12sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+</com.gougou.discover.CharmHeadLayout>

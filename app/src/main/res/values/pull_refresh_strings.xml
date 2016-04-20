@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- <string name="pull_to_refresh_pull_label">下拉刷新&#8230;</string> 
+    <string name="pull_to_refresh_release_label">松手刷新&#8230;</string>
+        <string name="pull_to_refresh_refreshing_label">加载中&#8230;</string>
+        <string name="pull_to_refresh_tap_label">点击刷新&#8230;</string>
+    -->
+
+  
+  <string name="pull_up_to_get_more" tools:ignore="MissingTranslation">上拉加载更多&#8230;</string>
+  <string name="pull_up_to_refresh_release_label" tools:ignore="MissingTranslation">松手加载更多&#8230;</string>
+  <string name="pull_up_refresh_refreshing_label" tools:ignore="MissingTranslation,MissingTranslation">正在加载更多&#8230;</string>
+  <string name="pull_to_refresh_update_tiem" translatable="false">更新于:</string>
+</resources>

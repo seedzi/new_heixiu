@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/position"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.gougou.widget.CircleImageView
+        android:id="@+id/head_img"
+        android:layout_toRightOf="@id/position"
+        android:layout_marginLeft="10dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/head_default"/>
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_toRightOf="@id/head_img"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="安妮贝贝"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/vip_grade"
+        android:layout_toRightOf="@id/user_name"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="魅v11"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="#ffff00"
+        android:textSize="12sp"
+        android:textColor="#ffffff"/>
+
+    <TextView
+        android:id="@+id/charm_value"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1111"
+        android:layout_alignParentRight="true"
+        android:textSize="18sp"/>
+
+
+</RelativeLayout>

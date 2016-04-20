@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- top -->
+    <!--<include-->
+    <!--/>-->
+
+    <!-- bottom -->
+    <com.gougou.main.Tabs
+        android:id="@+id/container_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tabs_height_dp"
+        android:layout_alignParentBottom="true"
+        android:background="#252525"
+        android:gravity="center_vertical"/>
+
+    <!--
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/action_bar_divider"
+        android:layout_above="@id/container_tabs"/>
+    -->
+    <!-- center -->
+    <LinearLayout
+        android:id="@+id/container_body_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/container_tabs"/>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<resources>
+
+    <style name="Widget" />
+    <style name="TextAppearance" />
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <!--
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>-->
+
+
+    <style name="Theme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TitleTabPageIndicator</item>
+    </style>
+
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/color_titlebar_background</item>
+    </style>
+
+    <!-- 圆形控件 -->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_padding" format="dimension" /> <!-- huzhi -->
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+    <!-- 发现 -->
+    <style name="ListView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#ffffff</item><!-- @color/background_dark_gray -->
+        <item name="android:divider">@color/background_dark_gray</item>
+        <item name="android:dividerHeight">0px</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:listSelector">@android:color/transparent</item>
+    </style>
+
+
+    <!-- 第二步设置主题 -->
+    <style name="Widget.TitleTabPageIndicator">
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/title_tab_indicator</item>
+        <item name="android:textAppearance">@style/TextAppearance.TitleTab</item>
+    </style>
+
+    <style name="TextAppearance.TitleTab">
+        <item name="android:textSize">@dimen/line_txt_size_big</item>
+    </style>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GouGou</string>
+
+    <string name="warning_network_unavailable" translatable="false">网络不给力呢～</string>
+
+    <!-- 发现 -->
+    <string name="discover_online">在线</string>
+    <string name="discover_charm">魅力</string>
+    <string name="discover_wealth">财富</string>
+
+    <!-- 消息 -->
+    <string name="chat_message">消息</string>
+    <string name="chat_friends">好友</string>
+</resources>

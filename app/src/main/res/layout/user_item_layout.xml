@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:paddingLeft="13dp"
+    android:paddingRight="12dp"
+    android:paddingBottom="10dp"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_toRightOf="@id/img"
+        android:layout_marginLeft="13dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:textSize="@dimen/line_txt_size_big"
+        android:text="财富等级"/>
+
+    <ImageView
+        android:id="@+id/itme_icon"
+        android:layout_toRightOf="@id/item_name"
+        android:layout_marginLeft="7dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/tag"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/user_item_tag"/>
+
+    <TextView
+        android:id="@+id/tag_txt"
+        android:layout_toLeftOf="@id/tag"
+        android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#a6a6a6"
+        android:textSize="@dimen/line_txt_size_normal"
+        android:text=""/>
+
+</RelativeLayout>

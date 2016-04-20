@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <color name="home_allsub_child_topnews">#595959</color>
+    
+    <color name="color_pink">#FF6666</color>
+    
+    <color name="color_main">#c96cf1</color>
+
+    <color name="color_black">#000000</color>
+    
+     <color name="color_gray">#969696</color>
+
+    <color name="color_gray_light">#b4b4b4</color>
+
+     <color name="color_gray_dark">#8c8c8c</color>
+     
+     <color name="color_white">#FFFFFF</color>
+     
+     <color name="color_green">#66CC66</color>
+     
+     <color name="color_pick_high">#850d85</color>
+    
+     <color name="color_titlebar_background">#f9f9f9</color>
+     
+      <color name="color_titlebar_title">#1e1e1e</color>
+      
+      <color name="item_txt_color">#c1c1c1</color>
+      
+      
+      <color name="color_payment_cancel">#989898</color>
+      <color name="color_payment_cancel_press">#333333</color>
+      
+      <!-- 全局背景 -->
+      <color name="color_background">#f6f6f6</color>
+     
+      <color name="background_dark_gray">#e2e2e2</color>
+  
+      <color name="color_user_info_line_gray">#b4b4b4</color>
+      <color name="color_user_info_line">#c96cf1</color>
+      
+      <!-- tabs -->
+      <color name="color_button_normal">#00b8d0</color>
+      <color name="color_button_checked">#ffffff</color>
+      
+      <color name="color_transparent">#00000000</color>
+
+    <color name="username">#1e1e1e</color>
+    <color name="date">#c5c5c5</color>
+
+    <color name="title_tab_indicator_selected">#00b8d0</color><!-- c96cf1 -->
+
+    <color name="list_item_background">@color/color_white</color>
+
+    <color name="merchant_title_text">#787878</color>
+
+    <color name="cancel_text_normal">#373737</color>
+    <color name="cancel_text_pressed">#ffffff</color>
+
+    <color name="share_dialog_title">#969696</color>
+    <color name="share_dialog_grid_item_text">#787878</color>
+
+      <color name="drop_item_text_normal">#000000</color>
+      <color name="drop_item_text_checked">#d366f3</color>
+      
+      <color name="filter_item_text_normal">#373737</color>
+      <color name="filter_title_text_normal">#787878</color>
+      <color name="filter_text_activated">#d366f3</color>
+      
+      <color name="divider">#b2b2b2</color>
+      <color name="action_bar_divider">#e4e4e4</color>
+      
+      <color name="semi_transparent">#40000000</color>
+      <color name="semi_transparent_white">#E6FFFFFF</color>
+      
+      <color name="title_text">#727272</color>
+      
+      <!-- 友盟 -->
+          <color name="body_text_1">#ff000000</color>
+    <color name="body_text_2">#99000000</color>
+    <color name="body_text_disabled">#66000000</color>
+    <color name="body_text_1_inverse">#ffffffff</color>
+    <color name="body_text_2_inverse">#99ffffff</color>
+    <color name="accent_1">#ff29549f</color>
+    <color name="hyperlink">#ffff549f</color>
+    <color name="background_1">#ffffffff</color>
+    <color name="whats_on_separator">#4d000000</color>
+    <color name="all_track_color">#ff222222</color>
+    <color name="block_column_1">#ff0fabff</color>
+    <color name="block_column_2">#ffdf1831</color>
+    <color name="block_column_3">#ff009939</color>
+
+
+    <!--   ######################### 嘿咻颜色 #######################   -->
+    <!-- app 主题颜色 -->
+    <color name="app_theme_color">#00b8d0</color>
+    <!-- 分割线颜色 -->
+    <color name="divide_line_color">#b2b2b2</color>
+
+    <color name="tab_txt_normal">#717171</color>
+    <color name="tab_txt_check">#d6d6d6</color>
+</resources>

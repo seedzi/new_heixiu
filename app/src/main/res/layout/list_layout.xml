@@ -1,0 +1,16 @@
+<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:gravity="center">
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/list"
+        style="@style/ListView" />
+
+  <include  android:id="@+id/loading_layout"
+      layout="@layout/loading_layout"
+      android:visibility="visible"/>
+  <include  android:id="@+id/empty_view"
+      layout="@layout/empty_layout"
+      android:visibility="gone"/> 
+</FrameLayout>
