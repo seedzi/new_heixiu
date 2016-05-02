@@ -47,7 +47,6 @@ public class EaseChatExtendMenu extends GridView{
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EaseChatExtendMenu);
         int numColumns = ta.getInt(R.styleable.EaseChatExtendMenu_numColumns, 4);
         ta.recycle();
-        
         setNumColumns(numColumns);
         setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
         setGravity(Gravity.CENTER_VERTICAL);

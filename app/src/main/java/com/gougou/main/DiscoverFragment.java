@@ -16,6 +16,7 @@ import com.gougou.bean.Friend;
 import com.gougou.discover.CharmAdapter;
 import com.gougou.discover.OnLineAdapter;
 import com.gougou.discover.WealthAdapter;
+import com.gougou.heixiubroadcast.HeixiuBroadCastPage;
 import com.gougou.widget.LayoutPagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -29,7 +30,8 @@ import viewpagerindicator.PageIndicator;
 /**
  * Created by huzhi on 16-3-21.
  */
-public class DiscoverFragment extends Fragment implements ViewPager.OnPageChangeListener ,PullToRefreshBase.OnRefreshListener, PullToRefreshBase.OnLastItemVisibleListener {
+public class DiscoverFragment extends Fragment implements
+        ViewPager.OnPageChangeListener ,PullToRefreshBase.OnRefreshListener, PullToRefreshBase.OnLastItemVisibleListener ,View.OnClickListener{
 
     private ViewGroup mRootView;
     private ViewPager mViewPager;
@@ -59,12 +61,14 @@ public class DiscoverFragment extends Fragment implements ViewPager.OnPageChange
         mViewPager = (ViewPager) mRootView.findViewById(R.id.viewpager);
         mDiscoverAdapter = new DiscoverPagerAdapter();
         mOnLineAdapter = new OnLineAdapter(getActivity());
+        mOnLineAdapter.setActivity(getActivity());
         mCharmAdapter = new CharmAdapter(getActivity());
         mWealthAdapter = new WealthAdapter(getActivity());
         mViewPager.setAdapter(mDiscoverAdapter);
         PageIndicator indicator = (PageIndicator) mRootView.findViewById(R.id.indicator);
         indicator.setViewPager(mViewPager);
         indicator.setOnPageChangeListener(this);
+        mRootView.findViewById(R.id.heixiu_broadcast).setOnClickListener(this);
     }
 
     private void initData() {
@@ -126,6 +130,16 @@ public class DiscoverFragment extends Fragment implements ViewPager.OnPageChange
 //            mPullView.onRefreshComplete();
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.heixiu_broadcast:
+                HeixiuBroadCastPage.startActivity(getActivity());
+                break;
+        }
+    }
 
     // ===============================================================================================
     // page adpter

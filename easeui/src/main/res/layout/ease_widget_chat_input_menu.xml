@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" /> -->
     
-    <FrameLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/primary_menu_container"
-        >
-    </FrameLayout>
+        android:orientation="vertical">
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/extend_menu_container"
@@ -32,9 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="9dp"
-            hyphenate:numColumns="4" />
+            hyphenate:numColumns="4"
+            android:visibility="gone"/>
 
-        <FrameLayout 
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/emojicon_menu_container"

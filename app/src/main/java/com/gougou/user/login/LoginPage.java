@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gougou.R;
 import com.gougou.im.ImManager;
+import com.gougou.main.MainActivity;
 import com.gougou.utils.UiUtil;
 
 /**
@@ -18,32 +20,25 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
 
     private ViewGroup mRootLayout;
 
-    private EditText mUserNameEt;
-
-    private EditText mPasswordEt;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_login_page);
         mRootLayout = (ViewGroup)findViewById(R.id.root_layout);
-        UiUtil.findViewById(mRootLayout,R.id.login_bt).setOnClickListener(this);
-        mUserNameEt = (EditText)UiUtil.findViewById(mRootLayout, R.id.user_name);
-        mPasswordEt = (EditText)UiUtil.findViewById(mRootLayout, R.id.password);
+        UiUtil.findViewById(mRootLayout,R.id.qq_login_bt).setOnClickListener(this);
+        UiUtil.findViewById(mRootLayout,R.id.wechat_login_bt).setOnClickListener(this);
     }
 
+    @Override
     public void onClick(View v){
         int id = v.getId();
         switch (id){
-            case R.id.login_bt:
-                String username = mUserNameEt.getText().toString();
-                String password = mPasswordEt.getText().toString();
-                ImManager.getInstance().login(username, password, new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),"登陆成功", 0).show();
-                    }
-                });
+            case R.id.qq_login_bt:
+                MainActivity.startActivity(this);
+                break;
+            case R.id.wechat_login_bt:
+
                 break;
         }
     }

@@ -1,6 +1,8 @@
 package com.gougou.discover;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +10,12 @@ import android.widget.ArrayAdapter;
 
 import com.gougou.R;
 import com.gougou.bean.Friend;
+import com.gougou.chat.ChatPage;
 
 /**
  * Created by huzhi on 16-4-6.
  */
-public class OnLineAdapter extends ArrayAdapter<Friend> {
+public class OnLineAdapter extends ArrayAdapter<Friend> implements View.OnClickListener{
 
 
     public OnLineAdapter(Context context) {
@@ -41,7 +44,20 @@ public class OnLineAdapter extends ArrayAdapter<Friend> {
 //        UiUtil.findImageViewById(itemView,R.id.head_img).setImageResource(R.drawable.head_default);
 //        UiUtil.findTextViewById(itemView, R.id.user_name).setText("女人");
 //        UiUtil.findTextViewById(itemView, R.id.description).setText("说明");
+
+        itemView.setOnClickListener(this);
+
         return itemView;
     }
 
+    FragmentActivity mAc;
+
+    public void setActivity(FragmentActivity ac){
+        mAc = ac;
+    }
+
+    @Override
+    public void onClick(View v) {
+        ChatPage.startActivity(mAc);
+    }
 }

@@ -17,6 +17,16 @@
         android:gravity="center_vertical"/>
 
     <!--
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tabs_height_dp">
+        <com.gougou.widget.DotTextView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="1"/>
+    </FrameLayout> -->
+    <!--
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"

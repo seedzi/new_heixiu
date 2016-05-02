@@ -145,6 +145,8 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
             Context context = container.getContext();
             View itemView = LayoutInflater.from(context).inflate(R.layout.list_layout, container, false);
 
+            View headLayout = LayoutInflater.from(context).inflate(R.layout.friend_list_head_layout,null);
+
             ViewHolder holder = new ViewHolder(itemView);
             itemView.setTag(holder);
             PullToRefreshListView pullView = holder.mPullToRefreshListView;
@@ -156,6 +158,7 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
                     adapter = mMessageAdapter;
                     break;
                 case POSITION_FRIENDS:
+                    pullView.getRefreshableView().addHeaderView(headLayout);
                     adapter = mFriendsAdapter;
                     break;
             }

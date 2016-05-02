@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gougou.R;
+import com.gougou.user.CharmLevelActivity;
 import com.gougou.user.UserDetailActivity;
 import com.gougou.user.WalletActivity;
 import com.gougou.utils.UiUtil;
@@ -66,6 +67,7 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         UiUtil.findImageViewById(mCharmValueLayout, R.id.img).setImageResource(R.drawable.charm_icon);
         UiUtil.findImageViewById(mCharmValueLayout, R.id.itme_icon).setImageResource(R.drawable.vip_grade_1);
         UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setText("等级 2");
+        mCharmValueLayout.setOnClickListener(this);
 
         mWalletLayout = (ViewGroup) mRootView.findViewById(R.id.wallet);
         UiUtil.findTextViewById(mWalletLayout, R.id.item_name).setText("钱包");
@@ -77,14 +79,18 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         UiUtil.findTextViewById(mInviteFriendsLayout, R.id.item_name).setText("邀请朋友");
         UiUtil.findImageViewById(mInviteFriendsLayout, R.id.img).setImageResource(R.drawable.add_friends_icon);
         UiUtil.findTextViewById(mInviteFriendsLayout, R.id.tag_txt).setText("邀请返现金");
+        mInviteFriendsLayout.setOnClickListener(this);
 
         mSetUpLayout = (ViewGroup) mRootView.findViewById(R.id.feedback);
         UiUtil.findTextViewById(mSetUpLayout, R.id.item_name).setText("意见反馈");
         UiUtil.findImageViewById(mSetUpLayout, R.id.img).setImageResource(R.drawable.feedback_icon);
+        mSetUpLayout.setOnClickListener(this);
+
 
         mFeedbackLayout = (ViewGroup) mRootView.findViewById(R.id.setup);
         UiUtil.findTextViewById(mFeedbackLayout, R.id.item_name).setText("设置");
         UiUtil.findImageViewById(mFeedbackLayout, R.id.img).setImageResource(R.drawable.settings_icon);
+        mFeedbackLayout.setOnClickListener(this);
 
         UiUtil.findImageViewById(mRootView,R.id.user_detail).setOnClickListener(this);
 
@@ -98,6 +104,8 @@ public class UserFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if(v==mWalletLayout){
             WalletActivity.startActivity(getActivity());
+        } else if(v==mCharmValueLayout){
+            CharmLevelActivity.startActivity(getActivity());
         }
         int id = v.getId();
         switch (id){

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <TextView
+        android:layout_marginTop="23dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:text="咻广播"/>
+
+    <TextView
+        android:layout_marginTop="91dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#b1b1b1"
+        android:textSize="10sp"
+        android:text="当前有198位女生在线,预计1分09秒回应你的广播."/>
+    
+    <View
+        android:layout_marginTop="17dp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#33ffffff"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:padding="16dp"
+        android:textColor="#ffffff"
+        android:textSize="13sp"
+        android:hint="说说想和对方聊什么..."/>
+
+    <TextView
+        android:layout_marginTop="38dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="发布"
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="每日免费发布一次"
+        android:textSize="10sp"
+        android:textColor="#676767"/>
+</LinearLayout>
