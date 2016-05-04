@@ -8,22 +8,22 @@
 
     <ImageView
         android:id="@+id/qq_login_bt"
-        android:layout_marginLeft="40dp"
+        android:layout_marginLeft="34dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="157dp"
-        android:src="@drawable/qq_login_bt"/>
+        android:layout_marginBottom="120dp"
+        android:src="@drawable/qq_login_bt_selector"/>
 
     <ImageView
         android:id="@+id/wechat_login_bt"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="34dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="157dp"
-        android:src="@drawable/wechat_login_bt"/>
+        android:layout_marginBottom="120dp"
+        android:src="@drawable/wechat_login_bt_selector"/>
 
 </RelativeLayout>

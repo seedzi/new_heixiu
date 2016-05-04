@@ -37,5 +37,5 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="bottom|right"
-        android:src="@drawable/heixiu_broadcast_bt_shape"/>
+        android:src="@drawable/heixiu_broadcast_bt_selector"/>
 </FrameLayout>

@@ -7,8 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
-        android:paddingLeft="12sp"
-        android:paddingRight="12sp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:background="#ffffff">
         <TextView
             android:id="@+id/back"

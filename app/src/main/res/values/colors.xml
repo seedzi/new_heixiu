@@ -105,4 +105,11 @@
     <color name="color_user_info_line">#1edde6</color>
     <!-- 小红点 -->
     <color name="dot_color">#fd1313</color> <!-- 提示小红点 -->
+
+
+
+    <color name="heixiu_broadcast_press_color">#44000000</color>
+
+    <color name="heixiu_broadcast_submit_bt_color">#00b8d0</color>
+
 </resources>

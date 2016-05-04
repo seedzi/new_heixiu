@@ -4,23 +4,47 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:background="@drawable/heixiu_broadcast_bg">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height">
+        <TextView
+            android:id="@+id/back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关闭"
+            android:textSize="14sp"
+            android:textColor="#797979"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="咻广播"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/line_txt_size_big"/>
+    </RelativeLayout>
 
     <TextView
-        android:layout_marginTop="23dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:text="咻广播"/>
-
-    <TextView
-        android:layout_marginTop="91dp"
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#b1b1b1"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:text="当前有198位女生在线,预计1分09秒回应你的广播."/>
+
+    <com.gougou.widget.HeixiuHeadImgLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="17dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
     
     <View
         android:layout_marginTop="17dp"
@@ -29,25 +53,36 @@
         android:background="#33ffffff"/>
 
     <EditText
+        android:layout_marginTop="25dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="230dp"
         android:padding="16dp"
         android:textColor="#ffffff"
         android:textSize="13sp"
-        android:hint="说说想和对方聊什么..."/>
+        android:gravity="left|top"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColorHint="#ffffff"
+        android:hint="说说想和对方聊什么..."
+        android:background="@drawable/heixiu_broadcast_edit_bg"/>
 
     <TextView
         android:layout_marginTop="38dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:text="发布"
-        android:gravity="center"/>
+        android:textSize="15sp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:background="@drawable/heixiu_broadcast_submit_bt"/>
 
     <TextView
         android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="每日免费发布一次"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textColor="#676767"/>
 </LinearLayout>

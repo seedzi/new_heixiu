@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 
 import com.gougou.R;
 import com.gougou.user.CharmLevelActivity;
+import com.gougou.user.SetupPage;
 import com.gougou.user.UserDetailActivity;
 import com.gougou.user.WalletActivity;
+import com.gougou.user.invitation.InvitationPage;
 import com.gougou.utils.UiUtil;
 
 /**
@@ -111,6 +113,12 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         switch (id){
             case R.id.user_detail:
                 UserDetailActivity.startActivity(getActivity());
+                break;
+            case R.id.invite_friends:
+                InvitationPage.startActivity(getActivity());
+                break;
+            case R.id.setup:
+                SetupPage.startActivity(getActivity());
                 break;
         }
     }

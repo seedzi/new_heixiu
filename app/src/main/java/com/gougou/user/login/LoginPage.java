@@ -35,10 +35,12 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
         int id = v.getId();
         switch (id){
             case R.id.qq_login_bt:
+                finish();
                 MainActivity.startActivity(this);
                 break;
             case R.id.wechat_login_bt:
-
+                finish();
+                MainActivity.startActivity(this);
                 break;
         }
     }
