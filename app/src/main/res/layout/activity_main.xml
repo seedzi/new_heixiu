@@ -8,7 +8,7 @@
     <!--/>-->
 
     <!-- bottom -->
-    <com.gougou.main.Tabs
+    <com.xiuxiu.main.Tabs
         android:id="@+id/container_tabs"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tabs_height_dp"

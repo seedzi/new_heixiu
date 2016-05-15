@@ -6,27 +6,29 @@
     android:paddingBottom="2dip"
     android:paddingTop="2dip" >
 
+    <!--
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="@color/gray_normal" />
-
+    -->
     <LinearLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#aaffffff"
+
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingTop="4dp" >
+        android:paddingTop="4dp" ><!-- android:background="#aaffffff" -->
 
+        <!--
         <Button
             android:id="@+id/btn_set_mode_voice"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginLeft="6dp"
             android:background="@drawable/ease_chatting_setmode_voice_btn"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btn_set_mode_keyboard"
@@ -35,7 +37,7 @@
             android:layout_marginLeft="6dp"
             android:background="@drawable/ease_chatting_setmode_keyboard_btn"
             android:visibility="gone" />
-
+            -->
         <LinearLayout
             android:id="@+id/btn_press_to_speak"
             android:layout_width="0dp"
@@ -69,26 +71,26 @@
             android:gravity="bottom" >
 
             <EditText
+                android:hint="输入内容..."
                 android:id="@+id/et_sendmessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="35dip"
-                android:background="@null"
+                android:background="@drawable/ease_chat_edit_bg_shape"
                 android:maxLines="3"
                 android:minHeight="40dp"
                 android:paddingBottom="3dp"
-                android:paddingLeft="1dp"
+                android:paddingLeft="10dp"
                 android:paddingRight="1dp"
                 android:paddingTop="3dp"
-                android:textSize="18sp" />
-
+                android:textSize="18sp" /><!-- android:layout_marginRight="35dip" -->
+            <!--
             <RelativeLayout 
                 android:id="@+id/rl_face"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                >
+
             <ImageView
                 android:id="@+id/iv_face_normal"
                 android:layout_width="24dip"
@@ -96,7 +98,7 @@
                 android:layout_margin="1dip"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ease_chatting_biaoqing_btn_normal"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_face_checked"
@@ -105,29 +107,117 @@
                 android:layout_margin="1dip"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ease_chatting_biaoqing_btn_enable"
-                android:visibility="invisible" />
+                android:visibility="gone" />
             
-            </RelativeLayout>
+            </RelativeLayout>-->
         </RelativeLayout>
 
+        <!--
         <Button
             android:id="@+id/btn_more"
             android:layout_width="32dip"
             android:layout_height="32dip"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ease_type_select_btn" />
+            android:background="@drawable/ease_type_select_btn"
+            android:visibility="gone"/>  -->
 
         <Button
             android:id="@+id/btn_send"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginRight="4dp"
-            android:background="@drawable/ease_chat_send_btn_selector"
-            android:text="@string/button_send"
+            android:background="@drawable/ease_chat_send_selector"
             android:textColor="#666666"
             android:textSize="16sp"
-            android:visibility="gone" />
+            /><!-- android:text="@string/button_send" android:background="@drawable/ease_chat_send_btn_selector" android:visibility="gone"  -->
     </LinearLayout>
 
+    <!-- 第二行 -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ease_chat_voice"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ease_chat_voice"/>
+
+        <ImageView
+            android:id="@+id/ease_chat_voice_keyboard"
+            android:layout_toRightOf="@id/ease_chat_voice"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ease_chat_voice_checked"
+            android:visibility="gone" />
+
+
+        <ImageView
+            android:id="@+id/ease_chat_video"
+            android:layout_toRightOf="@id/ease_chat_voice_keyboard"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ease_chat_video_selector"/>
+
+        <ImageView
+            android:id="@+id/ease_chat_pic"
+            android:layout_toRightOf="@id/ease_chat_video"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ease_chat_pic_selector"/>
+        <RelativeLayout
+            android:id="@+id/rl_face"
+            android:layout_toRightOf="@id/ease_chat_pic"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp">
+            <ImageView
+                android:id="@+id/ease_chat_expression"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ease_chat_expression"/>
+
+            <ImageView
+                android:id="@+id/ease_chat_expression_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ease_chat_expression_press"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/ease_chat_heixiu"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ease_chat_xiuxiu_selector"/>
+
+        <ImageView
+            android:id="@+id/ease_chat_gift"
+            android:layout_toLeftOf="@id/ease_chat_heixiu"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="9dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ease_chat_gift_selector"/>
+    </RelativeLayout>
 </LinearLayout>

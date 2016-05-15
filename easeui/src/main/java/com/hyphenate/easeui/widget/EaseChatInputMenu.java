@@ -18,7 +18,7 @@ import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.model.EaseDefaultEmojiconDatas;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
-import com.hyphenate.easeui.widget.EaseChatExtendMenu.EaseChatExtendMenuItemClickListener;
+import com.hyphenate.easeui.widget.EaseChatExtendMenu2.EaseChatExtendMenuItemClickListener;
 import com.hyphenate.easeui.widget.EaseChatPrimaryMenuBase.EaseChatPrimaryMenuListener;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenuBase;
@@ -35,7 +35,7 @@ public class EaseChatInputMenu extends LinearLayout {
     FrameLayout emojiconMenuContainer;
     protected EaseChatPrimaryMenuBase chatPrimaryMenu;
     protected EaseEmojiconMenuBase emojiconMenu;
-    protected EaseChatExtendMenu chatExtendMenu;
+//    protected EaseChatExtendMenu chatExtendMenu;
     protected FrameLayout chatExtendMenuContainer;
     protected LayoutInflater layoutInflater;
 
@@ -43,6 +43,9 @@ public class EaseChatInputMenu extends LinearLayout {
     private ChatInputMenuListener listener;
     private Context context;
     private boolean inited;
+
+    //huzhi//
+    protected EaseChatExtendMenu2 chatExtendMenu;
 
     public EaseChatInputMenu(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
@@ -67,7 +70,10 @@ public class EaseChatInputMenu extends LinearLayout {
         chatExtendMenuContainer = (FrameLayout) findViewById(R.id.extend_menu_container);
 
          // 扩展按钮栏
-         chatExtendMenu = (EaseChatExtendMenu) findViewById(R.id.extend_menu);
+//         chatExtendMenu = (EaseChatExtendMenu) findViewById(R.id.extend_menu);
+
+        //huzhi
+        chatExtendMenu = (EaseChatExtendMenu2) layoutInflater.inflate(R.layout.ease_layout_chat_primary_menu2, null);
     }
 
     /**
@@ -84,7 +90,7 @@ public class EaseChatInputMenu extends LinearLayout {
             chatPrimaryMenu = (EaseChatPrimaryMenu) layoutInflater.inflate(R.layout.ease_layout_chat_primary_menu, null);
         }
         primaryMenuContainer.addView(chatPrimaryMenu);
-        primaryMenuContainer.addView(layoutInflater.inflate(R.layout.ease_layout_chat_primary_menu2, null));//huzhi
+
         // 表情栏，没有自定义的用默认的
         if(emojiconMenu == null){
             emojiconMenu = (EaseEmojiconMenu) layoutInflater.inflate(R.layout.ease_layout_emojicon_menu, null);
@@ -128,10 +134,10 @@ public class EaseChatInputMenu extends LinearLayout {
     public EaseChatPrimaryMenuBase getPrimaryMenu(){
         return chatPrimaryMenu;
     }
-    
+    /*
     public EaseChatExtendMenu getExtendMenu(){
         return chatExtendMenu;
-    }
+    }*/
     
     public EaseEmojiconMenuBase getEmojiconMenu(){
         return emojiconMenu;
@@ -150,10 +156,11 @@ public class EaseChatInputMenu extends LinearLayout {
      * @param listener
      *            item点击事件
      */
+    /*
     public void registerExtendMenuItem(String name, int drawableRes, int itemId,
             EaseChatExtendMenuItemClickListener listener) {
         chatExtendMenu.registerMenuItem(name, drawableRes, itemId, listener);
-    }
+    }*/
 
     /**
      * 注册扩展菜单的item
@@ -167,10 +174,18 @@ public class EaseChatInputMenu extends LinearLayout {
      * @param listener
      *            item点击事件
      */
+    /*
     public void registerExtendMenuItem(int nameRes, int drawableRes, int itemId,
             EaseChatExtendMenuItemClickListener listener) {
         chatExtendMenu.registerMenuItem(nameRes, drawableRes, itemId, listener);
+    }*/
+
+    // ======================================= huzhi ==================================================//
+    public void registerExtendItem(int itemId,
+                                       EaseChatPrimaryMenu.EaseChatExtendItemClickListener listener) {
+        ((EaseChatPrimaryMenu)chatPrimaryMenu).registerMenuItems(itemId, listener);
     }
+
 
 
     protected void processChatMenu() {
@@ -210,16 +225,17 @@ public class EaseChatInputMenu extends LinearLayout {
         emojiconMenu.setEmojiconMenuListener(new EaseEmojiconMenuListener() {
             @Override
             public void onExpressionClicked(EaseEmojicon emojicon) {
-                if(emojicon.getType() != EaseEmojicon.Type.BIG_EXPRESSION){
-                    if(emojicon.getEmojiText() != null){
-                        chatPrimaryMenu.onEmojiconInputEvent(EaseSmileUtils.getSmiledText(context,emojicon.getEmojiText()));
+                if (emojicon.getType() != EaseEmojicon.Type.BIG_EXPRESSION) {
+                    if (emojicon.getEmojiText() != null) {
+                        chatPrimaryMenu.onEmojiconInputEvent(EaseSmileUtils.getSmiledText(context, emojicon.getEmojiText()));
                     }
-                }else{
-                    if(listener != null){
+                } else {
+                    if (listener != null) {
                         listener.onBigExpressionClicked(emojicon);
                     }
                 }
             }
+
             @Override
             public void onDeleteImageClicked() {
                 chatPrimaryMenu.onEmojiconDeleteEvent();

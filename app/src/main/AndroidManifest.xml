@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gougou" >
+    package="com.xiuxiu" >
+    <!--  <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
 
-    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -20,9 +20,16 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <application
-        android:name="com.gougou.GougouApplication"
+        android:name="com.xiuxiu.GougouApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -47,100 +54,102 @@
 
         <activity
             android:theme="@style/Theme"
-            android:name=".main.MainActivity"
+            android:name="com.xiuxiu.main.MainActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 邀请-->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.invitation.InvitationPage"
+            android:name="com.xiuxiu.user.invitation.InvitationPage"
             android:label="@string/app_name">
         </activity>
         HeixiuBroadCastSettingsPage
 
-        <!-- 嘿咻设置 -->
+        <!-- 嘿咻设置  (价格设置) -->
         HeixiuSettingsPage
         <activity
             android:theme="@style/Theme"
-            android:name=".user.HeixiuSettingsPage"
+            android:name="com.xiuxiu.user.HeixiuSettingsPage"
             android:label="@string/app_name">
         </activity>
         <!-- 咻广播设置 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".heixiubroadcast.HeixiuBroadCastSettingsPage"
+            android:name="com.xiuxiu.heixiubroadcast.HeixiuBroadCastSettingsPage"
             android:label="@string/app_name">
         </activity>
         <!-- 咻广播 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".heixiubroadcast.HeixiuBroadCastPage"
+            android:name="com.xiuxiu.heixiubroadcast.HeixiuBroadCastPage"
             android:label="@string/app_name">
         </activity>
         <!-- 魅力等级 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.CharmLevelActivity"
+            android:name="com.xiuxiu.user.CharmLevelActivity"
             android:label="@string/app_name">
         </activity>
         <!-- 钱包页面 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.WalletActivity"
+            android:name="com.xiuxiu.user.WalletActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 钱包提现 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.WalletCashActivity"
+            android:name="com.xiuxiu.user.WalletCashActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 拉黑举报 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.PullBlackReportActivity"
+            android:name="com.xiuxiu.user.PullBlackReportActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 充值 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.RechargeActivity"
+            android:name="com.xiuxiu.user.RechargeActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户详情页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.gougou.user.UserDetailActivity"
+            android:name="com.xiuxiu.user.UserDetailActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户注册页 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.register.RegisterPage"
+            android:name="com.xiuxiu.user.register.RegisterPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户登陆 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.login.LoginPage"
+            android:name="com.xiuxiu.user.login.LoginPage"
             android:label="@string/app_name">
+            <!-- -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <!-- 用户资料修改 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.login.PersonalDataPage"
+            android:name="com.xiuxiu.user.login.PersonalDataPage"
             android:label="@string/app_name">
 
         </activity>
@@ -148,16 +157,66 @@
         <!-- 聊天祥情页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.gougou.chat.ChatPage"
+            android:name="com.xiuxiu.chat.ChatPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 设置 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.gougou.user.SetupPage"
+            android:name="com.xiuxiu.user.SetupPage"
             android:label="@string/app_name">
         </activity>
+
+        <!-- 咻羞任务 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name=".xiuxiutask.XiuxiuTaskPage"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
+        <!-- 环信页面  -->
+        <!-- choose video -->
+        <activity
+            android:name="com.xiuxiu.chat.im.ImageGridActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name="com.xiuxiu.chat.im.RecorderVideoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+
+        <!--    友盟    -->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:theme="@style/Theme.UMDefault"
+            android:excludeFromRecents="true"/>
+        <!-- ###################注册SDK使用的Activity###################### -->
+        <activity
+            android:name="com.xiuxiu.wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <!--
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:theme="@style/Theme.UMDefault"
+            android:excludeFromRecents="true"/> -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5729959767e58e9905000715" >
+        </meta-data>
 
     </application>
 </manifest>

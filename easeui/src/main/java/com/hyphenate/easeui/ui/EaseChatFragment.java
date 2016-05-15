@@ -24,9 +24,11 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseChatExtendMenu;
+import com.hyphenate.easeui.widget.EaseChatExtendMenu2;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu.ChatInputMenuListener;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
+import com.hyphenate.easeui.widget.EaseChatPrimaryMenu;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView;
 import com.hyphenate.easeui.widget.EaseVoiceRecorderView.EaseVoiceRecorderCallback;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
@@ -98,15 +100,22 @@ public class EaseChatFragment extends EaseBaseFragment {
     protected int pagesize = 20;
     protected GroupListener groupListener;
     protected EMMessage contextMenuMessage;
-    
+
+    /**   item id  视频 图片  礼物  咻羞 */
+    public static final int ITEM_VIDEO = 0;
+    public static final int ITEM_PICTURE = 1;
+    public static final int ITEM_GIFT = 2;
+    public static final int ITEM_XIUXIU = 3;
+    /*
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
-    static final int ITEM_LOCATION = 3;
+    static final int ITEM_LOCATION = 3;*/
     
     protected int[] itemStrings = { R.string.attach_take_pic, R.string.attach_picture, R.string.attach_location, R.string.attach_face};
     protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
             R.drawable.ease_chat_location_selector ,R.drawable.ease_chat_face_normal};
-    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION ,4};
+//    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION ,4};
+    protected int[] itemIds = {ITEM_PICTURE, ITEM_GIFT,ITEM_XIUXIU};
     private EMChatRoomChangeListener chatRoomChangeListener;
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
@@ -143,9 +152,11 @@ public class EaseChatFragment extends EaseBaseFragment {
 
         extendMenuItemClickListener = new MyItemClickListener();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
-        registerExtendMenuItem();
         // init input menu
         inputMenu.init(null);
+
+        registerExtendMenuItem();
+
         inputMenu.setChatInputMenuListener(new ChatInputMenuListener() {
 
             @Override
@@ -247,8 +258,9 @@ public class EaseChatFragment extends EaseBaseFragment {
      * 注册底部菜单扩展栏item; 覆盖此方法时如果不覆盖已有item，item的id需大于3
      */
     protected void registerExtendMenuItem(){
-        for(int i = 0; i < itemStrings.length; i++){
-            inputMenu.registerExtendMenuItem(itemStrings[i], itemdrawables[i], itemIds[i], extendMenuItemClickListener);
+        for(int i = 0; i < itemIds.length; i++){
+//            inputMenu.registerExtendMenuItem(getString(itemStrings[i]), itemdrawables[i], itemIds[i], extendMenuItemClickListener);
+            inputMenu.registerExtendItem(itemIds[i],extendMenuItemClickListener);
         }
     }
     
@@ -599,6 +611,7 @@ public class EaseChatFragment extends EaseBaseFragment {
      * 扩展菜单栏item点击事件
      *
      */
+    /*
     class MyItemClickListener implements EaseChatExtendMenu.EaseChatExtendMenuItemClickListener{
 
         @Override
@@ -624,8 +637,35 @@ public class EaseChatFragment extends EaseBaseFragment {
             }
         }
 
+    }*/
+    /**
+     * 菜单栏item点击事件
+     */
+    class MyItemClickListener implements EaseChatPrimaryMenu.EaseChatExtendItemClickListener{
+
+        @Override
+        public void onClick(int itemId, View view) {
+            if(chatFragmentListener != null){
+                if(chatFragmentListener.onExtendMenuItemClick(itemId, view)){
+                    return;
+                }
+            }
+            switch (itemId) {
+                case ITEM_PICTURE:
+                    selectPicFromLocal(); // 图库选择图片
+                    break;
+                case ITEM_VIDEO: //视频
+                    break;
+                case ITEM_GIFT:
+                    break;
+                case ITEM_XIUXIU:
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
-    
 
     //发送消息方法
     //==========================================================================

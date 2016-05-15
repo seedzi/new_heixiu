@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/heixiu_broadcast_bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bar_height"
+        android:paddingLeft="12sp"
+        android:paddingRight="12sp">
+        <TextView
+            android:id="@+id/back"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="关闭"
+            android:textSize="14sp"
+            android:textColor="#8b8b8b"
+            android:drawablePadding="2dp"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="咻羞任务"
+            android:textColor="#ffffff"
+            android:textSize="@dimen/line_txt_size_big"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/video"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:src="@drawable/xiuxiu_task_video"/>
+
+        <ImageView
+            android:id="@+id/pic"
+            android:layout_marginRight="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/xiuxiu_task_pic"/>
+
+        <ImageView
+            android:id="@+id/voice"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/xiuxiu_task_voice"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/heixiu_broadcast_edit_bg"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/edit"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="left|top"
+            android:hint="填写你对索要照片的期望和要求...(智能查看3次)"
+            android:textSize="13sp"
+            android:textColorHint="#d4d4d4"
+            android:background="@null"/>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#d4d4d4"/>
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="愿意支付:"
+                android:textSize="13sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/xiu_bi"
+                android:text="咻币"
+                android:layout_alignParentRight="true"
+                android:textSize="13sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/xiu_bi_size"
+                android:text="20"
+                android:layout_marginRight="3dp"
+                android:layout_toLeftOf="@id/xiu_bi"
+                android:textSize="13sp"
+                android:textColor="#00b8d0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+        
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="3dp"
+        android:text="对方接受并完成'咻羞'才真正支付,否则咻币会在15分钟后返回你的账户."
+        android:textSize="12sp"
+        android:textColor="#b1b1b1"
+        android:maxLines="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="22dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:text="咻羞Ta"
+        android:background="@drawable/wallet_bt_bg"/>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.gougou;
+package com.xiuxiu;
 
 import org.junit.Test;
 

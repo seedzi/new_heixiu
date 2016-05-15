@@ -5,7 +5,7 @@
 <RelativeLayout
     android:layout_width="match_parent" android:layout_height="wrap_content">
     <!-- -->
-    <com.gougou.widget.CircleImageView
+    <com.xiuxiu.widget.CircleImageView
         android:id="@+id/head_img"
         android:layout_marginTop="13dp"
         android:layout_marginBottom="13dp"

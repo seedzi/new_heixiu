@@ -9,7 +9,7 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:background="#ffffff"
         android:paddingBottom="21dp">
-        <com.gougou.widget.CircleImageView
+        <com.xiuxiu.widget.CircleImageView
             android:id="@+id/head_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -71,9 +71,29 @@
         android:layout_below="@id/line_2"
         android:orientation="vertical">
 
+        <!-- 魅力等级 -->
         <include android:id="@+id/charm_value" layout="@layout/user_item_layout"/>
 
         <View
+            android:id="@+id/charm_value_line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ececeb"/>
+
+        <!-- 财富等级 -->
+        <include android:id="@+id/wealth_value" layout="@layout/user_item_layout"/>
+
+        <View
+            android:id="@+id/wealth_value_line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ececeb"/>
+
+        <!-- 咻羞设置-->
+        <include android:id="@+id/xiuxiu_settings" layout="@layout/user_item_layout"/>
+
+        <View
+            android:id="@+id/xiuxiu_settings_line"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#ececeb"/>
@@ -84,6 +104,7 @@
             android:layout_height="1px"
             android:background="#ececeb"/>
 
+        <!-- 钱包 -->
         <include android:id="@+id/wallet" layout="@layout/user_item_layout"/>
 
         <View
@@ -92,6 +113,7 @@
             android:layout_height="1px"
             android:background="#ececeb"/>
 
+        <!-- 邀请朋友 -->
         <include android:id="@+id/invite_friends" layout="@layout/user_item_layout"/>
 
         <View
@@ -99,12 +121,12 @@
             android:layout_height="1px"
             android:background="#ececeb"/>
 
-
         <View
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="1px"/>
 
+        <!-- 帮助与反馈-->
         <include android:id="@+id/feedback" layout="@layout/user_item_layout"/>
 
         <View
@@ -113,6 +135,7 @@
             android:layout_height="1px"
             android:background="#ececeb"/>
 
+        <!-- 设置-->
         <include android:id="@+id/setup" layout="@layout/user_item_layout"/>
 
         <View
@@ -120,6 +143,33 @@
             android:layout_height="1px"
             android:background="#ececeb"/>
 
+        <View
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="1px"/>
+        <!-- 退出账号-->
+        <RelativeLayout
+            android:id="@+id/login_out"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="10dp"
+            android:background="#ffffff">
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="@dimen/line_txt_size_big"/>
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#ececeb"/>
     </LinearLayout>
 
 </RelativeLayout>
