@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.xiuxiu.R;
+import com.xiuxiu.main.chat.ChatFragment;
+import com.xiuxiu.main.discover.DiscoverFragment;
 
 /**
  * Created by huzhi on 15-3-9.

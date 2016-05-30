@@ -81,6 +81,7 @@ public class EaseChatFragment extends EaseBaseFragment {
     protected Bundle fragmentArgs;
     protected int chatType;
     protected String toChatUsername;
+    protected String username; //huzhi
     protected EaseChatMessageList messageList;
     protected EaseChatInputMenu inputMenu;
 
@@ -133,7 +134,7 @@ public class EaseChatFragment extends EaseBaseFragment {
         chatType = fragmentArgs.getInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);
         // 会话人或群组id
         toChatUsername = fragmentArgs.getString(EaseConstant.EXTRA_USER_ID);
-
+        username = fragmentArgs.getString(EaseConstant.EXTRA_USER_NAME); //huzhi
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -197,7 +198,8 @@ public class EaseChatFragment extends EaseBaseFragment {
      * 设置属性，监听等
      */
     protected void setUpView() {
-        titleBar.setTitle(toChatUsername);
+//        titleBar.setTitle(toChatUsername);
+        titleBar.setTitle(username); //huzhi
         if (chatType == EaseConstant.CHATTYPE_SINGLE) { // 单聊
             // 设置标题
             if(EaseUserUtils.getUserInfo(toChatUsername) != null){
@@ -241,6 +243,8 @@ public class EaseChatFragment extends EaseBaseFragment {
                 } else {
                     toGroupDetails();
                 }
+                // huzhi
+                // 加好友页面
             }
         });
 

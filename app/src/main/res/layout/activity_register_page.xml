@@ -34,11 +34,13 @@
 
     <EditText
         android:id="@+id/username"
+        android:hint="请输入用户名"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/token"
+        android:hint="请输入用户token"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 

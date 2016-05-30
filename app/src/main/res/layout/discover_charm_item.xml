@@ -60,7 +60,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="5dp"
-            android:src="@drawable/vip_grade_1"/>
+            android:src="@drawable/charm_1"/>
 
         <ImageView
             android:layout_marginRight="14dp"

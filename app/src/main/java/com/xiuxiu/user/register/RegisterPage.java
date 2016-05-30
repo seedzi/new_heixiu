@@ -15,12 +15,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.xiuxiu.GougouApplication;
+import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
-import com.xiuxiu.api.XiuxiuResult;
-import com.xiuxiu.api.XiuxiuUser;
-import com.xiuxiu.im.ImManager;
+import com.xiuxiu.api.XiuxiuAllUserResult;
+import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.UiUtil;
@@ -33,7 +33,7 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
 
     private EditText mUserNameEdt;
 
-    private EditText mPasswordEdt;
+    private EditText mTokenEdt;
 
 
     public static void startActivity(Context context){
@@ -56,15 +56,23 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
         UiUtil.findViewById(mRootLayout,R.id.login_bt).setOnClickListener(this);
 
         mUserNameEdt =  UiUtil.findEditViewById(mRootLayout, R.id.username);
-        mPasswordEdt = UiUtil.findEditViewById(mRootLayout, R.id.password);
+        mTokenEdt = UiUtil.findEditViewById(mRootLayout, R.id.token);
     }
 
     @Override
     public void onClick(View v){
         switch (v.getId()){
             case R.id.login_bt:
-//                ImManager.getInstance().register("huzhi","123456");
                 login();
+                /*
+                ImManager.getInstance().login("11030", "23387", new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplication(), "登录成功", 0).show();
+                        finish();
+                        MainActivity.startActivity(RegisterPage.this);
+                    }
+                });*/
                 break;
 
         }
@@ -74,13 +82,19 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
     private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            Gson gson = new Gson();
             android.util.Log.d("ccc","response = " + response);
-            XiuxiuResult res = gson.fromJson(response, XiuxiuUser.class);
+            Gson gson = new Gson();
+            XiuxiuLoginResult res = gson.fromJson(response, XiuxiuLoginResult.class);
             if (res.isSuccess()) {
-                Toast.makeText(getApplication(), "登录成功", 0).show();
-                finish();
-                MainActivity.startActivity(RegisterPage.this);
+                XiuxiuLoginResult.save(res);
+                ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplication(), "登录成功", 0).show();
+                        finish();
+                        MainActivity.startActivity(RegisterPage.this);
+                    }
+                });
             }
         }
     };
@@ -94,16 +108,16 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
      * 登录
      */
     private void login() {
-        GougouApplication.getInstance().getQueue()
+        XiuxiuApplication.getInstance().getQueue()
                 .add(new StringRequest(getTopicListUrl(), mRefreshListener, mRefreshErroListener));
     }
     private String getTopicListUrl() {
-        return Uri.parse(HttpUrlManager.loginUrl()).buildUpon()
+        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.LOGIN_BY_PLAT)
                 .appendQueryParameter("password", Md5Util.md5())
-                .appendQueryParameter("xiuxiu_id", String.valueOf("1234560"))
-                .appendQueryParameter("xiuxiu_name", String.valueOf("huzhi1"))
-                .appendQueryParameter("attrs", String.valueOf("huzhi"))
+                .appendQueryParameter("weixin_token", mTokenEdt.getText().toString())
+                .appendQueryParameter("xiuxiu_name", mUserNameEdt.getText().toString())
+//                .appendQueryParameter("attrs", String.valueOf("huzhi"))
                 .build().toString();
     }
 }

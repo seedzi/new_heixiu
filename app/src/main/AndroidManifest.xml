@@ -29,7 +29,7 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <application
-        android:name="com.xiuxiu.GougouApplication"
+        android:name=".XiuxiuApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -51,6 +51,15 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+
+
+
+        <provider
+            android:name="com.xiuxiu.provider.XiuxiuProvider"
+            android:authorities="com.xiuxiu"
+            android:exported="false" >
+        </provider>
+
 
         <activity
             android:theme="@style/Theme"
@@ -126,6 +135,26 @@
             android:label="@string/app_name">
         </activity>
 
+        <!-- 用户详情编辑页 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name="com.xiuxiu.user.UserEditDetailActivity"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
+        <!-- 用户文本信息编辑页面 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name="com.xiuxiu.user.UserTxtEditActivity"
+            android:label="@string/app_name">
+        </activity>
+
         <!-- 用户注册页 -->
         <activity
             android:theme="@style/Theme"
@@ -138,12 +167,12 @@
             android:theme="@style/Theme"
             android:name="com.xiuxiu.user.login.LoginPage"
             android:label="@string/app_name">
-            <!-- -->
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+            -->
         </activity>
 
         <!-- 用户资料修改 -->
@@ -168,10 +197,10 @@
             android:label="@string/app_name">
         </activity>
 
-        <!-- 咻羞任务 -->
+        <!-- 用户语音编辑 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".xiuxiutask.XiuxiuTaskPage"
+            android:name=".user.voice.VoiceIntroductionActivity"
             android:label="@string/app_name">
             <!--
             <intent-filter>
@@ -180,6 +209,43 @@
             </intent-filter>
             -->
         </activity>
+
+        <!-- 咻羞任务 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name=".xiuxiutask.XiuxiuTaskPage"
+            android:label="@string/app_name">
+            <!--　
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>　-->
+
+        </activity>
+
+        <!-- 编辑用户城市 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name=".user.UserEditCityActivity"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
+        <!-- 用户登录后的资料编辑页面 -->
+        <activity android:name=".user.login.LoginUserDataPage"
+            android:theme="@style/Theme"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
 
         <!-- 环信页面  -->
         <!-- choose video -->

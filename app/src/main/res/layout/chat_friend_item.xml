@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:src="@drawable/vip_grade_1"/>
+            android:src="@drawable/charm_1"/>
 
         <TextView
             android:id="@+id/description"

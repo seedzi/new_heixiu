@@ -22,7 +22,6 @@
         android:layout_marginLeft="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="安妮贝贝"
         android:textSize="@dimen/line_txt_size_big"/>
 
     <TextView
@@ -49,7 +48,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="5dp"
-        android:src="@drawable/vip_grade_1"/>
+        android:src="@drawable/charm_1"/>
 
     <TextView
         android:id="@+id/description"
@@ -59,7 +58,6 @@
         android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="好无聊,有哥哥愿意和我聊吗."
         android:textColor="#8b8b8b"
         android:textSize="@dimen/line_txt_size_normal"/>
 

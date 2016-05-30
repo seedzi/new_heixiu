@@ -17,6 +17,8 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
+import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskPage;
 
 import java.io.File;
@@ -131,18 +133,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                         }
                     }
                     break;
-
                 default:
                     break;
             }
         }
-
     }
-
 
     @Override
     public void onSetMessageAttributes(EMMessage message) {
-
+        message.setAttribute("em_from_nick_name", XiuxiuUserInfoResult.getInstance().getXiuxiu_name()); //huzhi
     }
 
     @Override

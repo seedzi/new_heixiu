@@ -1,18 +1,23 @@
 package com.xiuxiu.discover;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.xiuxiu.R;
+import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.bean.Friend;
+import com.xiuxiu.utils.UiUtil;
+
+import java.net.URLDecoder;
 
 /**
  * Created by huzhi on 16-4-7.
  */
-public class WealthAdapter extends ArrayAdapter<Friend> {
+public class WealthAdapter extends ArrayAdapter<XiuxiuPerson> {
 
     public WealthAdapter(Context context) {
         super(context, 0);
@@ -20,8 +25,11 @@ public class WealthAdapter extends ArrayAdapter<Friend> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /*
         View itemView = convertView != null ? convertView :
                 LayoutInflater.from(getContext()).inflate(R.layout.discover_wealth_item, parent, false);
+        return itemView;
+        */
         /*
         final Friend recommendShares = getItem(position);
         ImageLoader.getInstance().displayImage(recommendShares.getAvatar(), UiUtil.findImageViewById(itemView, R.id.avatar));
@@ -40,6 +48,28 @@ public class WealthAdapter extends ArrayAdapter<Friend> {
 //        UiUtil.findImageViewById(itemView,R.id.head_img).setImageResource(R.drawable.head_default);
 //        UiUtil.findTextViewById(itemView, R.id.user_name).setText("女人");
 //        UiUtil.findTextViewById(itemView, R.id.description).setText("说明");
+
+
+        View itemView = convertView != null ? convertView :
+                LayoutInflater.from(getContext()).inflate(R.layout.discover_friend_item, parent, false);
+
+        if(getItem(position)!=null){
+            if(!TextUtils.isEmpty(getItem(position).getXiuxiu_name())&&
+                    UiUtil.findTextViewById(itemView, R.id.user_name)!=null ) {
+                UiUtil.findTextViewById(itemView, R.id.user_name).setText(URLDecoder.decode(getItem(position).getXiuxiu_name()));
+            }
+            if(!TextUtils.isEmpty(getItem(position).getSign())&&
+                    UiUtil.findTextViewById(itemView, R.id.description)!=null){
+                UiUtil.findTextViewById(itemView, R.id.description).setText(URLDecoder.decode(getItem(position).getSign()));
+            }
+            if(UiUtil.findImageViewById(itemView,R.id.vip_grade)!=null) {
+                XiuxiuPerson.setWealthValue(UiUtil.findImageViewById(itemView, R.id.vip_grade), getItem(position).getCharm());
+            }
+        }
+
+
+        itemView.setTag(new String[]{getItem(position).getXiuxiu_id(),getItem(position).getXiuxiu_name()});
+
         return itemView;
     }
 

@@ -13,11 +13,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.xiuxiu.GougouApplication;
+import com.hyphenate.chat.EMClient;
+import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuResult;
-import com.xiuxiu.api.XiuxiuUser;
+import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
+import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
+import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.register.RegisterPage;
 import com.xiuxiu.utils.Md5Util;
@@ -33,6 +37,12 @@ import java.util.Map;
  */
 public class LoginPage extends FragmentActivity implements View.OnClickListener{
 
+    public static void startActivity(FragmentActivity ac){
+        Intent intent = new Intent(ac,LoginPage.class);
+        ac.startActivity(intent);
+        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
+    }
+
     private ViewGroup mRootLayout;
 
     @Override
@@ -45,7 +55,32 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
         UiUtil.findViewById(mRootLayout,R.id.wechat_login_bt).setOnClickListener(this);
 
         mShareAPI = UMShareAPI.get(this);
+
+        inint();
     }
+
+    /**
+     * 如果登录了直接进入
+     */
+    private void inint(){
+        if(ImHelper.getInstance().isLoggedIn()){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    EMClient.getInstance().chatManager().loadAllConversations();
+                    ChatNickNameAndAvatarCacheManager.getInstance().init();
+                    XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity.startActivity(LoginPage.this);
+                            finish();
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+
 
     @Override
     public void onClick(View v){
@@ -56,6 +91,7 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
                 finish();
                 MainActivity.startActivity(this);
                 */
+                finish();
                 enterRegister();
                 break;
             case R.id.wechat_login_bt:
@@ -63,7 +99,6 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
                 HeixiuApi heixiuApi = new HeixiuApi();
                 thirdLoginWechat();*/
 //                login();
-
                 finish();
                 MainActivity.startActivity(this);
                 break;
@@ -110,7 +145,7 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
         public void onResponse(String response) {
             Gson gson = new Gson();
             android.util.Log.d("ccc","response = " + response);
-            XiuxiuResult res = gson.fromJson(response, XiuxiuUser.class);
+            XiuxiuResult res = gson.fromJson(response, XiuxiuLoginResult.class);
             if (res.isSuccess()) {
                 Toast.makeText(getApplication(),"登录成功",0).show();
                 finish();
@@ -128,11 +163,11 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
      * 登录
      */
     private void login() {
-        GougouApplication.getInstance().getQueue()
+        XiuxiuApplication.getInstance().getQueue()
                 .add(new StringRequest(getTopicListUrl(), mRefreshListener, mRefreshErroListener));
     }
     private String getTopicListUrl() {
-        return Uri.parse(HttpUrlManager.loginUrl()).buildUpon()
+        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.LOGIN_BY_PLAT)
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("xiuxiu_id", String.valueOf("1234560"))

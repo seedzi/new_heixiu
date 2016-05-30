@@ -112,4 +112,8 @@
 
     <color name="heixiu_broadcast_submit_bt_color">#00b8d0</color>
 
+    <!-- 咻咻进度条 -->
+    <color name="xiuxiu_voice_progressbar_indeterminate_color">#12b0c4</color>
+    <color name="xiuxiu_voice_progressbar_bg_color">#f4f4f4</color>
+
 </resources>

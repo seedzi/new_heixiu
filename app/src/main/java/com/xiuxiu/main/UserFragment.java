@@ -1,18 +1,29 @@
 package com.xiuxiu.main;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
 import com.xiuxiu.R;
+import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuPerson;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.user.CharmLevelActivity;
 import com.xiuxiu.user.SetupPage;
 import com.xiuxiu.user.UserDetailActivity;
 import com.xiuxiu.user.WalletActivity;
 import com.xiuxiu.user.invitation.InvitationPage;
+import com.xiuxiu.user.login.LoginPage;
 import com.xiuxiu.utils.UiUtil;
+
+import java.net.URLDecoder;
 
 /**
  * Created by huzhi on 16-3-21.
@@ -37,8 +48,14 @@ public class UserFragment extends Fragment implements View.OnClickListener{
 
     private ViewGroup mLoginoutLayout;
 
+
+    private TextView mNameTv;
+
+    private TextView mSignTv;
+
+
     /**性别设置*/
-    private boolean isFemale = false;
+    private boolean isFemale = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +63,7 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         if(mRootView ==null){
             mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_user, null);
             setUpView();
-            initData();
+            refreshData();
         } else {
             try {
                 ((ViewGroup)mRootView.getParent()).removeView(mRootView);
@@ -61,15 +78,13 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         mCharmValueLayout = (ViewGroup) mRootView.findViewById(R.id.charm_value);
         UiUtil.findTextViewById(mCharmValueLayout, R.id.item_name).setText("魅力值");
         UiUtil.findImageViewById(mCharmValueLayout, R.id.img).setImageResource(R.drawable.charm_icon);
-        UiUtil.findImageViewById(mCharmValueLayout, R.id.itme_icon).setImageResource(R.drawable.vip_grade_1);
         UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setText("等级 2");
         mCharmValueLayout.setOnClickListener(this);
 
-        //魅力值
+        //财富值
         mWealthValueLayout = (ViewGroup) mRootView.findViewById(R.id.wealth_value);
         UiUtil.findTextViewById(mWealthValueLayout, R.id.item_name).setText("财富值");
         UiUtil.findImageViewById(mWealthValueLayout, R.id.img).setImageResource(R.drawable.charm_icon);
-        UiUtil.findImageViewById(mWealthValueLayout, R.id.itme_icon).setImageResource(R.drawable.vip_grade_1);
         UiUtil.findTextViewById(mWealthValueLayout, R.id.tag_txt).setText("等级 2");
         mWealthValueLayout.setOnClickListener(this);
 
@@ -111,7 +126,8 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         mLoginoutLayout.setOnClickListener(this);
 
 
-        UiUtil.findImageViewById(mRootView,R.id.user_detail).setOnClickListener(this);
+        UiUtil.findImageViewById(mRootView, R.id.user_detail).setOnClickListener(this);
+        UiUtil.findViewById(mRootView,R.id.login_out).setOnClickListener(this);
 
 
         if(isFemale){//女性用户
@@ -123,10 +139,25 @@ public class UserFragment extends Fragment implements View.OnClickListener{
             UiUtil.findViewById(mRootView, R.id.charm_value_line).setVisibility(View.GONE);
             UiUtil.findViewById(mRootView, R.id.xiuxiu_settings_line).setVisibility(View.GONE);
         }
+
+        mNameTv = UiUtil.findTextViewById(mRootView,R.id.user_name);
+        mSignTv = UiUtil.findTextViewById(mRootView, R.id.description);
     }
 
-    private void initData(){
+    private void refreshData(){
+        mNameTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
+        mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
 
+
+        UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setText("等级 " + XiuxiuUserInfoResult.getInstance().getCharm());
+        XiuxiuPerson.setCharmValue(  UiUtil.findImageViewById(mCharmValueLayout, R.id.itme_icon),XiuxiuUserInfoResult.getInstance().getCharm());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNameTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
+        mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
     }
 
     @Override
@@ -147,6 +178,52 @@ public class UserFragment extends Fragment implements View.OnClickListener{
             case R.id.setup:
                 SetupPage.startActivity(getActivity());
                 break;
+            case R.id.login_out:
+                logout();
+                break;
         }
     }
+
+
+    void logout() {
+		final ProgressDialog pd = new ProgressDialog(getActivity());
+		String st = getResources().getString(R.string.Are_logged_out);
+		pd.setMessage(st);
+		pd.setCanceledOnTouchOutside(false);
+		pd.show();
+		ImHelper.getInstance().logout(false,new EMCallBack() {
+
+			@Override
+			public void onSuccess() {
+				getActivity().runOnUiThread(new Runnable() {
+					public void run() {
+						pd.dismiss();
+						//清除数据
+                        XiuxiuLoginResult.clear();
+                        XiuxiuUserInfoResult.clear();
+                                ((MainActivity) getActivity()).finish();
+                        LoginPage.startActivity(getActivity());
+					}
+				});
+			}
+
+			@Override
+			public void onProgress(int progress, String status) {
+
+			}
+
+			@Override
+			public void onError(int code, String message) {
+				getActivity().runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						pd.dismiss();
+						Toast.makeText(getActivity(), "unbind devicetokens failed", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
+		});
+	}
 }

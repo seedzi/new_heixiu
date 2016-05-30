@@ -12,15 +12,19 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xiuxiu.R;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.utils.ScreenUtils;
 import com.xiuxiu.utils.UiUtil;
+
+import java.net.URLDecoder;
 
 /**
  * Created by huzhi on 16-4-8.
  */
-public class UserDetailActivity extends FragmentActivity{
+public class UserDetailActivity extends FragmentActivity implements View.OnClickListener{
 
     public static void startActivity(Context context){
         Intent intent = new Intent(context,UserDetailActivity.class);
@@ -33,6 +37,13 @@ public class UserDetailActivity extends FragmentActivity{
     private int mScreenWidth;
     private int mPhotoItemWidth;
     private int mPhotoItemHeight;
+
+    private TextView mSignTv;
+    private TextView mTitleTv;
+    private TextView mAgTv;
+    private TextView mCityTv;
+    private TextView mHeixiuIdTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +51,7 @@ public class UserDetailActivity extends FragmentActivity{
         mScreenWidth = ScreenUtils.getScreenWidth(getApplication());
         setContentView(R.layout.activity_user_detail_page);
         setupViews();
+        refreshUserData();
     }
 
     private void setupViews(){
@@ -51,11 +63,46 @@ public class UserDetailActivity extends FragmentActivity{
         mPhotoItemHeight = mPhotoItemWidth;
         int height = mPhotoItemHeight*2 + ScreenUtils.dip2px(getApplicationContext(),4);
         LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width,height);
-        ll.setMargins(ScreenUtils.dip2px(getApplicationContext(),7),0,ScreenUtils.dip2px(getApplicationContext(),7),0);
+        ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
         mPhotoWall.setLayoutParams(ll);
         mPhotoWall.setHorizontalSpacing(4);
         mPhotoWall.setVerticalSpacing(4);
         mPhotoWall.setAdapter(new PhotoAdpater());
+
+        findViewById(R.id.edit).setOnClickListener(this);
+
+        mSignTv = (TextView)findViewById(R.id.user_sign_value);
+        mTitleTv = (TextView)findViewById(R.id.title);
+        mAgTv = (TextView)findViewById(R.id.age);
+        mCityTv = (TextView)findViewById(R.id.city_value);
+        mHeixiuIdTv = (TextView) findViewById(R.id.heixiu_hao_value);
+    }
+
+    /**
+     * 刷新用户信息
+     */
+    private void refreshUserData(){
+        mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
+        mTitleTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
+        mAgTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getAge()));
+        mCityTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getCity()));
+        mHeixiuIdTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_id()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshUserData();
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.edit:
+                UserEditDetailActivity.startActivity(UserDetailActivity.this);
+                break;
+        }
     }
 
 

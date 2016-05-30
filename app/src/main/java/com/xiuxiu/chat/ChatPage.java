@@ -14,10 +14,29 @@ import com.xiuxiu.chat.im.ChatFragment;
  */
 public class ChatPage extends FragmentActivity{
 
-    String toChatUsername;
+    public static final String EXTRA_USERID = "userId";
+
+    public static final String EXTRA_USERNAME = "userName";
+
+    String toChatUserId;
 
     public static void startActivity(FragmentActivity ac){
         Intent intent = new Intent(ac,ChatPage.class);
+        ac.startActivity(intent);
+        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
+    }
+
+    public static void startActivity(FragmentActivity ac,String userId){
+        Intent intent = new Intent(ac,ChatPage.class);
+        intent.putExtra(EXTRA_USERID,userId);
+        ac.startActivity(intent);
+        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
+    }
+
+    public static void startActivity(FragmentActivity ac,String userId,String userName){
+        Intent intent = new Intent(ac,ChatPage.class);
+        intent.putExtra(EXTRA_USERID,userId);
+        intent.putExtra(EXTRA_USERNAME,userName);
         ac.startActivity(intent);
         ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
     }
@@ -27,10 +46,8 @@ public class ChatPage extends FragmentActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_chat_page);
-        Intent intent = getIntent();
-        intent.putExtra("userId","123456");
         //聊天人或群id
-        toChatUsername = getIntent().getExtras().getString("userId");
+        toChatUserId = getIntent().getExtras().getString(EXTRA_USERID);
         //可以直接new EaseChatFratFragment使用
         ChatFragment chatFragment = new ChatFragment();
         //传入参数
@@ -42,8 +59,8 @@ public class ChatPage extends FragmentActivity{
     @Override
     protected void onNewIntent(Intent intent) {
         // 点击notification bar进入聊天页面，保证只有一个聊天页面
-        String username = intent.getStringExtra("userId");
-        if (toChatUsername.equals(username))
+        String userid = intent.getStringExtra(EXTRA_USERID);
+        if (toChatUserId.equals(userid))
             super.onNewIntent(intent);
         else {
             finish();
