@@ -49,5 +49,12 @@
             <enum name="close" value="1"/>
         </attr>
     </declare-styleable>
-    
+
+    <!-- 圆形控件 -->
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_padding" format="dimension" /> <!-- huzhi -->
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
 </resources>

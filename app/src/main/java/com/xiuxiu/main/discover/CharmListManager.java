@@ -1,6 +1,5 @@
 package com.xiuxiu.main.discover;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
@@ -19,15 +18,12 @@ import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuAllUserResult;
+import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
 import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.discover.CharmAdapter;
-import com.xiuxiu.discover.CharmHeadLayout;
-import com.xiuxiu.discover.OnLineAdapter;
 import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
 import com.xiuxiu.utils.Md5Util;
-import com.xiuxiu.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +84,7 @@ public class CharmListManager implements  PullToRefreshBase.OnRefreshListener {
         mPullToRefreshListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /*
                 try{
                     XiuxiuPerson xiuxiuUser = adapter.getItem(position -2);
                     ChatPage.startActivity(mAc, xiuxiuUser.getXiuxiu_id(), xiuxiuUser.getXiuxiu_name());
@@ -98,7 +95,7 @@ public class CharmListManager implements  PullToRefreshBase.OnRefreshListener {
                     ChatNickNameAndAvatarCacheManager.getInstance().add(info);
                 }catch (Exception e){
 
-                }
+                }*/
             }
         });
         adapter = new CharmAdapter(context);
@@ -159,6 +156,7 @@ public class CharmListManager implements  PullToRefreshBase.OnRefreshListener {
         return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.QUERY_USER_INFO)
                 .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .build().toString();
     }
 }

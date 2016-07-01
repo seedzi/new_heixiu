@@ -51,6 +51,9 @@ public class XiuxiuApplication extends MultiDexApplication{
         XiuxiuDatabaseHelper.getInstance(getApplicationContext());
         // 初始化图片加载器
         initImageLoader(getApplicationContext());
+
+
+        PlatformConfig.setWeixin("wx967daebe835fbeac", "");
     }
 
     private void initImageLoader(Context context) {
@@ -59,6 +62,9 @@ public class XiuxiuApplication extends MultiDexApplication{
                 .cacheOnDisc(true)
                 .considerExifParams(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
+                .showImageOnLoading(R.drawable.head_default)//设置图片在下载期间显示的图片
+                .showImageForEmptyUri(R.drawable.head_default)//设置图片Uri为空或是错误的时候显示的图片
+                .showImageOnFail(R.drawable.head_default)//设置图片加载/解码过程中错误时候显示的图片
                 .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .threadPriority(Thread.NORM_PRIORITY - 2)

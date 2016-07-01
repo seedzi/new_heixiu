@@ -22,13 +22,6 @@
         <item name="android:background">@color/color_titlebar_background</item>
     </style>
 
-    <!-- 圆形控件 -->
-    <declare-styleable name="CircleImageView">
-        <attr name="border_width" format="dimension" />
-        <attr name="border_padding" format="dimension" /> <!-- huzhi -->
-        <attr name="border_color" format="color" />
-    </declare-styleable>
-
     <!-- 发现 -->
     <style name="ListView">
         <item name="android:layout_width">match_parent</item>
@@ -51,4 +44,10 @@
     <style name="TextAppearance.TitleTab">
         <item name="android:textSize">@dimen/line_txt_size_big</item>
     </style>
+
+    <style name="Transparent">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

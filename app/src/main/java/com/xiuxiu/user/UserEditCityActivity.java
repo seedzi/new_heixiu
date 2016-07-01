@@ -11,6 +11,7 @@ import com.wheel.widget.adapters.AbstractWheelTextAdapter;
 import com.xiuxiu.R;
 
 /**
+ * 城市编辑页面
  * Created by huzhi on 16-5-24.
  */
 public class UserEditCityActivity extends FragmentActivity{
@@ -58,7 +59,7 @@ public class UserEditCityActivity extends FragmentActivity{
         protected CountryAdapter(Context context) {
             super(context, R.layout.activity_user_city_edit_layout, NO_RESOURCE);
 
-            setItemTextResource(R.id.age);
+            setItemTextResource(R.id.user_age);
         }
 
         @Override

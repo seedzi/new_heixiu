@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <com.xiuxiu.widget.CircleImageView
+        <com.hyphenate.easeui.widget.CircleImageView
             android:id="@+id/head_img"
             android:layout_toRightOf="@id/position"
             android:layout_marginLeft="8dp"
@@ -37,7 +37,7 @@
             android:textSize="@dimen/line_txt_size_big"/>
 
         <TextView
-            android:id="@+id/age"
+            android:id="@+id/user_age"
             android:layout_toRightOf="@id/head_img"
             android:layout_below="@id/user_name"
             android:layout_marginLeft="10dp"
@@ -47,14 +47,14 @@
             android:layout_height="wrap_content"
             android:text="24"
             android:textSize="9sp"
-            android:background="@drawable/age_bg"
+            android:background="@drawable/male_age_bg"
             android:paddingRight="12px"
             android:textColor="#ffffff"/><!-- android:paddingLeft="5dp" android:textSize="10sp" -->
 
         <ImageView
             android:id="@+id/vip_grade"
-            android:layout_toRightOf="@id/age"
-            android:layout_alignBottom="@id/age"
+            android:layout_toRightOf="@id/user_age"
+            android:layout_alignBottom="@id/user_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

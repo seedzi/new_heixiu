@@ -19,6 +19,14 @@ public class XiuxiuPerson {
 
     private int charm;
 
+    private String pic;
+
+    private String city;
+
+    private String sex;
+
+    private int age;
+
     public String getXiuxiu_id(){
         return xiuxiu_id;
     }
@@ -37,6 +45,26 @@ public class XiuxiuPerson {
 
     public int getCharm(){
         return charm;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isMale(){
+        return "male".equals(sex);
     }
 
     public static void setCharmValue(ImageView iv,int charm){

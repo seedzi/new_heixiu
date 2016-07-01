@@ -11,4 +11,21 @@
     <!-- 消息 -->
     <string name="chat_message">消息</string>
     <string name="chat_friends">好友</string>
+
+
+
+    <string name="agree">同意</string>
+    <string name="refuse">拒绝</string>
+    <string name="invite_join_group">邀请加入群：</string>
+    <string name="accept_join_group">同意加入群：</string>
+    <string name="refuse_join_group">拒绝加入群：</string>
+    <string name="Are_refuse_with">正在拒绝...</string>
+    <string name="Refuse_with_failure">拒绝失败:</string>
+
+    <string name="rss_list_time_text_30_days">30天前</string>
+    <string name="rss_list_time_text_hour">小时前</string>
+    <string name="rss_list_time_text_min">分钟前</string>
+    <string name="rss_list_time_text_sec">秒前</string>
+    <string name="rss_list_time_text_just">刚刚</string>
+    <string name="date_fromate_anecdote">"MM-dd"</string>
 </resources>

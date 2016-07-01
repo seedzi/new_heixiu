@@ -479,6 +479,7 @@ public class WheelView extends View {
 	 * Initializes resources
 	 */
 	private void initResourcesIfNecessary() {
+
 		if (centerDrawable == null) {
 			centerDrawable = getContext().getResources().getDrawable(wheelForeground);
 		}
@@ -491,7 +492,9 @@ public class WheelView extends View {
 			bottomShadow = new GradientDrawable(Orientation.BOTTOM_TOP, SHADOWS_COLORS);
 		}
 
+		/*
 		setBackgroundResource(wheelBackground);
+		*/
 	}
 
 	/**

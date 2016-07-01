@@ -1,9 +1,14 @@
 package com.xiuxiu.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Window;
 
 import com.android.volley.Response;
@@ -16,9 +21,21 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
+import com.xiuxiu.api.XiuxiuWechatBean;
+import com.xiuxiu.api.XiuxiuWechatResult;
+import com.xiuxiu.easeim.Constant;
+import com.xiuxiu.main.chat.ChatFragment;
+import com.xiuxiu.main.chat.ConversationListManager;
+import com.xiuxiu.payment.WeiXinPayManager;
+import com.xiuxiu.server.UpdateActiveUserManager;
+import com.xiuxiu.user.FileUploadManager;
 import com.xiuxiu.utils.Md5Util;
+import com.xiuxiu.utils.NetUtils;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 public class MainActivity extends FragmentActivity {
+
+    private static String TAG = "MainActivity";
 
     public static void startActivity(FragmentActivity ac){
         Intent intent = new Intent(ac,MainActivity.class);
@@ -32,75 +49,56 @@ public class MainActivity extends FragmentActivity {
         return mInstance;
     }
 
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInstance = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_main);
-
-        queryUserInfo();
+        XiuxiuUtils.onAppStart(this);
+        registerBroadcastReceiver();
+//        test();
     }
 
     // ============================================================================================
-    // 获取用户信息
+    // 注册事件
     // ============================================================================================
-    private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            Gson gson = new Gson();
-            XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
-            if(res!=null && res.getUserinfos()!=null && res.getUserinfos().size()>0){
-                XiuxiuUserInfoResult.save(res.getUserinfos().get(0));
+
+    private void registerBroadcastReceiver() {
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+//                updateUnreadLabel();
+//                updateUnreadAddressLable();
+                /*
+                if (TabsFragmentManager.getInstance().getCurrentPosition() == 0) {
+                } else if (TabsFragmentManager.getInstance().getCurrentPosition() == 1) {
+                    // 当前页面如果为聊天历史页面，刷新此页面
+                    if(TabsFragmentManager.getInstance().getFragment(1) != null) {
+                        ConversationListManager.getInstance().refresh();
+
+                    }
+                }*/
+                // 当前页面如果为聊天历史页面，刷新此页面
+                if(TabsFragmentManager.getInstance().getCurrentFragment()instanceof ChatFragment){
+                    ConversationListManager.getInstance().refresh();
+                }
+                /*
+                String action = intent.getAction();
+                if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+                    if (EaseCommonUtils.getTopActivity(MainActivity.this).equals(GroupsActivity.class.getName())) {
+                        GroupsActivity.instance.onResume();
+                    }
+                }*/
             }
-        }
-    };
-    private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-        }
-    };
-
-    private void queryUserInfo() {
-        XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getQueryUserInfoUrl(), mRefreshListener, mRefreshErroListener));
+        };
+        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
-    private String getQueryUserInfoUrl() {
-        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.QUERY_USER_INFO)
-                .appendQueryParameter("password", Md5Util.md5())
-                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .build().toString();
-    }
-
-
-    // ============================================================================================
-    // 获取七牛token
-    // ============================================================================================
-    /*
-    private Response.Listener<String> mRefreshListener1 = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            Gson gson = new Gson();
-            android.util.Log.d("ccc","response = " + response);
-        }
-    };
-    private Response.ErrorListener mRefreshErroListener1 = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-        }
-    };
-
-    private void qiniuinfo() {
-        XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(qiniu(), mRefreshListener, mRefreshErroListener));
-    }
-    private String qiniu() {
-        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.GET_QINIU_TOKEN)
-                .appendQueryParameter("key", "")
-                .appendQueryParameter("bucketname", "")
-                .build().toString();
-    }
-    */
 }

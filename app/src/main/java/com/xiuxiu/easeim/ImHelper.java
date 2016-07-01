@@ -4,27 +4,57 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import com.xiuxiu.api.HeixiuApi;
+import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
+import com.xiuxiu.user.invitation.ImModel;
+import com.xiuxiu.user.invitation.InviteMessage;
+import com.xiuxiu.user.invitation.InviteMessage.InviteMesageStatus;
+import com.xiuxiu.user.invitation.InviteMessgeDao;
+import com.xiuxiu.user.invitation.UserDao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 public class ImHelper {
+
+    /**
+     * 数据同步listener
+     */
+    static public interface DataSyncListener {
+        /**
+         * 同步完毕
+         * @param success true：成功同步到数据，false失败
+         */
+        public void onSyncComplete(boolean success);
+    }
 
     protected static final String TAG = "ImHelper";
 
@@ -41,10 +71,21 @@ public class ImHelper {
 
     private EaseUI easeUI;
 
+    private ImModel mImModel = null;
+
+    private UserProfileManager userProManager = null;
+
+    /**
+     * 当前好友列表
+     */
+    private Map<String, EaseUser> contactList;
+
     /**
      * EMEventListener
      */
     protected EMMessageListener messageListener = null;
+
+    private EMConnectionListener connectionListener;
 
     /**
      * 是否登录成功过
@@ -54,6 +95,25 @@ public class ImHelper {
     public boolean isLoggedIn() {
         return EMClient.getInstance().isLoggedInBefore();
     }
+
+    private boolean isGroupAndContactListenerRegisted;
+
+    private boolean isContactsSyncedWithServer;
+
+    private boolean isSyncingContactsWithServer;
+
+    private InviteMessgeDao inviteMessgeDao;
+
+    private LocalBroadcastManager broadcastManager;
+
+    private ImModel imModel;
+
+    private UserDao userDao;
+
+    /**
+     * HuanXin sync contacts status listener
+     */
+    private List<DataSyncListener> syncContactsListeners;
 
     /**
      * 退出登录
@@ -107,32 +167,40 @@ public class ImHelper {
 
             @Override
             public void onMessageReceived(List<EMMessage> messages) {
-                android.util.Log.d("aaa","onMessageReceived");
-                for (EMMessage message : messages) {
+                android.util.Log.d(TAG,"onMessageReceived");
+                for (final EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
                     //应用在后台，不需要刷新UI,通知栏提示新消息
                     if(!/*easeUI*/EaseUI.getInstance().hasForegroundActivies()){
                         getNotifier().onNewMsg(message);
                     }
+                    if(EaseUserCacheManager.getInstance().getBeanById(message.getUserName())==null){
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                HeixiuApi.queryUserInfoSyn(message.getUserName());
+                            }
+                        }).start();
+                    }
+                    // TODO
+                    /*
                     try {
-                        android.util.Log.d("ccc","收到消息");
-                        ChatNickNameAndAvatarBean info = new ChatNickNameAndAvatarBean();
+                        android.util.Log.d(TAG, "收到消息");
+                        XiuxiuUserInfoResult info = new XiuxiuUserInfoResult();
                         info.setXiuxiu_id(message.getUserName());
-                        android.util.Log.d("ccc", "收到消息getUserName");
-                        info.setNickName(message.getStringAttribute("em_from_nick_name"));
-                        android.util.Log.d("ccc", "收到消息getStringAttribute");
-                        info.setAvatar("");
-                        android.util.Log.d("ccc","info = "+ info);
-                        ChatNickNameAndAvatarCacheManager.getInstance().add(info);
+                        info.setXiuxiu_name(message.getStringAttribute("em_from_nick_name"));
+                        info.setPic("");
+                        EaseUserCacheManager.getInstance().add(info);
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
+                    */
                 }
             }
 
             @Override
             public void onCmdMessageReceived(List<EMMessage> messages) {
-                android.util.Log.d("aaa","onCmdMessageReceived");
+                android.util.Log.d(TAG,"onCmdMessageReceived");
                 for (EMMessage message : messages) {
                     EMLog.d(TAG, "收到透传消息");
                     //获取消息body
@@ -140,20 +208,6 @@ public class ImHelper {
                     final String action = cmdMsgBody.action();//获取自定义action
 
                     //获取扩展属性 此处省略
-                    //message.getStringAttribute("");
-                    try {
-                        android.util.Log.d("ccc","收到消息");
-                        ChatNickNameAndAvatarBean info = new ChatNickNameAndAvatarBean();
-                        info.setXiuxiu_id(message.getUserName());
-                        android.util.Log.d("ccc", "收到消息getUserName");
-                        info.setNickName(message.getStringAttribute("em_from_nick_name"));
-                        android.util.Log.d("ccc", "收到消息getStringAttribute");
-                        info.setAvatar("");
-                        android.util.Log.d("ccc","info = "+ info);
-                        ChatNickNameAndAvatarCacheManager.getInstance().add(info);
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
                     final String str = appContext.getString(com.hyphenate.easeui.R.string.receive_the_passthrough);
 
@@ -235,6 +289,9 @@ public class ImHelper {
         getUserProfileManager().reset();
         DemoDBManager.getInstance().closeDB();
         */
+        isSyncingContactsWithServer = false;
+        isContactsSyncedWithServer = false;
+        isGroupAndContactListenerRegisted = false;
     }
 
     /**
@@ -268,11 +325,21 @@ public class ImHelper {
             initDbDao();
         }
         */
+        imModel = new ImModel(context);
         if (EaseUI.getInstance().init(context, null)) {
-            android.util.Log.d("ccc","init()");
+            android.util.Log.d(TAG,"init()");
             appContext = context;
+
+            //get easeui instance
+            easeUI = EaseUI.getInstance();
+            //调用easeui的api设置providers
+            setEaseUIProviders();
+            //初始化用户管理类
+            getUserProfileManager().init(context);
             //设置全局监听
             setGlobalListeners();
+            broadcastManager = LocalBroadcastManager.getInstance(appContext);
+            initDbDao();
         }
     }
 
@@ -305,33 +372,110 @@ public class ImHelper {
         return options;
     }
 
+    protected void setEaseUIProviders() {
+        //需要easeui库显示用户头像和昵称设置此provider
+        easeUI.setUserProfileProvider(new EaseUI.EaseUserProfileProvider() {
+
+            @Override
+            public EaseUser getUser(String username) {
+                return getUserInfo(username);
+            }
+        });
+
+        //设置表情provider
+        /*
+        easeUI.setEmojiconInfoProvider(new EaseUI.EaseEmojiconInfoProvider() {
+
+            @Override
+            public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
+                EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
+                for (EaseEmojicon emojicon : data.getEmojiconList()) {
+                    if (emojicon.getIdentityCode().equals(emojiconIdentityCode)) {
+                        return emojicon;
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            public Map<String, Object> getTextEmojiconMapping() {
+                //返回文字表情emoji文本和图片(resource id或者本地路径)的映射map
+                return null;
+            }
+        });*/
+
+    }
+
+    private EaseUser getUserInfo(String username){
+        //获取user信息，demo是从内存的好友列表里获取，
+        //实际开发中，可能还需要从服务器获取用户信息,
+        //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
+        EaseUser user = null;
+        if(username.equals(EMClient.getInstance().getCurrentUser())) {
+            return XiuxiuUserInfoResult.toEaseUser(XiuxiuUserInfoResult.getInstance());
+            /*getUserProfileManager().getCurrentUserInfo();*/
+        }
+        user = getContactList().get(username);
+        if(user == null){
+            XiuxiuUserInfoResult xiuxiuUserInfoResult = EaseUserCacheManager.getInstance().getBeanById(username);
+            user = XiuxiuUserInfoResult.toEaseUser(xiuxiuUserInfoResult);
+        }
+        //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，demo未实现
+        /*
+        if(user == null && getRobotList() != null){
+            user = getRobotList().get(username);
+        }*/
+        return user;
+    }
+
+
+    private void initDbDao() {
+        inviteMessgeDao = new InviteMessgeDao(appContext);
+        userDao = new UserDao(appContext);
+    }
+
     /**
      * 设置全局事件监听
      */
     protected void setGlobalListeners(){
         /*
         syncGroupsListeners = new ArrayList<DataSyncListener>();
-        syncContactsListeners = new ArrayList<DataSyncListener>();
+
         syncBlackListListeners = new ArrayList<DataSyncListener>();
 
         isGroupsSyncedWithServer = demoModel.isGroupsSynced();
-        isContactsSyncedWithServer = demoModel.isContactSynced();
+
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
+
+
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+        if(callReceiver == null){
+            callReceiver = new CallReceiver();
+        }
+
+        //注册通话广播接收者
+        appContext.registerReceiver(callReceiver, callFilter);
+        //注册连接监听
+        EMClient.getInstance().addConnectionListener(connectionListener);
+
+        */
+        syncContactsListeners = new ArrayList<DataSyncListener>();
 
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
             @Override
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
-                    onCurrentAccountRemoved();
+//                    onCurrentAccountRemoved();
                 }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                    onConnectionConflict();
+//                    onConnectionConflict();
                 }
             }
 
             @Override
             public void onConnected() {
-
+                android.util.Log.d(TAG,"onConnected()");
+                /*
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
                 if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
                     new Thread(){
@@ -353,24 +497,302 @@ public class ImHelper {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
+                */
+                if(!isContactsSyncedWithServer){
+                    asyncFetchContactsFromServer(null);
+                }
             }
         };
-
-
-        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        if(callReceiver == null){
-            callReceiver = new CallReceiver();
-        }
-
-        //注册通话广播接收者
-        appContext.registerReceiver(callReceiver, callFilter);
         //注册连接监听
         EMClient.getInstance().addConnectionListener(connectionListener);
         //注册群组和联系人监听
         registerGroupAndContactListener();
-        */
         //注册消息事件监听
         registerEventListener();
     }
 
+    private String username;
+    /**
+     * 获取当前用户的环信id
+     */
+    public String getCurrentUsernName(){
+        if(username == null){
+            username = XiuxiuUserInfoResult.getInstance().getXiuxiu_id();
+        }
+        return username;
+    }
+
+
+    /**
+     * 注册群组和联系人监听，由于logout的时候会被sdk清除掉，再次登录的时候需要再注册一下
+     */
+    public void registerGroupAndContactListener(){
+        if(!isGroupAndContactListenerRegisted){
+            //注册群组变动监听
+//            EMClient.getInstance().groupManager().addGroupChangeListener(new MyGroupChangeListener());
+            //注册联系人变动监听
+            EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+            isGroupAndContactListenerRegisted = true;
+        }
+
+    }
+
+    /**
+     * 从服务器上同步好友信息
+     * @param callback
+     */
+    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
+        android.util.Log.d(TAG,"asyncFetchContactsFromServer()");
+        if(isSyncingContactsWithServer){
+            return;
+        }
+
+        isSyncingContactsWithServer = true;
+
+        new Thread(){
+            @Override
+            public void run(){
+                List<String> usernames = null;
+                try {
+                    usernames = DataSyncManager.getInstance().getAllContactsFromServer();
+                    android.util.Log.d(TAG,"usernames = " + usernames);
+                    // in case that logout already before server returns, we should return immediately
+                    if(!isLoggedIn()){
+                        isContactsSyncedWithServer = false;
+                        isSyncingContactsWithServer = false;
+                        //通知listeners联系人同步完毕
+                        notifyContactsSyncListener(false);
+                        return;
+                    }
+
+                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                    for (String username : usernames) {
+                        EaseUser user = new EaseUser(username);
+//                        EaseCommonUtils.setUserInitialLetter(user);
+                        userlist.put(username, user);
+                    }
+                    // 存入内存
+                    getContactList().clear();
+                    getContactList().putAll(userlist);
+                    // 存入db
+                    UserDao dao = new UserDao(appContext);
+                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
+                    dao.saveContactList(users);
+
+//                    imModel.setContactSynced(true);
+                    EMLog.d(TAG, "set contact syn status to true");
+
+                    isContactsSyncedWithServer = true;
+                    isSyncingContactsWithServer = false;
+
+                    //通知listeners联系人同步完毕
+                    notifyContactsSyncListener(true);
+                    /*
+                    if(isGroupsSyncedWithServer()){
+                        notifyForRecevingEvents();
+                    }*/
+
+                    DataSyncManager.getInstance().asyncFetchContactInfosFromServer(usernames,new DataSyncManager.Callback() {
+                        @Override
+                        public void onSuccess(List<XiuxiuUserInfoResult> ulist) {
+                            android.util.Log.d(TAG,"onSuccess ulist.size() = " + ulist.size());
+                            updateContactList(ulist);
+                            getUserProfileManager().notifyContactInfosSyncListener(true);
+                        }
+
+                        @Override
+                        public void onError() {
+                        }
+                    });
+                    /**/
+                    if(callback != null){
+                        callback.onSuccess(usernames);
+                    }
+                } catch (Exception e) {
+//                    imModel.setContactSynced(false);
+                    isContactsSyncedWithServer = false;
+                    isSyncingContactsWithServer = false;
+                    notifyContactsSyncListener(false);
+                    e.printStackTrace();
+                    /*
+                    if(callback != null){
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }*/
+                }
+
+            }
+        }.start();
+    }
+
+    /**
+     * update user list to cach And db
+     *
+     * @param contactList
+     */
+    public void updateContactList(List<XiuxiuUserInfoResult> contactInfoList) {
+        for (XiuxiuUserInfoResult r : contactInfoList) {
+            EaseUser u = XiuxiuUserInfoResult.toEaseUser(r);
+            android.util.Log.d(TAG,"u = " + u);
+            contactList.put(u.getUsername(), u);
+        }
+        ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
+        mList.addAll(contactList.values());
+        imModel.saveContactList(mList);
+    }
+
+    /***
+     * 好友变化listener
+     *
+     */
+    public class MyContactListener implements EMContactListener {
+
+        @Override
+        public void onContactAdded(String username) {
+            // 保存增加的联系人
+            Map<String, EaseUser> localUsers = getContactList();
+            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
+            EaseUser user = new EaseUser(username);
+            // 添加好友时可能会回调added方法两次
+            if (!localUsers.containsKey(username)) {
+                userDao.saveContact(user);
+            }
+            toAddUsers.put(username, user);
+            localUsers.putAll(toAddUsers);
+
+            //发送好友变动广播
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactDeleted(String username) {
+            // 被删除
+            Map<String, EaseUser> localUsers = ImHelper.getInstance().getContactList();
+            localUsers.remove(username);
+            userDao.deleteContact(username);
+            inviteMessgeDao.deleteMessage(username);
+
+            //发送好友变动广播
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactInvited(final String username, String reason) {
+
+            // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
+                    inviteMessgeDao.deleteMessage(username);
+                }
+            }
+            // 自己封装的javabean
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            msg.setReason(reason);
+            android.util.Log.d(TAG, username + "请求加你为好友,reason: " + reason);
+            // 设置相应status
+            msg.setStatus(InviteMesageStatus.BEINVITEED);
+            notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+            if(EaseUserCacheManager.getInstance().getBeanById(username)==null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        HeixiuApi.queryUserInfoSyn(username);
+                    }
+                }).start();
+            }
+        }
+
+        @Override
+        public void onContactAgreed(String username) {
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getFrom().equals(username)) {
+                    return;
+                }
+            }
+            // 自己封装的javabean
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            android.util.Log.d(TAG, username + "同意了你的好友请求");
+            msg.setStatus(InviteMesageStatus.BEAGREED);
+            notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+            // 参考同意，被邀请实现此功能,demo未实现
+            android.util.Log.d(TAG, username + "拒绝了你的好友请求");
+        }
+    }
+
+    /**
+     * 保存并提示消息的邀请消息
+     * @param msg
+     */
+    private void notifyNewIviteMessage(InviteMessage msg){
+        if(inviteMessgeDao == null){
+            inviteMessgeDao = new InviteMessgeDao(appContext);
+        }
+        inviteMessgeDao.saveMessage(msg);
+        //保存未读数，这里没有精确计算
+        inviteMessgeDao.saveUnreadMessageCount(1);
+        // 提示有新消息
+        getNotifier().viberateAndPlayTone(null);
+    }
+
+    /**
+     * 获取好友list
+     *
+     * @return
+     */
+    public Map<String, EaseUser> getContactList() {
+        if (isLoggedIn() && contactList == null) {
+            contactList = imModel.getContactList();
+        }
+
+        // return a empty non-null object to avoid app crash
+        if(contactList == null){
+            return new Hashtable<String, EaseUser>();
+        }
+
+        return contactList;
+    }
+
+    public void notifyContactsSyncListener(boolean success){
+        for (DataSyncListener listener : syncContactsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
+
+    public void addSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncContactsListeners.contains(listener)) {
+            syncContactsListeners.add(listener);
+        }
+    }
+
+    public void removeSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncContactsListeners.contains(listener)) {
+            syncContactsListeners.remove(listener);
+        }
+    }
+
+
+    public UserProfileManager getUserProfileManager() {
+        if (userProManager == null) {
+            userProManager = new UserProfileManager();
+        }
+        return userProManager;
+    }
 }

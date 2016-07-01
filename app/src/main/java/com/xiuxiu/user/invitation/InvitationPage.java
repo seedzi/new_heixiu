@@ -9,6 +9,7 @@ import android.view.Window;
 import com.xiuxiu.R;
 
 /**
+ * 邀请朋友加入咻咻
  * Created by huzhi on 16-4-24.
  */
 public class InvitationPage extends FragmentActivity{

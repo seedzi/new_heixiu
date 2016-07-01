@@ -19,6 +19,7 @@ import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.user.invitation.AddFriendsPage;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskPage;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     // huzhi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PathUtil.getInstance().initDirs("a", "b", getContext());  //因为不知道 PathUtil init()方法调用时机  目前这样手动调用
+        PathUtil.getInstance().initDirs("a", "b", getContext());  //因为不知道 PathUtil init()方法调用时机  目前这样手动调用 TODO
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -66,7 +67,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         rl.addRule(RelativeLayout.BELOW,R.id.title_bar);
         rl.setMargins(0,36,10,0);
         rootView.addView(xiuxiuTaskBt, rl);
-        xiuxiuTaskBt.setOnClickListener(new View.OnClickListener(){
+        xiuxiuTaskBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 XiuxiuTaskPage.startActivity(getActivity());
@@ -181,5 +182,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     @Override
     public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
         return null;
+    }
+
+    @Override
+    protected void addFriends(){
+        AddFriendsPage.startActivity(getContext(),toChatUsername);//huzhi
     }
 }

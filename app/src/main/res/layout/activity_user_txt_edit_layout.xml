@@ -58,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#a6a6a6"
+        android:visibility="gone"
         android:text="使用真是名字让人更快的找到和联系你"/>
 
 </LinearLayout>

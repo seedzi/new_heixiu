@@ -63,6 +63,9 @@ public class VoiceRecorder {
             voiceFileName = getVoiceFileName(EMClient.getInstance().getCurrentUser());
             voiceFilePath = Environment.getExternalStorageDirectory()  + "/" + voiceFileName;
             file = new File(voiceFilePath);
+            if(file.exists()){
+                android.util.Log.d("7777","file exists");
+            }
             recorder.setOutputFile(file.getAbsolutePath());
             recorder.prepare();
             isRecording = true;

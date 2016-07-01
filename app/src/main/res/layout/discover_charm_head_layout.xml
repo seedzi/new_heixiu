@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/crown_2"/>
-            <com.xiuxiu.widget.CircleImageView
+            <com.hyphenate.easeui.widget.CircleImageView
                 app:border_width="2px"
                 app:border_color="#dadada"
                 app:border_padding="8px"
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/crown_1"/>
-            <com.xiuxiu.widget.CircleImageView
+            <com.hyphenate.easeui.widget.CircleImageView
                 app:border_width="2px"
                 app:border_color="#00b8d0"
                 app:border_padding="8px"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:src="@drawable/crown_3"/>
-            <com.xiuxiu.widget.CircleImageView
+            <com.hyphenate.easeui.widget.CircleImageView
                 app:border_width="2px"
                 app:border_color="#dadada"
                 app:border_padding="8px"

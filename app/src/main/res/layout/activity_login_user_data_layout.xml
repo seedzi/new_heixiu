@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.xiuxiu.widget.CircleImageView
+    <com.hyphenate.easeui.widget.CircleImageView
         android:id="@+id/head_img"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
@@ -69,7 +69,9 @@
         <TextView
             android:id="@+id/nick_name_value"
             android:layout_marginLeft="30dp"
-            android:text="小狼9012"
+            android:hint="点击编辑昵称"
+            android:textColorHint="#b7b6b6"
+            android:textColor="#000000"
             android:textSize="16sp"
             android:layout_toRightOf="@id/nick_name"
             android:layout_width="wrap_content"
@@ -92,15 +94,15 @@
         <TextView
             android:id="@+id/brithday_name"
             android:layout_marginLeft="15dp"
-            android:text="生日"
+            android:text="点击选择出生日期"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/brithday_value"
             android:layout_marginLeft="30dp"
-            android:text="点击选择出身日期"
-            android:textColor="#b7b6b6"
+            android:textColorHint="#b7b6b6"
+            android:textColor="#000000"
             android:textSize="16sp"
             android:layout_toRightOf="@id/brithday_name"
             android:layout_width="wrap_content"
@@ -128,6 +130,7 @@
             android:layout_height="wrap_content" />
 
         <RadioGroup
+            android:id="@+id/sex_radio_group"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
@@ -156,6 +159,38 @@
         android:layout_marginLeft="15dp"
         android:background="#dfdfdf"/>
 
+    <!-- 城市 -->
+    <RelativeLayout
+        android:id="@+id/city_layout"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/city_name"
+            android:layout_marginLeft="15dp"
+            android:text="城市"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/city_value"
+            android:layout_marginLeft="30dp"
+            android:hint="点击选择所在城市"
+            android:textColorHint="#b7b6b6"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:layout_toRightOf="@id/city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="15dp"
+        android:background="#dfdfdf"/>
+
     <TextView
         android:layout_marginTop="30dp"
         android:textColor="#b7b6b6"
@@ -165,6 +200,7 @@
         android:layout_gravity="center_horizontal"/>
 
     <TextView
+        android:id="@+id/commit"
         android:layout_marginTop="10dp"
         android:textColor="#ffffff"
         android:text="提交"

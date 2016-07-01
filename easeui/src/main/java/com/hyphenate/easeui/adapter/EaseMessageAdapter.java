@@ -63,8 +63,16 @@ public class EaseMessageAdapter extends BaseAdapter{
 	private static final int MESSAGE_TYPE_RECV_FILE = 11;
 	private static final int MESSAGE_TYPE_SENT_EXPRESSION = 12;
 	private static final int MESSAGE_TYPE_RECV_EXPRESSION = 13;
-	
-	
+
+	/**
+	 * 扩展消息
+	 */
+	private static final int MESSAGE_TYPE_SENT_IMAGE＿CHARGE = 14; //发送收费图片
+	private static final int MMESSAGE_TYPE_RECV_IMAGE＿CHARGE = 15; //接受收费图片
+	private static final int MESSAGE_TYPE_SENT_VIDEO_CHARGE = 16; //发送收费视频
+	private static final int MESSAGE_TYPE_RECV_VIDEO_CHARGE = 17; //接受收费视频
+
+
 	public int itemTypeCount; 
 	
 	// reference to conversation object in chatsdk

@@ -34,11 +34,17 @@
             android:layout_marginTop="9dp"
             hyphenate:numColumns="4"
             android:visibility="gone"/>
-
+        <!-- 表情的container -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/emojicon_menu_container"
+            ></FrameLayout>
+        <!-- 声音的container -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/voice_menu_container"
             ></FrameLayout>
     </FrameLayout>
 

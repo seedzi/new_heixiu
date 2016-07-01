@@ -18,9 +18,9 @@ import com.hyphenate.easeui.R;
 public class EaseTitleBar extends RelativeLayout{
 
     protected RelativeLayout leftLayout;
-    protected ImageView leftImage;
+    protected TextView leftImage;
     protected RelativeLayout rightLayout;
-    protected ImageView rightImage;
+    protected TextView rightImage;
     protected TextView titleView;
     protected RelativeLayout titleLayout;
 
@@ -41,9 +41,9 @@ public class EaseTitleBar extends RelativeLayout{
     private void init(Context context, AttributeSet attrs){
         LayoutInflater.from(context).inflate(R.layout.ease_widget_title_bar, this);
         leftLayout = (RelativeLayout) findViewById(R.id.left_layout);
-        leftImage = (ImageView) findViewById(R.id.left_image);
+        leftImage = (TextView) findViewById(R.id.back);
         rightLayout = (RelativeLayout) findViewById(R.id.right_layout);
-        rightImage = (ImageView) findViewById(R.id.right_image);
+        rightImage = (TextView) findViewById(R.id.right_bt);
         titleView = (TextView) findViewById(R.id.title);
         titleLayout = (RelativeLayout) findViewById(R.id.root);
         
@@ -58,11 +58,11 @@ public class EaseTitleBar extends RelativeLayout{
             
             Drawable leftDrawable = ta.getDrawable(R.styleable.EaseTitleBar_titleBarLeftImage);
             if (null != leftDrawable) {
-                leftImage.setImageDrawable(leftDrawable);
+//                leftImage.setImageDrawable(leftDrawable);
             }
             Drawable rightDrawable = ta.getDrawable(R.styleable.EaseTitleBar_titleBarRightImage);
             if (null != rightDrawable) {
-                rightImage.setImageDrawable(rightDrawable);
+//                rightImage.setImageDrawable(rightDrawable);
             }
         
             Drawable background = ta.getDrawable(R.styleable.EaseTitleBar_titleBarBackground);
@@ -75,11 +75,11 @@ public class EaseTitleBar extends RelativeLayout{
     }
     
     public void setLeftImageResource(int resId) {
-        leftImage.setImageResource(resId);
+//        leftImage.setImageResource(resId);
     }
     
     public void setRightImageResource(int resId) {
-        rightImage.setImageResource(resId);
+//        rightImage.setImageResource(resId);
     }
     
     public void setLeftLayoutClickListener(OnClickListener listener){

@@ -17,6 +17,8 @@ package com.wheel.widget.adapters;
 
 import android.content.Context;
 
+import com.xiuxiu.R;
+
 /**
  * The simple Array wheel adapter
  * @param <T> the element type
@@ -33,8 +35,6 @@ public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
      */
     public ArrayWheelAdapter(Context context, T items[]) {
         super(context);
-        
-        //setEmptyItemResource(TEXT_VIEW_ITEM_RESOURCE);
         this.items = items;
     }
     

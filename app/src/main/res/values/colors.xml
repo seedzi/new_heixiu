@@ -116,4 +116,6 @@
     <color name="xiuxiu_voice_progressbar_indeterminate_color">#12b0c4</color>
     <color name="xiuxiu_voice_progressbar_bg_color">#f4f4f4</color>
 
+    <color name="transparent">#00000000</color>
+
 </resources>

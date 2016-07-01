@@ -19,12 +19,9 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.utils.EaseImageUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
-import com.hyphenate.easeui.widget.EaseChatExtendMenu;
-import com.hyphenate.easeui.widget.EaseChatExtendMenu2;
 import com.hyphenate.easeui.widget.EaseChatInputMenu;
 import com.hyphenate.easeui.widget.EaseChatInputMenu.ChatInputMenuListener;
 import com.hyphenate.easeui.widget.EaseChatMessageList;
@@ -106,7 +103,6 @@ public class EaseChatFragment extends EaseBaseFragment {
     public static final int ITEM_VIDEO = 0;
     public static final int ITEM_PICTURE = 1;
     public static final int ITEM_GIFT = 2;
-    public static final int ITEM_XIUXIU = 3;
     /*
     static final int ITEM_TAKE_PICTURE = 1;
     static final int ITEM_PICTURE = 2;
@@ -116,7 +112,7 @@ public class EaseChatFragment extends EaseBaseFragment {
     protected int[] itemdrawables = { R.drawable.ease_chat_takepic_selector, R.drawable.ease_chat_image_selector,
             R.drawable.ease_chat_location_selector ,R.drawable.ease_chat_face_normal};
 //    protected int[] itemIds = { ITEM_TAKE_PICTURE, ITEM_PICTURE, ITEM_LOCATION ,4};
-    protected int[] itemIds = {ITEM_PICTURE, ITEM_GIFT,ITEM_XIUXIU};
+    protected int[] itemIds = {ITEM_PICTURE, ITEM_GIFT};
     private EMChatRoomChangeListener chatRoomChangeListener;
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
@@ -238,13 +234,15 @@ public class EaseChatFragment extends EaseBaseFragment {
 
             @Override
             public void onClick(View v) {
+                /*
                 if (chatType == EaseConstant.CHATTYPE_SINGLE) {
                     emptyHistory();
                 } else {
                     toGroupDetails();
-                }
+                }*/
                 // huzhi
                 // 加好友页面
+                addFriends();
             }
         });
 
@@ -257,7 +255,10 @@ public class EaseChatFragment extends EaseBaseFragment {
             forwardMessage(forward_msg_id);
         }
     }
-    
+
+    protected void addFriends(){
+    }
+
     /**
      * 注册底部菜单扩展栏item; 覆盖此方法时如果不覆盖已有item，item的id需大于3
      */
@@ -661,8 +662,6 @@ public class EaseChatFragment extends EaseBaseFragment {
                 case ITEM_VIDEO: //视频
                     break;
                 case ITEM_GIFT:
-                    break;
-                case ITEM_XIUXIU:
                     break;
                 default:
                     break;

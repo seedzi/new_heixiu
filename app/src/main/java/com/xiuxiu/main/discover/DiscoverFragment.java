@@ -1,29 +1,18 @@
 package com.xiuxiu.main.discover;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.R;
-import com.xiuxiu.api.HttpUrlManager;
-import com.xiuxiu.api.XiuxiuAllUserResult;
 import com.xiuxiu.bean.Friend;
-import com.xiuxiu.discover.CharmAdapter;
-import com.xiuxiu.discover.OnLineAdapter;
-import com.xiuxiu.discover.WealthAdapter;
+import com.xiuxiu.call.CallManager;
+import com.xiuxiu.call.voice.CallVoicePage;
 import com.xiuxiu.heixiubroadcast.HeixiuBroadCastPage;
-import com.xiuxiu.utils.Md5Util;
+import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.widget.LayoutPagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -83,6 +72,11 @@ public class DiscoverFragment extends Fragment implements
 
     @Override
     public void onPageSelected(int position) {
+        if(position==0){
+            mRootView.findViewById(R.id.heixiu_broadcast).setVisibility(View.VISIBLE);
+        }else{
+            mRootView.findViewById(R.id.heixiu_broadcast).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -102,7 +96,7 @@ public class DiscoverFragment extends Fragment implements
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.heixiu_broadcast:
+            case R.id.heixiu_broadcast: //咻咻
                 HeixiuBroadCastPage.startActivity(getActivity());
                 break;
         }

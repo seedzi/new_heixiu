@@ -22,6 +22,7 @@ import com.xiuxiu.api.XiuxiuAllUserResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
+import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.UiUtil;
 
@@ -30,6 +31,7 @@ import com.xiuxiu.utils.UiUtil;
  */
 public class RegisterPage extends FragmentActivity implements View.OnClickListener{
 
+    private static String TAG = RegisterPage.class.getSimpleName();
 
     private EditText mUserNameEdt;
 
@@ -82,10 +84,12 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
     private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
-            android.util.Log.d("ccc","response = " + response);
+            android.util.Log.d(TAG,"response = " + response);
             Gson gson = new Gson();
             XiuxiuLoginResult res = gson.fromJson(response, XiuxiuLoginResult.class);
+
             if (res.isSuccess()) {
+                android.util.Log.d(TAG,"res = " + res);
                 XiuxiuLoginResult.save(res);
                 ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
                     @Override
@@ -93,6 +97,7 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
                         Toast.makeText(getApplication(), "登录成功", 0).show();
                         finish();
                         MainActivity.startActivity(RegisterPage.this);
+//                        LoginUserDataEditPage.startActivity(RegisterPage.this, "huzhi", "", "北京", "male");
                     }
                 });
             }
@@ -101,6 +106,7 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
     private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
+            android.util.Log.d(TAG,"error = "+ error.getMessage());
         }
     };
 

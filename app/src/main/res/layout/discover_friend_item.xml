@@ -2,85 +2,85 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical">
-<RelativeLayout
-    android:layout_width="match_parent" android:layout_height="wrap_content">
-    <!-- -->
-    <com.xiuxiu.widget.CircleImageView
-        android:id="@+id/head_img"
-        android:layout_marginTop="13dp"
-        android:layout_marginBottom="13dp"
-        android:layout_marginLeft="10dp"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:src="@drawable/head_default"/>
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+        <!-- -->
+        <com.hyphenate.easeui.widget.CircleImageView
+            android:id="@+id/head_img"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/head_default"/>
 
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_toRightOf="@id/head_img"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="14dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/line_txt_size_big"/>
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_toRightOf="@id/head_img"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/line_txt_size_big"/>
 
-    <TextView
-        android:id="@+id/age"
-        android:layout_toRightOf="@id/head_img"
-        android:layout_below="@id/user_name"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="9sp"
-        android:text="24"
-        android:gravity="center_vertical|right"
-        android:background="@drawable/age_bg"
-        android:paddingRight="12px"
-        android:textColor="#ffffff"/><!-- android:paddingLeft="5dp" android:textSize="10sp" -->
+        <TextView
+            android:id="@+id/user_age"
+            android:layout_toRightOf="@id/head_img"
+            android:layout_below="@id/user_name"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="9sp"
+            android:text="24"
+            android:gravity="center_vertical|right"
+            android:background="@drawable/male_age_bg"
+            android:paddingRight="12px"
+            android:textColor="#ffffff"/>
 
-    <ImageView
-        android:id="@+id/vip_grade"
-        android:layout_toRightOf="@id/age"
-        android:layout_alignBottom="@id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="5dp"
-        android:src="@drawable/charm_1"/>
+        <ImageView
+            android:id="@+id/vip_grade"
+            android:layout_toRightOf="@id/user_age"
+            android:layout_alignBottom="@id/user_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/charm_1"/>
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_toRightOf="@id/head_img"
-        android:layout_below="@id/age"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#8b8b8b"
-        android:textSize="@dimen/line_txt_size_normal"/>
+        <TextView
+            android:id="@+id/description"
+            android:layout_toRightOf="@id/head_img"
+            android:layout_below="@id/user_age"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8b8b8b"
+            android:textSize="@dimen/line_txt_size_normal"/>
 
-    <TextView
-        android:id="@+id/online_time"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="14dp"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#8b8b8b"
-        android:textSize="@dimen/line_txt_size_small"
-        android:text="15分钟前"/>
+        <TextView
+            android:id="@+id/online_time"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8b8b8b"
+            android:textSize="@dimen/line_txt_size_small"/>
 
-    <ImageView
-        android:layout_below="@id/online_time"
-        android:layout_marginRight="14dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="13dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/list_item_play"/>
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/list_item_play"
+            android:layout_below="@id/online_time"
+            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="13dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/list_item_play"/>
+    </RelativeLayout>
     <View
         android:layout_marginLeft="79dp"
         android:layout_width="match_parent"

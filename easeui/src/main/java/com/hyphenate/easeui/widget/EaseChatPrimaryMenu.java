@@ -72,8 +72,10 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         
         buttonSend.setOnClickListener(this);
         buttonSend.setEnabled(false);
-        buttonSetModeKeyboard.setOnClickListener(this);
-        buttonSetModeVoice.setOnClickListener(this);
+        //huzhi
+//        buttonSetModeKeyboard.setOnClickListener(this);
+//        buttonSetModeVoice.setOnClickListener(this);
+        findViewById(R.id.rl_voice).setOnClickListener(this);
 //        buttonMore.setOnClickListener(this);
         faceLayout.setOnClickListener(this);
         editText.setOnClickListener(this);
@@ -122,8 +124,8 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         
         
         buttonPressToSpeak.setOnTouchListener(new OnTouchListener() {
-            
-            @Override 
+
+            @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(listener != null){
                     return listener.onPressToSpeakBtnTouch(v, event);
@@ -132,10 +134,9 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             }
         });
 
-        // =============== 视频 图片 礼物 咻羞 拍照  注册点击事件 huzhi ===================//
+        // =============== 视频 图片 礼物  拍照  注册点击事件 huzhi ===================//
         mItemViews.add(findViewById(R.id.ease_chat_video));//视频
         mItemViews.add(findViewById(R.id.ease_chat_pic));//图片
-        mItemViews.add(findViewById(R.id.ease_chat_heixiu));//咻羞
         mItemViews.add(findViewById(R.id.ease_chat_gift));//礼物
     }
     
@@ -179,12 +180,13 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
                 listener.onSendBtnClicked(s);
             }
         } else if (id == R.id.ease_chat_voice) {
-            setModeVoice();
+//            setModeVoice(); //huzhi
+            toggleVoiceImage();
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleVoiceBtnClicked();
         } else if (id == R.id.ease_chat_voice_keyboard) {
-            setModeKeyboard();
+//            setModeKeyboard(); //huzhi
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleVoiceBtnClicked();
@@ -196,12 +198,17 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             showNormalFaceImage();
             if(listener != null)
                 listener.onToggleExtendClicked();
-        }*/ else if (id == R.id.et_sendmessage) {
+        }*/
+        else if (id == R.id.et_sendmessage) {
 //            edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_active);
 //            faceNormal.setVisibility(View.VISIBLE);
 //            faceChecked.setVisibility(View.INVISIBLE);
             if(listener != null)
                 listener.onEditTextClicked();
+        } else if (id == R.id.rl_voice){
+            toggleVoiceImage();
+            if(listener != null)
+                listener.onToggleVoiceBtnClicked();
         } else if (id == R.id.rl_face) {
             toggleFaceImage();
             if(listener != null){
@@ -251,11 +258,13 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     
     
     protected void toggleFaceImage(){
+        android.util.Log.d("aaaa","toggleFaceImage");
         if(faceNormal.getVisibility() == View.VISIBLE){
             showSelectedFaceImage();
         }else{
             showNormalFaceImage();
         }
+        showNormalVoiceImage();
     }
     
     private void showNormalFaceImage(){
@@ -266,6 +275,27 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     private void showSelectedFaceImage(){
         faceNormal.setVisibility(View.INVISIBLE);
         faceChecked.setVisibility(View.VISIBLE);
+    }
+
+    protected void toggleVoiceImage(){
+        if(buttonSetModeKeyboard.getVisibility() == View.VISIBLE){
+            showNormalVoiceImage();
+        }else{
+            showSelectedVoiceImage();
+        }
+        showNormalFaceImage();
+    }
+
+    private void showNormalVoiceImage(){
+        android.util.Log.d("aaaa","showNormalVoiceImage");
+        buttonSetModeVoice.setVisibility(View.VISIBLE);
+        buttonSetModeKeyboard.setVisibility(View.INVISIBLE);
+    }
+
+    private void showSelectedVoiceImage(){
+        android.util.Log.d("aaaa","showSelectedVoiceImage");
+        buttonSetModeVoice.setVisibility(View.INVISIBLE);
+        buttonSetModeKeyboard.setVisibility(View.VISIBLE);
     }
     
 

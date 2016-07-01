@@ -1,6 +1,7 @@
 package com.xiuxiu.main.chat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -12,9 +13,14 @@ import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.util.EMLog;
 import com.xiuxiu.R;
 import com.xiuxiu.chat.ChatPage;
+import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.MainActivity;
+import com.xiuxiu.main.chat.widget.ContactItemView;
+import com.xiuxiu.user.invitation.InviteMessgeDao;
+import com.xiuxiu.user.invitation.NewFriendsMsgActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +32,10 @@ import java.util.Map;
  * 会话列表页面管理类
  */
 public class ConversationListManager {
+    /**
+     *
+     */
+    private ContactSyncListener contactSyncListener;
 
     private static ConversationListManager mInstance;
 
@@ -49,6 +59,14 @@ public class ConversationListManager {
     private View mLoadingView;
 
     private ConversationListAdapter adapter;
+
+    private InviteMessgeDao inviteMessgeDao;
+
+    private Context mContext;
+    /**
+     * 列表头部好友申请控件
+     */
+    private ContactItemView applicationItem;
 
     // ===================================== 刷新罗辑 start =========================================//
     protected Handler handler = new Handler(){
@@ -97,8 +115,22 @@ public class ConversationListManager {
      * 刷新页面
      */
     public void refresh() {
+        /**
+         * １刷新信息列表
+         */
         if(!handler.hasMessages(2)){
             handler.sendEmptyMessage(2);
+        }
+        /**
+         * 刷新加好友列表
+         */
+        if(inviteMessgeDao == null){
+            inviteMessgeDao = new InviteMessgeDao(mContext);
+        }
+        if(inviteMessgeDao.getUnreadMessagesCount() > 0){
+            applicationItem.showUnreadMsgView();
+        }else{
+            applicationItem.hideUnreadMsgView();
         }
     }
 // ======================================== 刷新罗辑 end ============================================//
@@ -113,6 +145,7 @@ public class ConversationListManager {
     }
 
     private void setUpViews(Context context){
+        mContext = context;
         mLayout = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.list_layout,null);
         mPullToRefreshListView = (PullToRefreshListView) mLayout.findViewById(R.id.list);
         mEmptyView = mLayout.findViewById(R.id.empty_view);
@@ -120,20 +153,31 @@ public class ConversationListManager {
         mPullToRefreshListView.setVisibility(View.VISIBLE);
         mEmptyView.setVisibility(View.GONE);
         mLoadingView.setVisibility(View.GONE);
-        mPullToRefreshListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
+        mPullToRefreshListView.getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EMConversation conversation = adapter.getItem(position -1);
-                String username = conversation.getUserName();
-                if (username.equals(EMClient.getInstance().getCurrentUser()))
-                    Toast.makeText(MainActivity.getInstance(), R.string.Cant_chat_with_yourself, 0).show();
-                else {
-                    // 进入聊天页面
-                    ChatPage.startActivity(MainActivity.getInstance(), username, username);
-                }
+                try {
+                    EMConversation conversation = adapter.getItem(position - 2);
+                    String username = conversation.getUserName();
+                    if (username.equals(EMClient.getInstance().getCurrentUser()))
+                        Toast.makeText(MainActivity.getInstance(), R.string.Cant_chat_with_yourself, 0).show();
+                    else {
+                        // 进入聊天页面
+                        ChatPage.startActivity(MainActivity.getInstance(), username, username);
+                    }
+                }catch (Exception e){}
             }
         });
+        applicationItem = new ContactItemView(mContext);
+        applicationItem.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                // 进入申请与通知页面
+                mContext.startActivity(new Intent(mContext, NewFriendsMsgActivity.class));
+            }
+        });
+        mPullToRefreshListView.getRefreshableView().addHeaderView(applicationItem);
     }
 
     private void initData(Context context){
@@ -203,5 +247,33 @@ public class ConversationListManager {
             }
 
         });
+    }
+
+
+
+
+
+
+
+
+    class ContactSyncListener implements ImHelper.DataSyncListener {
+        @Override
+        public void onSyncComplete(final boolean success) {
+//            EMLog.d(TAG, "on contact list sync success:" + success);
+            MainActivity.getInstance().runOnUiThread(new Runnable() {
+                public void run() {
+                    if (success) {
+//                        loadingView.setVisibility(View.GONE);
+                        refresh();
+                    } else {
+                        /*
+                        String s1 = getResources().getString(R.string.get_failed_please_check);
+                        Toast.makeText(getActivity(), s1, 1).show();
+                        loadingView.setVisibility(View.GONE);
+                        */
+                    }
+                }
+            });
+        }
     }
 }

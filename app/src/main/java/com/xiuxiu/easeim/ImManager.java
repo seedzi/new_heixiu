@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class ImManager {
 
+
     private static ImManager mInstance;
 
     private ImManager(){
@@ -59,7 +60,8 @@ public class ImManager {
     public void login(String userName,String password,final Runnable runnable){
         EMClient.getInstance().login(userName,password,new EMCallBack() {//回调
             @Override
-                public void onSuccess() {
+            public void onSuccess() {
+                android.util.Log.d("ccc","EASE  onSuccess");
                 XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {

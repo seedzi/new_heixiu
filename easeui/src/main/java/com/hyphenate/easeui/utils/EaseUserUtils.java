@@ -10,9 +10,12 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class EaseUserUtils {
-    
+
+    private static String TAG = EaseUserUtils.class.getSimpleName();
+
     static EaseUserProfileProvider userProvider;
     
     static {
@@ -36,8 +39,14 @@ public class EaseUserUtils {
      * @param username
      */
     public static void setUserAvatar(Context context, String username, ImageView imageView){
+        android.util.Log.d(TAG,"setUserAvatar");
     	EaseUser user = getUserInfo(username);
         if(user != null && user.getAvatar() != null){
+            ImageLoader.getInstance().displayImage(user.getAvatar(),imageView);
+        }
+        /*
+        if(user != null && user.getAvatar() != null){
+            android.util.Log.d(TAG,"user.getAvatar() = " + user.getAvatar());
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Glide.with(context).load(avatarResId).into(imageView);
@@ -48,6 +57,7 @@ public class EaseUserUtils {
         }else{
             Glide.with(context).load(R.drawable.ease_default_avatar).into(imageView);
         }
+        */
     }
     
     /**
@@ -63,5 +73,29 @@ public class EaseUserUtils {
         	}
         }
     }
-    
+
+    /**
+     * 设置用户签名
+     */
+    public static void setUserSignature(String username,TextView textView){
+        if(textView != null){
+            EaseUser user = getUserInfo(username);
+            if(user != null && user.getSign() != null){
+                textView.setText(user.getSign());
+            }
+        }
+    }
+
+    /**
+     * 设置用户年纪
+     */
+    public static void setUserAge(String username,TextView textView){
+        if(textView != null){
+            EaseUser user = getUserInfo(username);
+            if(user != null ){
+                textView.setText(user.getAge());
+            }
+        }
+    }
+
 }

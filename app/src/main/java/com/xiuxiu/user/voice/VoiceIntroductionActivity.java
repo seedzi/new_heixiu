@@ -1,12 +1,15 @@
 package com.xiuxiu.user.voice;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -14,10 +17,26 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 import com.hyphenate.EMError;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
 import com.xiuxiu.R;
+import com.xiuxiu.XiuxiuApplication;
+import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuResult;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.main.MainActivity;
+import com.xiuxiu.user.FileUploadManager;
+import com.xiuxiu.utils.FileUtils;
 import com.xiuxiu.utils.ToastUtil;
+
+import org.json.JSONObject;
 
 
 /**
@@ -26,11 +45,12 @@ import com.xiuxiu.utils.ToastUtil;
 public class VoiceIntroductionActivity extends FragmentActivity implements View.OnClickListener,
         View.OnTouchListener {
 
-    public static void startActivity(Context context){
-        Intent intent = new Intent(context,VoiceIntroductionActivity.class);
-        context.startActivity(intent);
+    public static void startActivity(FragmentActivity ac){
+        Intent intent = new Intent(ac,VoiceIntroductionActivity.class);
+        ac.startActivityForResult(intent,REQUEST_CODE);
     }
 
+    public static int REQUEST_CODE = 102;
 
 
 
@@ -59,6 +79,7 @@ public class VoiceIntroductionActivity extends FragmentActivity implements View.
         mBt.setOnTouchListener(this);
 
         mTimeTxt = (TextView)findViewById(R.id.time_txt);
+        findViewById(R.id.save).setOnClickListener(this);
     }
 
     @Override
@@ -79,12 +100,22 @@ public class VoiceIntroductionActivity extends FragmentActivity implements View.
         switch (id){
             case R.id.control:
                 if(mMediaPlayer!=null && mMediaPlayer.isPlaying()){
-                    android.util.Log.d("ccc","pause");
                     pause();
                 }else{
-                    android.util.Log.d("ccc","play");
                     play();
                 }
+                break;
+            case R.id.save:
+                if(voiceRecorder==null ||
+                        TextUtils.isEmpty(voiceRecorder.getVoiceFilePath())){
+                    return;
+                }
+                Intent intent = new Intent();
+                Bundle bundle=new Bundle();
+                bundle.putString("data", voiceRecorder.getVoiceFilePath());
+                intent.putExtras(bundle);
+                setResult(RESULT_OK,intent);
+                finish();
                 break;
             default:
                 break;
@@ -97,7 +128,6 @@ public class VoiceIntroductionActivity extends FragmentActivity implements View.
     protected Handler micImageHandler = new Handler() {
         @Override
         public void handleMessage(android.os.Message msg) {
-            android.util.Log.d("cccc"," msg.what = " + msg.what);
             // 切换msg切换图片
 //            micImage.setImageDrawable(micImages[msg.what]);
             if(msg.what==0){
@@ -165,7 +195,6 @@ public class VoiceIntroductionActivity extends FragmentActivity implements View.
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        android.util.Log.d("ccc","e = " + e.getMessage());
                         ToastUtil.showMessage(this, (CharSequence)"录制文件异常");
                     }
                 }
@@ -286,5 +315,87 @@ public class VoiceIntroductionActivity extends FragmentActivity implements View.
         mMediaPlayer.pause();
         mControl.setImageResource(R.drawable.user_voice_play_icon);
     }
-    // http://blog.csdn.net/huanghuanghbc/article/details/8634891 录音
+
+    // ============================================================================================
+    // 网络层
+    // ============================================================================================
+        /*
+    private ProgressDialog mProgressDialog;
+
+    private void showProgressDialog(){
+        mProgressDialog = ProgressDialog.show(this, "提示", "正在上传中...");
+    }
+
+    private void dismisslProgressDialog(){
+        if(mProgressDialog!=null){
+            mProgressDialog.dismiss();
+        }
+    }
+
+
+
+
+     private String mUploadFilePath;
+    private void updateUserData() {
+        if(voiceRecorder == null || TextUtils.isEmpty( voiceRecorder.getVoiceFilePath())){
+            return;
+        }
+        FileUploadManager.getInstance().upload( voiceRecorder.getVoiceFilePath(),
+                FileUploadManager.getInstance().generateUserVoiceFileName(FileUtils.getFileNameBySuffix(voiceRecorder.getVoiceFilePath())),
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
+                        android.util.Log.d("aaaa","s = " + s);
+                        android.util.Log.d("aaaa","responseInfo = " + responseInfo);
+                        android.util.Log.d("aaaa","jsonObject = " + jsonObject);
+                        if (responseInfo != null && responseInfo.isOK() && !TextUtils.isEmpty(s)) {
+                            mUploadFilePath = HttpUrlManager.QI_NIU_HOST + s;
+                            android.util.Log.d("aaaa","mUploadFilePath = " + mUploadFilePath);
+                            XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    XiuxiuApplication.getInstance().getQueue()
+                                            .add(new StringRequest(getUpdateUrl(), mRefreshListener, mRefreshErroListener));
+                                }
+                            });
+                        }
+                    }
+                });
+    }
+
+    private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            Gson gson = new Gson();
+            XiuxiuResult res = gson.fromJson(response, XiuxiuResult.class);
+            android.util.Log.d("cccc","error response= " + response);
+            if(res.isSuccess()){
+                XiuxiuUserInfoResult info = new XiuxiuUserInfoResult();
+                info.setVoice(mUploadFilePath);
+                XiuxiuUserInfoResult.save(info);
+                dismisslProgressDialog();
+                ToastUtil.showMessage(VoiceIntroductionActivity.this, "资料更新成功!");
+                finish();
+            }else{
+                dismisslProgressDialog();
+                ToastUtil.showMessage(VoiceIntroductionActivity.this, "修改失败!");
+            }
+        }
+    };
+    private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            android.util.Log.d("cccc","error = " + error.getMessage());
+            dismisslProgressDialog();
+            ToastUtil.showMessage(VoiceIntroductionActivity.this, "修改失败!");
+        }
+    };
+    private String getUpdateUrl() {
+        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.UPDATE_USER_INFO)
+                .appendQueryParameter(XiuxiuUserInfoResult.XIUXIU_ID, XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter(XiuxiuUserInfoResult.VOICE, mUploadFilePath)
+                .build().toString();
+    }
+    */
 }

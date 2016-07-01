@@ -3,28 +3,39 @@ package com.xiuxiu.user;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
+import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.user.voice.VoicePlayManager;
 import com.xiuxiu.utils.ScreenUtils;
 import com.xiuxiu.utils.UiUtil;
 
 import java.net.URLDecoder;
+import java.util.List;
 
 /**
+ * 用户资料详情页
  * Created by huzhi on 16-4-8.
  */
 public class UserDetailActivity extends FragmentActivity implements View.OnClickListener{
+
+    private static String TAG = UserDetailActivity.class.getSimpleName();
 
     public static void startActivity(Context context){
         Intent intent = new Intent(context,UserDetailActivity.class);
@@ -44,6 +55,10 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
     private TextView mCityTv;
     private TextView mHeixiuIdTv;
 
+    private ImageView mCharmIv;
+    private List<String> mUrlList;
+
+    PhotoAdpater mPhotoAdpater;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,36 +73,106 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
         mLayout = (ViewGroup)findViewById(R.id.root_layout);
         mPhotoWall = (GridView)UiUtil.findViewById(mLayout, R.id.photo_wall);
         //设置照片墙大小
-        int width = mScreenWidth - ScreenUtils.dip2px(getApplicationContext(),14);
-        mPhotoItemWidth = (width - ScreenUtils.dip2px(getApplicationContext(),12))/4;
-        mPhotoItemHeight = mPhotoItemWidth;
-        int height = mPhotoItemHeight*2 + ScreenUtils.dip2px(getApplicationContext(),4);
-        LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width,height);
-        ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
-        mPhotoWall.setLayoutParams(ll);
+        mPhotoAdpater = new PhotoAdpater();
         mPhotoWall.setHorizontalSpacing(4);
         mPhotoWall.setVerticalSpacing(4);
-        mPhotoWall.setAdapter(new PhotoAdpater());
+        mPhotoWall.setAdapter(mPhotoAdpater);
+
+        mPhotoWall.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserImagePageActivity.startActivity(UserDetailActivity.this, mUrlList, position);
+            }
+        });
 
         findViewById(R.id.edit).setOnClickListener(this);
+        findViewById(R.id.edit).setVisibility(View.VISIBLE);
+        findViewById(R.id.more).setVisibility(View.GONE);
 
         mSignTv = (TextView)findViewById(R.id.user_sign_value);
         mTitleTv = (TextView)findViewById(R.id.title);
-        mAgTv = (TextView)findViewById(R.id.age);
+        mAgTv = (TextView)findViewById(R.id.user_age);
         mCityTv = (TextView)findViewById(R.id.city_value);
         mHeixiuIdTv = (TextView) findViewById(R.id.heixiu_hao_value);
+
+        mCharmIv = (ImageView) findViewById(R.id.charm_value);
+
+        VoicePlayManager.getInstance().init(this, (ImageView) findViewById(R.id.yuyin_bt),
+                R.drawable.list_item_stop, R.drawable.list_item_play);
+
+        findViewById(R.id.back).setOnClickListener(this);
+
+        findViewById(R.id.bottom_layout).setVisibility(View.GONE);
     }
 
     /**
      * 刷新用户信息
      */
     private void refreshUserData(){
+        mUrlList = XiuxiuUserInfoResult.getInstance().getPics();
+        android.util.Log.d(TAG, "mUrlList = " + mUrlList);
         mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
         mTitleTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
         mAgTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getAge()));
         mCityTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getCity()));
         mHeixiuIdTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_id()));
+        XiuxiuPerson.setCharmValue(mCharmIv, XiuxiuUserInfoResult.getInstance().getCharm());
+        mPhotoAdpater.notifyDataSetChanged();
+
+        if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getVoice())){
+            findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
+            ((TextView)findViewById(R.id.yuyin_txt)).setText("暂无语音介绍");
+            findViewById(R.id.yuyin_layout).setOnClickListener(null);
+        }else{
+            findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
+            ((TextView)findViewById(R.id.yuyin_txt)).setText("语音介绍");
+            findViewById(R.id.yuyin_layout).setOnClickListener(this);
+        }
+
+        if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){
+            ((TextView)findViewById(R.id.charm_txt)).setText("财富等级");
+            XiuxiuPerson.setWealthValue(mCharmIv, XiuxiuUserInfoResult.getInstance().getFortune());
+            mAgTv.setBackgroundResource(R.drawable.male_age_bg);
+        }else{
+            ((TextView)findViewById(R.id.charm_txt)).setText("魅力等级");
+            XiuxiuPerson.setCharmValue(mCharmIv, XiuxiuUserInfoResult.getInstance().getCharm());
+            mAgTv.setBackgroundResource(R.drawable.female_age_bg);
+        }
+
+        setUpWalletHeight();
+
+        setUpBuliangjilv();
     }
+
+    //设置不良记录
+    private void setUpBuliangjilv(){
+        if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getSpam())){
+            findViewById(R.id.bu_liang_ji_lu_layout).setVisibility(View.GONE);
+            findViewById(R.id.bu_liang_ji_lu_line).setVisibility(View.GONE);
+        }
+    }
+
+    // 设置照片墙宽度
+    private void setUpWalletHeight(){
+        int width = mScreenWidth - ScreenUtils.dip2px(getApplicationContext(),14);
+        mPhotoItemWidth = (width - ScreenUtils.dip2px(getApplicationContext(),12))/4;
+        mPhotoItemHeight = mPhotoItemWidth;
+        int height = 0;
+        if(mUrlList!=null && mUrlList.size()>4) {
+            height = mPhotoItemHeight*2 + ScreenUtils.dip2px(getApplicationContext(),4);
+            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width, height);
+            ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
+            mPhotoWall.setLayoutParams(ll);
+        }else if(mUrlList!=null && mUrlList.size()<=4){
+            height = mPhotoItemHeight + ScreenUtils.dip2px(getApplicationContext(),4);
+            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width, height);
+            ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
+            mPhotoWall.setLayoutParams(ll);
+        } else {
+            mPhotoWall.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -99,12 +184,27 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
+            case R.id.back:
+                finish();
+                break;
             case R.id.edit:
                 UserEditDetailActivity.startActivity(UserDetailActivity.this);
+                break;
+            case R.id.yuyin_layout:
+                if(VoicePlayManager.getInstance().isPlaying()){
+                    VoicePlayManager.getInstance().pause();
+                }else{
+                    VoicePlayManager.getInstance().play(XiuxiuUserInfoResult.getUrlVoice4Qiniu(XiuxiuUserInfoResult.getInstance().getVoice()));
+                }
                 break;
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VoicePlayManager.getInstance().release();
+    }
 
     private class PhotoAdpater extends BaseAdapter{
 
@@ -120,7 +220,7 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
 
         @Override
         public int getCount() {
-            return 8;
+            return mUrlList==null?0: mUrlList.size();
         }
 
         @Override
@@ -132,7 +232,11 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
                 convertView.setLayoutParams(gl);
                 ((ImageView)convertView).setScaleType(ImageView.ScaleType.FIT_XY);
             }
-            ((ImageView)convertView).setBackgroundColor(Color.parseColor("#a6a6a6"));
+            ((ImageView)convertView).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
+            if(mUrlList!=null && position<mUrlList.size()){
+                ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + XiuxiuUserInfoResult.getInstance().getPics().get(position),
+                        (ImageView)convertView);
+            }
             return convertView;
         }
     }

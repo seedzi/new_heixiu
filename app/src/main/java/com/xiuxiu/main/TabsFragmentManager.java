@@ -18,10 +18,31 @@ import com.xiuxiu.main.discover.DiscoverFragment;
  * Created by huzhi on 15-3-9.
  */
 public class TabsFragmentManager {
-	
-	private Map<String ,Fragment> fragments = new HashMap<String ,Fragment>();
 
-    public TabsFragmentManager(){};
+    private static TabsFragmentManager mInstance;
+
+    private TabsFragmentManager(){};
+
+    public static TabsFragmentManager getInstance(){
+        if(mInstance == null){
+            mInstance = new TabsFragmentManager();
+        }
+        return mInstance;
+    }
+
+    private Map<String ,Fragment> fragments = new HashMap<String ,Fragment>();
+
+    public void clear(){
+        if(fragments!=null){
+            fragments.clear();
+        }
+    }
+
+    private int mPosition;
+
+    public Fragment getCurrentFragment(){
+        return getFragment(mPosition);
+    }
 
     public Fragment getFragment(int position){
         Fragment fragment = null;
@@ -44,6 +65,7 @@ public class TabsFragmentManager {
 
     @SuppressLint("NewApi")
 	public void commitFragment(int position, FragmentActivity ac){
+        mPosition = position;
         FragmentManager fragmentManager = ac.getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
@@ -57,5 +79,9 @@ public class TabsFragmentManager {
 //        fragmentTransaction.show(fragment);
 //        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    public int getCurrentPosition(){
+        return mPosition;
     }
 }

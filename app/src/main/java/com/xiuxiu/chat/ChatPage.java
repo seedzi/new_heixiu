@@ -20,19 +20,6 @@ public class ChatPage extends FragmentActivity{
 
     String toChatUserId;
 
-    public static void startActivity(FragmentActivity ac){
-        Intent intent = new Intent(ac,ChatPage.class);
-        ac.startActivity(intent);
-        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
-    }
-
-    public static void startActivity(FragmentActivity ac,String userId){
-        Intent intent = new Intent(ac,ChatPage.class);
-        intent.putExtra(EXTRA_USERID,userId);
-        ac.startActivity(intent);
-        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
-    }
-
     public static void startActivity(FragmentActivity ac,String userId,String userName){
         Intent intent = new Intent(ac,ChatPage.class);
         intent.putExtra(EXTRA_USERID,userId);

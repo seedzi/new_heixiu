@@ -60,7 +60,7 @@ public class Tabs extends LinearLayout implements View.OnClickListener{
 	private void init(Context context){
     	LayoutInflater inflater = LayoutInflater.from(context);
     	mContext = context;
-    	mMTabsFragmentManager = new TabsFragmentManager();
+    	mMTabsFragmentManager = TabsFragmentManager.getInstance();
     	tabs_names = mContext.getResources().getStringArray(R.array.tabs_names);
         int index = 0;
         tabViews.clear();

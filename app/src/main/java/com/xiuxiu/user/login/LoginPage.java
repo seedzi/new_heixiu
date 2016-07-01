@@ -19,23 +19,23 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
+import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.register.RegisterPage;
+import com.xiuxiu.user.thirdplatform.ThirdPlatformManager;
+import com.xiuxiu.utils.DateUtils;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.UiUtil;
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-
-import java.util.Map;
 
 /**
  * Created by zhihu on 16-4-17.
  */
 public class LoginPage extends FragmentActivity implements View.OnClickListener{
+
+    private static String TAG = "LoginPage";
 
     public static void startActivity(FragmentActivity ac){
         Intent intent = new Intent(ac,LoginPage.class);
@@ -54,21 +54,20 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
         UiUtil.findViewById(mRootLayout,R.id.qq_login_bt).setOnClickListener(this);
         UiUtil.findViewById(mRootLayout,R.id.wechat_login_bt).setOnClickListener(this);
 
-        mShareAPI = UMShareAPI.get(this);
-
-        inint();
+        init();
+        android.util.Log.d(TAG,"time = " + DateUtils.time2Date("1260028800000"));
     }
 
     /**
      * 如果登录了直接进入
      */
-    private void inint(){
+    private void init(){
         if(ImHelper.getInstance().isLoggedIn()){
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     EMClient.getInstance().chatManager().loadAllConversations();
-                    ChatNickNameAndAvatarCacheManager.getInstance().init();
+                    EaseUserCacheManager.getInstance().init();
                     XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                         @Override
                         public void run() {
@@ -78,6 +77,8 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
                     });
                 }
             }).start();
+        }else{
+            ThirdPlatformManager.getInstance().setActivity(this);
         }
     }
 
@@ -87,57 +88,22 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
         int id = v.getId();
         switch (id){
             case R.id.qq_login_bt:
-                /*
-                finish();
-                MainActivity.startActivity(this);
-                */
                 finish();
                 enterRegister();
                 break;
             case R.id.wechat_login_bt:
-                /*
-                HeixiuApi heixiuApi = new HeixiuApi();
-                thirdLoginWechat();*/
-//                login();
-                finish();
-                MainActivity.startActivity(this);
+                ThirdPlatformManager.getInstance().thirdLoginWechat();
                 break;
         }
     }
 
-    UMShareAPI mShareAPI;
-    SHARE_MEDIA platform;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mShareAPI.onActivityResult(requestCode, resultCode, data);
+        ThirdPlatformManager.getInstance().onActivityResult4Wechat(requestCode, requestCode, data);
     }
 
-
-    public void thirdLoginWechat(){
-        platform = SHARE_MEDIA.WEIXIN;
-        UMAuthListener umAuthListener = new UMAuthListener() {
-            @Override
-            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-                android.util.Log.d("aaa","完成");
-                Toast.makeText(LoginPage.this, "Authorize succeed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-                android.util.Log.d("aaa","出错了");
-                Toast.makeText( LoginPage.this, "Authorize fail", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancel(SHARE_MEDIA platform, int action) {
-                android.util.Log.d("aaa","取消了");
-                Toast.makeText( LoginPage.this, "onCancel cancel", Toast.LENGTH_SHORT).show();
-            }
-        };
-        mShareAPI.doOauthVerify(LoginPage.this, platform, umAuthListener);
-    }
 
     // ========================================= Volley  login ================================================//
     private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
@@ -169,6 +135,7 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
     private String getTopicListUrl() {
         return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.LOGIN_BY_PLAT)
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("xiuxiu_id", String.valueOf("1234560"))
                 .appendQueryParameter("xiuxiu_name", String.valueOf("huzhi1"))

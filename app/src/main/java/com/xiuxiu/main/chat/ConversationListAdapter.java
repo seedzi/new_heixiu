@@ -22,9 +22,13 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.DateUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
+import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
 import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
+import com.xiuxiu.easeim.EaseUserCacheManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +54,6 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
 
     @Override
     public int getCount() {
-        android.util.Log.d("ccc","count = " + conversationList.size());
         return conversationList.size();
     }
 
@@ -80,11 +83,11 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
             holder.message = (TextView) convertView.findViewById(R.id.message);
             holder.time = (TextView) convertView.findViewById(R.id.time);
             holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
-//            holder.msgState = convertView.findViewById(com.hyphenate.easeui.R.id.msg_state);
+        //  holder.msgState = convertView.findViewById(com.hyphenate.easeui.R.id.msg_state);
             holder.list_itease_layout = (RelativeLayout) convertView.findViewById(R.id.list_itease_layout);
             convertView.setTag(holder);
         }
-//        holder.list_itease_layout.setBackgroundResource(com.hyphenate.easeui.R.drawable.ease_mm_listitem);
+        // holder.list_itease_layout.setBackgroundResource(com.hyphenate.easeui.R.drawable.ease_mm_listitem);
 
         // 获取与此用户/群组的会话
         EMConversation conversation = getItem(position);
@@ -105,9 +108,18 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
             EaseUserUtils.setUserNick(username, holder.name);
             */
             // huzhi
+            /*
             ChatNickNameAndAvatarBean info = ChatNickNameAndAvatarCacheManager.getInstance().getBeanById(username);
             if(info!=null) {
                 holder.name.setText(info.getNickName());
+            }*/
+            XiuxiuUserInfoResult info = EaseUserCacheManager.getInstance().getBeanById(username);
+            if(info!=null) {
+                holder.name.setText(info.getXiuxiu_name());
+            }
+            holder.avatar.setImageResource(R.drawable.head_default);
+            if(info!=null) {
+                ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + info.getPic(), holder.avatar);
             }
         }
 
@@ -131,6 +143,15 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
             } else {
                 holder.msgState.setVisibility(View.GONE);
             }*/
+
+            try {
+                String timeTxt = com.xiuxiu.utils.DateUtils.getTextByTime(
+                        getContext(),
+                        conversation.getLastMessage().getMsgTime(),
+                        R.string.date_fromate_anecdote);
+                holder.time.setText(timeTxt);
+            }catch (Exception e){}
+
         }
 
         //设置自定义属性

@@ -68,43 +68,6 @@
                 android:layout_marginLeft="7px"
                 android:layout_marginRight="7px"/>
 
-            <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
-                android:layout_marginBottom="3dp">
-                <TextView
-                    android:id="@+id/age"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="8sp"
-                    android:paddingLeft="40px"
-                    android:text="22"
-                    android:textColor="#ffffff"
-                    android:background="@drawable/age_bg"/>
-                <TextView
-                    android:id="@+id/online_time"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="6分钟前"
-                    android:textSize="@dimen/line_txt_size_small"
-                    android:textColor="#a6a6a6"/>
-
-                <ImageView
-                    android:layout_marginRight="12dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/user_item_tag"/>
-            </RelativeLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -115,6 +78,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#ececeb"/>
+
+            <!-- 昵称 -->
+            <RelativeLayout
+                android:id="@+id/nick_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp">
+                <TextView
+                    android:id="@+id/nickname_txt"
+                    android:layout_marginLeft="13dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="昵称"
+                    android:textColor="#a6a6a6"
+                    android:textSize="@dimen/line_txt_size_normal"/>
+
+                <TextView
+                    android:id="@+id/nickname_value"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:layout_marginRight="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/user_item_tag"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_marginLeft="13dp"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#ececeb"/>
+
+
+
             <!-- 语音介绍-->
             <RelativeLayout
                 android:id="@+id/voice_layout"
@@ -131,12 +136,13 @@
                     android:textColor="#a6a6a6"
                     android:textSize="@dimen/line_txt_size_normal"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/yuyin_bt"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="100dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/list_item_play"/>
 
                 <ImageView
                     android:layout_marginRight="12dp"

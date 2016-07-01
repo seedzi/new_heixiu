@@ -34,13 +34,18 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
     private ViewPager mViewPager;
     private DiscoverPagerAdapter mDiscoverAdapter;
 
-    private MessageAdapter mMessageAdapter;
-    private FriendsAdapter mFriendsAdapter;
+//    private MessageAdapter mMessageAdapter;
+//    private FriendsAdapter mFriendsAdapter;
 
     /**
      * 会话管理类
      */
     ConversationListManager mConversationListManager;
+
+    /**
+     * 联系人管理
+     */
+    ContactListManager mContactListManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +54,8 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
         if(mRootView ==null){
             mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_chat, null);
             setUpView();
-            initData();
+//            initData();
+            initListManager();
         } else {
             try {
                 ((ViewGroup)mRootView.getParent()).removeView(mRootView);
@@ -67,24 +73,30 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
         if(mConversationListManager!=null){
             mConversationListManager.refresh();
         }
+        if(mContactListManager!=null){
+            mContactListManager.refresh();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mContactListManager!=null){
+            mContactListManager.onDestroy();
+        }
     }
 
     private void setUpView(){
         mViewPager = (ViewPager) mRootView.findViewById(R.id.viewpager);
         mDiscoverAdapter = new DiscoverPagerAdapter();
-        mMessageAdapter = new MessageAdapter(getActivity());
-        mFriendsAdapter = new FriendsAdapter(getActivity());
+//        mMessageAdapter = new MessageAdapter(getActivity());
+//        mFriendsAdapter = new FriendsAdapter(getActivity());
         mViewPager.setAdapter(mDiscoverAdapter);
         PageIndicator indicator = (PageIndicator) mRootView.findViewById(R.id.indicator);
         indicator.setViewPager(mViewPager);
         indicator.setOnPageChangeListener(this);
     }
-
+    /*
     private void initData() {
         List<Friend> list = new ArrayList<Friend>();
         for(int i=0;i<10;i++){
@@ -94,7 +106,7 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
         mFriendsAdapter.addAll(list);
 
         initListManager();
-    }
+    }*/
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -121,6 +133,9 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
         mConversationListManager = ConversationListManager.getInstance();
         mConversationListManager.init(getContext());
 
+        mContactListManager = ContactListManager.getInstance();
+        mContactListManager.init(getContext());
+
     }
 
     // ===============================================================================================
@@ -143,6 +158,9 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
                     container.addView(mConversationListManager.getLayout());
                     return mConversationListManager.getLayout();
                 case POSITION_FRIENDS:
+                    container.addView(mContactListManager.getLayout());
+                    return mContactListManager.getLayout();
+                    /*
                     Context context = container.getContext();
                     View itemView = LayoutInflater.from(context).inflate(R.layout.list_layout, container, false);
 
@@ -167,6 +185,7 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
                     });
                     container.addView(itemView);
                     return itemView;
+                    */
             }
             return null;
         }

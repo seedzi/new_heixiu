@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.user.wallet.WalletRechargePage;
 
 /**
  * Created by huzhi on 16-4-8.
@@ -24,6 +25,7 @@ public class WalletActivity extends FragmentActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_wallet_layout);
+        findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.ti_xian).setOnClickListener(this);
         findViewById(R.id.chong_zhi).setOnClickListener(this);
     }
@@ -33,10 +35,13 @@ public class WalletActivity extends FragmentActivity implements View.OnClickList
         int id = v.getId();
         switch (id){
             case R.id.ti_xian:
-                WalletCashActivity.startActivity(WalletActivity.this);
+                WalletCashPage.startActivity(WalletActivity.this);
                 break;
             case R.id.chong_zhi:
-                RechargeActivity.startActivity(WalletActivity.this);
+                WalletRechargePage.startActivity(WalletActivity.this);
+                break;
+            case R.id.back:
+                finish();
                 break;
         }
     }

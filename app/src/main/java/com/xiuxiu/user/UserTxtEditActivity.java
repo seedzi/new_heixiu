@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
@@ -17,19 +18,28 @@ import com.xiuxiu.utils.ToastUtil;
  */
 public class UserTxtEditActivity extends FragmentActivity implements View.OnClickListener{
 
-    public static void startActivity(FragmentActivity ac){
-        Intent intent = new Intent(ac,UserTxtEditActivity.class);
-        ac.startActivityForResult(intent, 1);
-    }
-
     public static void startActivity(FragmentActivity ac,String value){
         Intent intent = new Intent(ac,UserTxtEditActivity.class);
         intent.putExtra("txt",value);
-        ac.startActivityForResult(intent, 1);
+        ac.startActivityForResult(intent, REQUEST_CODE);
     }
+
+
+    public static void startActivity(FragmentActivity ac,String value,int code){
+        Intent intent = new Intent(ac,UserTxtEditActivity.class);
+        intent.putExtra("txt",value);
+        ac.startActivityForResult(intent, code);
+    }
+
+    public static int REQUEST_CODE = 103;
+
+    public static int REQUEST_CODE_2 = 104;
 
     private EditText mEdit;
 
+    private TextView mTitleTv;
+
+    public static final String TXT_KEY = "txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +57,12 @@ public class UserTxtEditActivity extends FragmentActivity implements View.OnClic
         if(!TextUtils.isEmpty(txt)){
             mEdit.setText(txt);
         }
+        mTitleTv = (TextView) findViewById(R.id.title);
+        if(!TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getXiuxiu_name())) {
+            mTitleTv.setText(XiuxiuUserInfoResult.getInstance().getXiuxiu_name());
+        }else{
+            mTitleTv.setText(XiuxiuUserInfoResult.getInstance().getXiuxiu_id());
+        }
     }
 
     @Override
@@ -63,7 +79,7 @@ public class UserTxtEditActivity extends FragmentActivity implements View.OnClic
                     return;
                 }
                 Intent intent=new Intent();
-                intent.putExtra(XiuxiuUserInfoResult.SIGN, txt);
+                intent.putExtra(TXT_KEY, txt);
                 setResult(RESULT_OK, intent);
                 finish();
                 break;

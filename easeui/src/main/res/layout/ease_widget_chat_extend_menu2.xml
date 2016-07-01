@@ -37,21 +37,25 @@
         android:src="@drawable/ease_chat_expression"/>
 
     <ImageView
+        android:id="@+id/ease_chat_gift"
+        android:layout_toRightOf="@id/ease_chat_expression"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:src="@drawable/ease_chat_gift"/>
+
+
+    <ImageView
         android:id="@+id/ease_chat_heixiu"
         android:layout_alignParentRight="true"
         android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
-        android:src="@drawable/ease_chat_heixiu"/>
+        android:src="@drawable/ease_chat_heixiu"
+        android:visibility="gone"/>
 
-    <ImageView
-        android:id="@+id/ease_chat_gift"
-        android:layout_toLeftOf="@id/ease_chat_heixiu"
-        android:layout_gravity="center_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="9dp"
-        android:src="@drawable/ease_chat_gift"/>
+
 
 </merge>

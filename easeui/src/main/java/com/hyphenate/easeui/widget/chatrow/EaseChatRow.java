@@ -125,14 +125,21 @@ public abstract class EaseChatRow extends LinearLayout {
         }
         
         if(deliveredView != null){
-            if (message.isDelivered()) {
-                deliveredView.setVisibility(View.VISIBLE);
-            } else {
-                deliveredView.setVisibility(View.INVISIBLE);
-            }
+            deliveredView.setBackgroundResource(R.drawable.xiuxiu_conversation_unread);
+            deliveredView.setText("");
+            //huzhi TODO  这块逻辑环信没做处理　目前这么处理
+//            if (message.isDelivered()) {
+//                deliveredView.setVisibility(View.VISIBLE);
+//            } else {
+//                deliveredView.setVisibility(View.INVISIBLE);
+//            }
+            deliveredView.setVisibility(View.VISIBLE);
         }
         
         if(ackedView != null){
+            //huzhi
+            ackedView.setBackgroundResource(R.drawable.xiuxiu_conversation_read);
+            ackedView.setText("");
             if (message.isAcked()) {
                 if (deliveredView != null) {
                     deliveredView.setVisibility(View.INVISIBLE);

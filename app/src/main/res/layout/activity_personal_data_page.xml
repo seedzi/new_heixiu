@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.xiuxiu.widget.CircleImageView
+    <com.hyphenate.easeui.widget.CircleImageView
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:layout_width="116dp"

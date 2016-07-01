@@ -25,11 +25,15 @@ public class XiuxiuResult {
     }
     */
 
-    public static final String SUCCESS = "ok";
-    private String status;
+    public static final String SUCCESS = "0";
+    public String status;
 
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public boolean isSuccess() {

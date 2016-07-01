@@ -16,7 +16,7 @@ package com.hyphenate.easeui.domain;
 import com.hyphenate.chat.EMContact;
 
 public class EaseUser extends EMContact {
-    
+
     /**
      * 昵称首字母
      */
@@ -25,7 +25,77 @@ public class EaseUser extends EMContact {
 	 * 用户头像
 	 */
 	protected String avatar;
-	
+
+	protected String sign;
+
+	protected String age;
+
+	protected int charm = -1;
+
+	protected int fortune;
+
+	protected String voice;
+
+	protected long onlineTime;
+
+	protected String sex;
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public void setCharm(int charm) {
+		this.charm = charm;
+	}
+
+	public void setFortune(int fortune) {
+		this.fortune = fortune;
+	}
+
+	public void setVoice(String voice) {
+		this.voice = voice;
+	}
+
+	public void setOnlineTime(long onlineTime) {
+		this.onlineTime = onlineTime;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public int getCharm() {
+		return charm;
+	}
+
+	public int getFortune() {
+		return fortune;
+	}
+
+	public String getVoice() {
+		return voice;
+	}
+
+	public long getOnlineTime() {
+		return onlineTime;
+	}
+
 	public EaseUser(String username){
 	    this.username = username;
 	}
