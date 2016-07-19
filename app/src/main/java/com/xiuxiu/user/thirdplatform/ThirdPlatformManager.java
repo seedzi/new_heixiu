@@ -4,6 +4,7 @@ package com.xiuxiu.user.thirdplatform;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.utils.Md5Util;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 import java.util.Map;
 
@@ -57,6 +59,8 @@ public class ThirdPlatformManager {
 
     private ProgressDialog mProgressDialog;
 
+
+    private Handler mUiHandler = new Handler();
 
     public void setActivity(FragmentActivity ac){
         mAc = ac;
@@ -137,14 +141,27 @@ public class ThirdPlatformManager {
                 ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(mAc, "登录成功", 0).show();
-                        dismisslProgressDialog();
-                        mAc.finish();
-                        if(res.getIsFirstLogin()){
-                            LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
-                        }else {
-                            MainActivity.startActivity(mAc);
-                        }
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                XiuxiuUtils.onAppStart(mAc);
+                                mUiHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(mAc, "登录成功", 0).show();
+                                        dismisslProgressDialog();
+                                        mAc.finish();
+                                        if(res.getIsFirstLogin()){
+                                            LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
+                                        }else {
+                                            MainActivity.startActivity(mAc);
+                                        }
+                                    }
+                                });
+                            }
+                        }).start();
+
                     }
                 });
             }else{

@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -64,17 +63,6 @@ public class EaseMessageAdapter extends BaseAdapter{
 	private static final int MESSAGE_TYPE_SENT_EXPRESSION = 12;
 	private static final int MESSAGE_TYPE_RECV_EXPRESSION = 13;
 
-	/**
-	 * 扩展消息
-	 */
-	private static final int MESSAGE_TYPE_SENT_IMAGE＿CHARGE = 14; //发送收费图片
-	private static final int MMESSAGE_TYPE_RECV_IMAGE＿CHARGE = 15; //接受收费图片
-	private static final int MESSAGE_TYPE_SENT_VIDEO_CHARGE = 16; //发送收费视频
-	private static final int MESSAGE_TYPE_RECV_VIDEO_CHARGE = 17; //接受收费视频
-
-
-	public int itemTypeCount; 
-	
 	// reference to conversation object in chatsdk
 	private EMConversation conversation;
 	EMMessage[] messages = null;
@@ -188,7 +176,7 @@ public class EaseMessageAdapter extends BaseAdapter{
 	    if(customRowProvider != null && customRowProvider.getCustomChatRowTypeCount() > 0){
 	        return customRowProvider.getCustomChatRowTypeCount() + 14;
 	    }
-        return 14;
+        return 20;
     }
 	
 
@@ -204,7 +192,6 @@ public class EaseMessageAdapter extends BaseAdapter{
 		if(customRowProvider != null && customRowProvider.getCustomChatRowType(message) > 0){
 		    return customRowProvider.getCustomChatRowType(message) + 13;
 		}
-		
 		if (message.getType() == EMMessage.Type.TXT) {
 		    if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
 		        return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_EXPRESSION : MESSAGE_TYPE_SENT_EXPRESSION;
@@ -227,7 +214,6 @@ public class EaseMessageAdapter extends BaseAdapter{
 		if (message.getType() == EMMessage.Type.FILE) {
 			return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_FILE : MESSAGE_TYPE_SENT_FILE;
 		}
-
 		return -1;// invalid
 	}
 	

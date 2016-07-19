@@ -15,6 +15,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.chat.ChatPage;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.utils.ToastUtil;
@@ -22,7 +23,7 @@ import com.xiuxiu.utils.ToastUtil;
 /**
  * Created by huzhi on 16-6-2.
  */
-public class AddFriendsPage extends FragmentActivity implements View.OnClickListener{
+public class AddFriendsPage extends BaseActivity implements View.OnClickListener{
 
 
     public static void startActivity(Context context,String userId){

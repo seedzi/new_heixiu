@@ -36,6 +36,7 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.user.voice.VoiceIntroductionActivity;
 import com.xiuxiu.user.voice.VoicePlayManager;
@@ -54,13 +55,13 @@ import java.util.List;
  * 用户资料修改页面
  * Created by huzhi on 16-5-15.
  */
-public class UserEditDetailActivity extends FragmentActivity implements View.OnClickListener{
+public class UserEditDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = "UserEditDetailActivity";
 
-    public static void startActivity(Context context){
-        Intent intent = new Intent(context,UserEditDetailActivity.class);
-        context.startActivity(intent);
+    public static void startActivity4Result(FragmentActivity ac,int requestCode){
+        Intent intent = new Intent(ac,UserEditDetailActivity.class);
+        ac.startActivityForResult(intent,requestCode);
     }
 
     private ViewGroup mLayout;
@@ -153,11 +154,12 @@ public class UserEditDetailActivity extends FragmentActivity implements View.OnC
         }
         mVoiceKey = XiuxiuUserInfoResult.getInstance().getVoice();
         if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getVoice())){
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("点击上传语音介绍");
             findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.VISIBLE);
+            ((TextView)findViewById(R.id.yuyin_txt_no)).setText("点击上传语音介绍");
         }else{
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("语音介绍");
             findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.GONE);
         }
 
     }
@@ -167,11 +169,12 @@ public class UserEditDetailActivity extends FragmentActivity implements View.OnC
         super.onResume();
         if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getVoice())
                 && TextUtils.isEmpty(mVoicPath)){
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("点击上传语音介绍");
             findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.VISIBLE);
+            ((TextView)findViewById(R.id.yuyin_txt_no)).setText("点击上传语音介绍");
         }else{
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("语音介绍");
             findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.GONE);
         }
     }
 
@@ -422,6 +425,7 @@ public class UserEditDetailActivity extends FragmentActivity implements View.OnC
             }
             dismisslProgressDialog();
             ToastUtil.showMessage(UserEditDetailActivity.this, "服务器资料更新成功!");
+            setResult(RESULT_OK);
             finish();
             android.util.Log.d(TAG, "服务器成功");
         }

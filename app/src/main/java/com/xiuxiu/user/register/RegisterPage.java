@@ -20,16 +20,18 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuAllUserResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.UiUtil;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 /**
  * Created by zhihu on 16-4-17.
  */
-public class RegisterPage extends FragmentActivity implements View.OnClickListener{
+public class RegisterPage extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = RegisterPage.class.getSimpleName();
 
@@ -94,6 +96,8 @@ public class RegisterPage extends FragmentActivity implements View.OnClickListen
                 ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
                     @Override
                     public void run() {
+                        android.util.Log.d(TAG,"环信完成");
+                        XiuxiuUtils.onAppStart(getApplicationContext());
                         Toast.makeText(getApplication(), "登录成功", 0).show();
                         finish();
                         MainActivity.startActivity(RegisterPage.this);

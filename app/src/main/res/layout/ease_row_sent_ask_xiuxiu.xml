@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="13dp">
+
+    <TextView
+        android:id="@+id/timestamp"
+        style="@style/chat_text_date_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_chat_activity" >
+
+        <com.hyphenate.easeui.widget.CircleImageView
+            android:id="@+id/iv_userhead"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="@dimen/margin_chat_activity"
+            android:background="@drawable/ease_default_avatar"/>
+
+        <RelativeLayout
+            android:id="@+id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_chat_activity"
+            android:layout_toLeftOf="@id/iv_userhead"
+            android:layout_below="@+id/tv_userid"
+            android:background="@drawable/ease_chatto_bg"
+            >
+            <!--
+            <TextView
+                android:id="@+id/tv_chatcontent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:layout_centerInParent="true"
+                android:gravity="center|left"
+                android:paddingRight="6dp"
+                android:paddingLeft="1dp"
+                android:minHeight="38dp"
+                android:lineSpacingExtra="2dp"
+                android:textColor="#000000"
+                android:maxWidth="225.0dip"
+                android:textSize="15sp" />
+             -->
+
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="#a6a6a6"/>
+                <TextView
+                    android:id="@+id/xiuxiu_ask_title"
+                    android:layout_toRightOf="@id/img"
+                    android:text="我给你发了一张咻照"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"/>
+                <TextView
+                    android:id="@+id/xiuxiu_ask_content"
+                    android:layout_toRightOf="@id/img"
+                    android:layout_below="@id/xiuxiu_ask_title"
+                    android:text="绝对值"
+                    android:textSize="13sp"
+                    android:textColor="#8b8b8b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:id="@+id/pay_txt"
+                    android:layout_toRightOf="@id/img"
+                    android:layout_below="@id/xiuxiu_ask_content"
+                    android:text="愿意支付："
+                    android:textSize="13sp"
+                    android:textColor="#8b8b8b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"/>
+
+                <TextView
+                    android:id="@+id/xiuxiu_bi"
+                    android:layout_marginRight="5dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@id/pay_txt"
+                    android:textColor="#8b8b8b"
+                    android:text="咻币"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/xiuxiu_bi_size"
+                    android:layout_toLeftOf="@id/xiuxiu_bi"
+                    android:layout_alignBottom="@id/pay_txt"
+                    android:textColor="#00b8d0"
+                    android:text="20"
+                    android:layout_marginBottom="-5px"
+                    android:textSize="23sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_below="@id/pay_txt"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#8b8b8b"/>
+
+                <TextView
+                    android:id="@+id/xiuxiu_status"
+                    android:layout_below="@id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="已接受"
+                    android:textColor="#8b8b8b"
+                    android:gravity="center"/>
+
+                <RelativeLayout
+                    android:id="@+id/bottom_received_layout"
+                    android:layout_below="@id/line"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/refuse_bt"
+                        android:gravity="center"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:text="拒绝"/>
+
+                    <TextView
+                        android:id="@+id/agree_bt"
+                        android:gravity="center"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:text="同意"/>
+
+                    <View
+                        android:background="#8b8b8b"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="1dp"
+                        android:layout_height="30dp"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/msg_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:clickable="true"
+            android:src="@drawable/ease_msg_state_failed_resend"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_ack"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:text="@string/text_ack_msg"
+            android:textSize="12sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_delivered"
+            style="@style/chat_text_name_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:text="@string/text_delivered_msg"
+            android:textSize="12sp"
+            android:visibility="invisible" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/bubble"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</LinearLayout>

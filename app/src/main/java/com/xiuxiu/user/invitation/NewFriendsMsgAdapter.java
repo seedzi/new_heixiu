@@ -61,8 +61,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			holder.avator = (ImageView) convertView.findViewById(R.id.avatar);
 			holder.reason = (TextView) convertView.findViewById(R.id.message);
 			holder.name = (TextView) convertView.findViewById(R.id.name);
-            holder.agree = (Button) convertView.findViewById(R.id.agree);
-			holder.status = (Button) convertView.findViewById(R.id.user_state);
+            holder.agree = (TextView) convertView.findViewById(R.id.agree);
+			holder.status = (TextView) convertView.findViewById(R.id.user_state);
 			holder.groupContainer = (LinearLayout) convertView.findViewById(R.id.ll_group);
 			holder.groupname = (TextView) convertView.findViewById(R.id.tv_groupName);
 			// holder.time = (TextView) convertView.findViewById(R.id.time);
@@ -105,22 +105,27 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			if(xiuxiuUserInfoResult!=null && xiuxiuUserInfoResult.getPics()!=null){
 				ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST+ xiuxiuUserInfoResult.getPics().get(0),holder.avator);
 			}
-
+			android.util.Log.d("AAAAA","msg.getStatus() = " + msg.getStatus());
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteMesageStatus.BEAGREED) {
-				holder.status.setVisibility(View.INVISIBLE);
+//				holder.status.setVisibility(View.INVISIBLE);
+				holder.status.setVisibility(View.GONE); //huzhi
 				holder.reason.setText(str1);
+
 			} else if (msg.getStatus() == InviteMessage.InviteMesageStatus.BEINVITEED || msg.getStatus() == InviteMesageStatus.BEAPPLYED ||
 			        msg.getStatus() == InviteMesageStatus.GROUPINVITATION) {
 			    holder.agree.setVisibility(View.VISIBLE);
                 holder.agree.setEnabled(true);
-                holder.agree.setBackgroundResource(android.R.drawable.btn_default);
+//                holder.agree.setBackgroundResource(android.R.drawable.btn_default);
+				holder.agree.setBackgroundResource(R.drawable.em_row_invite_bt_selector); //huHi
                 holder.agree.setText(str2);
 
-				holder.status.setVisibility(View.VISIBLE);
+//				holder.status.setVisibility(View.VISIBLE);
+				holder.status.setVisibility(View.GONE); //huzhi
 				holder.status.setEnabled(true);
-				holder.status.setBackgroundResource(android.R.drawable.btn_default);
+//				holder.status.setBackgroundResource(android.R.drawable.btn_default);
+				holder.status.setBackgroundResource(R.drawable.em_row_invite_bt_selector); //huzhi
 				holder.status.setText(str7);
 				if(msg.getStatus() == InviteMesageStatus.BEINVITEED){
 					if (msg.getReason() == null) {
@@ -153,6 +158,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 					}
 				});
 			} else if (msg.getStatus() == InviteMesageStatus.AGREED) {
+				holder.status.setVisibility(View.VISIBLE);//huzhi
 				holder.status.setText(str5);
 				holder.status.setBackgroundDrawable(null);
 				holder.status.setEnabled(false);
@@ -184,7 +190,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	 * @param button
 	 * @param username
 	 */
-	private void acceptInvitation(final Button buttonAgree, final Button buttonRefuse, final InviteMessage msg) {
+	private void acceptInvitation(final TextView buttonAgree, final TextView buttonRefuse, final InviteMessage msg) {
 		final ProgressDialog pd = new ProgressDialog(context);
 		String str1 = context.getResources().getString(R.string.Are_agree_with);
 		final String str2 = context.getResources().getString(R.string.Has_agreed_to);
@@ -255,7 +261,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
      * @param button
      * @param username
      */
-    private void refuseInvitation(final Button buttonAgree, final Button buttonRefuse, final InviteMessage msg) {
+    private void refuseInvitation(final TextView buttonAgree, final TextView buttonRefuse, final InviteMessage msg) {
         final ProgressDialog pd = new ProgressDialog(context);
         String str1 = context.getResources().getString(R.string.Are_refuse_with);
         final String str2 = context.getResources().getString(R.string.Has_refused_to);
@@ -302,8 +308,8 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		ImageView avator;
 		TextView name;
 		TextView reason;
-        Button agree;
-		Button status;
+		TextView agree;
+		TextView status;
 		LinearLayout groupContainer;
 		TextView groupname;
 		// TextView time;

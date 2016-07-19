@@ -98,7 +98,7 @@
             android:layout_marginLeft="35dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2568250咻币"/>
+            android:text="0咻币"/>
         <TextView
             android:id="@+id/keyi_ti_xian_txt_rmb"
             android:textSize="13sp"

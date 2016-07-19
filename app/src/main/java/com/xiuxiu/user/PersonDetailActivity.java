@@ -7,7 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,9 +32,12 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.api.XiuxiuResult;
+import com.xiuxiu.api.XiuxiuTimsResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.chat.ChatPage;
+import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.Constant;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
@@ -47,15 +50,17 @@ import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.ScreenUtils;
 import com.xiuxiu.utils.ToastUtil;
 import com.xiuxiu.utils.UiUtil;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 第三方用户的个人页面
  * Created by huzhi on 16-6-16.
  */
-public class PersonDetailActivity extends FragmentActivity implements View.OnClickListener{
+public class PersonDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = PersonDetailActivity.class.getSimpleName();
 
@@ -74,24 +79,36 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
     private int mScreenWidth;
     private int mPhotoItemWidth;
     private int mPhotoItemHeight;
-
+    /*个人签名*/
     private TextView mSignTv;
+    /*标题*/
     private TextView mTitleTv;
+    /*年纪*/
     private TextView mAgTv;
+    /*城市*/
     private TextView mCityTv;
-    private TextView mHeixiuIdTv;
+    /*xiuxiu id*/
+    private TextView mXiuxiuIdTv;
+    /*在线时间*/
     private TextView mOnLineTime;
-
+    /*魅力值*/
     private ImageView mCharmIv;
+    /*url list*/
     private List<String> mUrlList;
-
+    /*照片墙*/
     PhotoAdpater mPhotoAdpater;
-
+    /*用户信息*/
     private XiuxiuUserInfoResult mXiuxiuUserInfoResult;
-
+    /*xiuxiu id*/
     private String xiuxiuId;
-
+    /**
+     * 免费打招呼次数
+     */
+    private int mCallTimes = -1;
+    /*是否从联系人列表进入*/
     private boolean isFromContactList;
+
+    private Handler mUiHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +118,6 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         setContentView(R.layout.activity_user_detail_page);
         setupViews();
         initData();
-//        refreshUserData(null);
     }
 
     private void setupViews(){
@@ -127,7 +143,7 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         mTitleTv = (TextView)findViewById(R.id.title);
         mAgTv = (TextView)findViewById(R.id.user_age);
         mCityTv = (TextView)findViewById(R.id.city_value);
-        mHeixiuIdTv = (TextView) findViewById(R.id.heixiu_hao_value);
+        mXiuxiuIdTv = (TextView) findViewById(R.id.heixiu_hao_value);
         mOnLineTime = (TextView) findViewById(R.id.online_time);
 
         findViewById(R.id.yuyin_layout).setOnClickListener(this);
@@ -156,7 +172,7 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         } else if(mUrlList!=null && mUrlList.size()>0 ){
             height = mPhotoItemHeight * 1 + ScreenUtils.dip2px(getApplicationContext(), 4);
         }
-        android.util.Log.d("AAAA","height = " + height);
+        android.util.Log.d("AAAA", "height = " + height);
         LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width, height);
         ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
         mPhotoWall.setLayoutParams(ll);
@@ -164,8 +180,15 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
 
     private void initData(){
         isFromContactList = getIntent().getBooleanExtra("isFromContactList", false);
+        if(!isFromContactList){
+            findViewById(R.id.more).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.more).setVisibility(View.VISIBLE);
+        }
         xiuxiuId= getIntent().getStringExtra("xiuxiu_id");
         android.util.Log.d(TAG, "xiuxiu_id = " + xiuxiuId);
+
+        refreshUserData(EaseUserCacheManager.getInstance().getBeanById(xiuxiuId));
         queryUserInfo(xiuxiuId);
 
         findViewById(R.id.say_hello_layout).setVisibility(View.VISIBLE);
@@ -178,8 +201,10 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         }else{
 
         }
+        if(!isFromContactList) {
+            getXiuxiuTimes();
+        }
     }
-
 
     /**
      * 刷新用户信息
@@ -191,10 +216,12 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         mXiuxiuUserInfoResult = result;
 
         if(TextUtils.isEmpty(mXiuxiuUserInfoResult.getVoice())){
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("暂无语音介绍");
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.VISIBLE);
+            ((TextView)findViewById(R.id.yuyin_txt_no)).setText("暂无语音介绍");
             findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
         }else{
             findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.GONE);
         }
 
         mUrlList = mXiuxiuUserInfoResult.getPics();
@@ -211,7 +238,7 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
             mCityTv.setText(URLDecoder.decode(mXiuxiuUserInfoResult.getCity()));
         }
         if(!TextUtils.isEmpty(result.getXiuxiu_id())) {
-            mHeixiuIdTv.setText(URLDecoder.decode(mXiuxiuUserInfoResult.getXiuxiu_id()));
+            mXiuxiuIdTv.setText(URLDecoder.decode(mXiuxiuUserInfoResult.getXiuxiu_id()));
         }
         if(TextUtils.isEmpty(result.getSpam())){
             findViewById(R.id.bu_liang_ji_lu_layout).setVisibility(View.GONE);
@@ -224,7 +251,13 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
                 PersonDetailActivity.this,
                 result.getActive_time(),
                 R.string.date_fromate_anecdote);
+        android.util.Log.d("AAAA","getActive_time = " + result.getActive_time());
         mOnLineTime.setText(timeTxt);
+
+        if(TextUtils.isEmpty(mXiuxiuUserInfoResult.getGet_gift())){
+            findViewById(R.id.gift_layout).setVisibility(View.GONE);
+            findViewById(R.id.gift_layout_line).setVisibility(View.GONE);
+        }
 
         if(XiuxiuUserInfoResult.isMale(result.getSex())){
             ((TextView)findViewById(R.id.charm_txt)).setText("财富等级");
@@ -251,16 +284,49 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
 
         setupPhotoWall();
 
+        /**
+         * 1.如果是好友，直接聊天
+         * 2.首先扣免费招呼
+         * 3.免费招呼扣完，直接扣咻b
+         */
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatPage.startActivity(PersonDetailActivity.this,
-                        result.getXiuxiu_id(), result.getXiuxiu_name());
-                android.util.Log.d(TAG,
-                        ",xiuxiuUser.getXiuxiu_name() = " + result.getXiuxiu_name()
-                                + ",xiuxiuUser.getXiuxiu_id() = " + result.getXiuxiu_id()
-                );
-                EaseUserCacheManager.getInstance().add(result);
+                if(isFromContactList){
+                    enterConversationPage();
+                    return;
+                }
+                if(mCallTimes>0){
+                    mCallTimes = mCallTimes -1;
+                    TextView tv = (TextView) findViewById(R.id.say_hello_txt);
+                    tv.setText("今天还有" + mCallTimes + "次免费机会");
+                    XiuxiuUtils.costXiuxiuTimes();
+                    enterConversationPage();
+                }else{
+                    showProgressDialog();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(XiuxiuUtils.costUserCoin("call","1")){
+                                mUiHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismisslProgressDialog();
+                                        enterConversationPage();
+                                    }
+                                });
+                            }else{
+                                mUiHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dismisslProgressDialog();
+                                        ToastUtil.showMessage(PersonDetailActivity.this, "咻咻b不够了，请您充值！");
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
             }
         });
 
@@ -273,6 +339,18 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
 
 
     }
+
+    private void enterConversationPage(){
+        if(mXiuxiuUserInfoResult!=null) {
+            ChatPage.startActivity(PersonDetailActivity.this,
+                    mXiuxiuUserInfoResult.getXiuxiu_id(), mXiuxiuUserInfoResult.getXiuxiu_name());
+            EaseUserCacheManager.getInstance().add(mXiuxiuUserInfoResult);
+        }else{
+            ChatPage.startActivity(PersonDetailActivity.this,
+                    xiuxiuId, xiuxiuId);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -340,7 +418,7 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
                 gl = new GridView.LayoutParams(mPhotoItemWidth,mPhotoItemHeight);
                 convertView = new ImageView(getApplicationContext());
                 convertView.setLayoutParams(gl);
-                ((ImageView)convertView).setScaleType(ImageView.ScaleType.FIT_XY);
+                ((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
             ((ImageView)convertView).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
             if(mUrlList!=null && position<mUrlList.size()){
@@ -359,9 +437,11 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         public void onResponse(String response) {
             Gson gson = new Gson();
             android.util.Log.d(TAG,"user = " + response);
-            XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
+            final XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
             if(res!=null && res.getUserinfos()!=null && res.getUserinfos().size()>0){
                 refreshUserData(res.getUserinfos().get(0));
+                /*取完用户信息后　更新用户信息*/
+                EaseUserCacheManager.getInstance().add(res.getUserinfos().get(0));
             }
         }
     };
@@ -388,8 +468,10 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         return url;
     }
 
+
+
     // ============================================================================================
-    // 删除好友
+    //　进度框
     // ============================================================================================
 
     private ProgressDialog mProgressDialog;
@@ -404,6 +486,9 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
         }
     }
 
+    // ============================================================================================
+    // 删除好友
+    // ============================================================================================
 
     private Response.Listener<String> mReleaseFriendListener = new Response.Listener<String>() {
         @Override
@@ -444,6 +529,50 @@ public class PersonDetailActivity extends FragmentActivity implements View.OnCli
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("remote_id", xiuxiu_id)
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .build().toString();
+        android.util.Log.d(TAG, "url = " + url);
+        return url;
+    }
+
+
+    // ============================================================================================
+    //　获取打招呼次数
+    // ============================================================================================
+
+    private Response.Listener<String> mXiuxiuTimesListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            android.util.Log.d(TAG,"咻咻招呼 response = " + response);
+            Gson gson = new Gson();
+            XiuxiuTimsResult res = gson.fromJson(response, XiuxiuTimsResult.class);
+            if(res!=null&&res.isSuccess()){
+                mCallTimes = res.getTimes();
+                if(mCallTimes>=0) {
+                    TextView tv = (TextView) findViewById(R.id.say_hello_txt);
+                    tv.setText("今天还有" + mCallTimes + "次免费机会");
+                }
+            }
+        }
+    };
+    private Response.ErrorListener mXiuxiuTimesErroListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            android.util.Log.d(TAG, "error = " + error);
+        }
+    };
+
+    private void getXiuxiuTimes() {
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getXiuxiuTimesUrl(), mXiuxiuTimesListener, mXiuxiuTimesErroListener));
+    }
+    private String getXiuxiuTimesUrl() {
+        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.GET_XX_TIMES)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("limitType", "call")
                 .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .build().toString();
         android.util.Log.d(TAG, "url = " + url);

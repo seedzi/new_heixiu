@@ -7,12 +7,13 @@ import android.view.Window;
 
 import com.xiuxiu.R;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.chat.im.ChatFragment;
 
 /**
  * Created by zhihu on 16-4-17.
  */
-public class ChatPage extends FragmentActivity{
+public class ChatPage extends BaseActivity{
 
     public static final String EXTRA_USERID = "userId";
 
@@ -53,6 +54,10 @@ public class ChatPage extends FragmentActivity{
             finish();
             startActivity(intent);
         }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

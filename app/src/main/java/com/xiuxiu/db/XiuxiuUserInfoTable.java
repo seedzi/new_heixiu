@@ -9,6 +9,7 @@ import android.net.Uri;
 
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.Constant;
 import com.xiuxiu.provider.XiuxiuProvider;
 
 import java.util.HashMap;
@@ -18,6 +19,8 @@ import java.util.Map;
  * Created by huzhi on 16-6-20.
  */
 public class XiuxiuUserInfoTable implements TableHelper{
+
+    private static final String TAG = "XiuxiuUserInfoTable";
 
     public static final String TABLE_NAME = "xiuxiu_user_info";
 
@@ -47,9 +50,10 @@ public class XiuxiuUserInfoTable implements TableHelper{
 
     public static final String ACTIVE_TIME = "active_time";
 
+    public static final String UPDATE_TIME = "update_time";
 
     private final String CREATE_TABLE =  String.format("create table %s(%s text primary key, " +
-                    "%s text, %s text, %s text, %s text, %s text, %s integer, %s integer, %s text, %s text, %s long);",
+                    "%s text, %s text, %s text, %s text, %s text, %s integer, %s integer, %s text, %s text, %s long, %s long);",
             TABLE_NAME,
             XIUXIU_ID,
             XIUXIU_NAME,
@@ -61,7 +65,8 @@ public class XiuxiuUserInfoTable implements TableHelper{
             CHARM,
             SEX,
             BIRTHDAY,
-            ACTIVE_TIME);
+            ACTIVE_TIME,
+            UPDATE_TIME);
 
     @Override
     public boolean create(SQLiteDatabase db) {
@@ -79,6 +84,21 @@ public class XiuxiuUserInfoTable implements TableHelper{
     @Override
     public void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    /**
+     * 删除按_SORT_ID 正序排序的   保留1000条
+     */
+    public static synchronized void deleteByExceedLimit(){
+        try {
+            ContentResolver resolver = getResolver();
+            int result = resolver.delete(TABLE_URI, UPDATE_TIME + " not in (select " +
+                            UPDATE_TIME + " from " + TABLE_NAME + " order by " + UPDATE_TIME + " desc limit " + Constant.EASE_USER_LIMIT_COUNT + ")",
+                    null);
+            android.util.Log.d(TAG,"result = " + result);
+        } catch (Exception e) {
+            android.util.Log.d(TAG,"e = " + e.getMessage());
+        }
     }
 
     /**
@@ -117,6 +137,31 @@ public class XiuxiuUserInfoTable implements TableHelper{
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取记录总数
+     * @return
+     */
+    public static int queryCount() {
+        ContentResolver resolver = getResolver();
+        Uri queryUri = TABLE_URI;
+        queryUri = TABLE_URI.buildUpon().build();
+        Cursor cursor = resolver.query(queryUri, null, null, null, null);
+        int count  = 0;
+        if(cursor!=null){
+            try {
+                count = cursor.getCount();
+                cursor.close();
+            } catch (Exception e) {
+            } finally{
+                if(cursor!=null){
+                    cursor.close();
+                }
+            }
+        }
+        android.util.Log.d(TAG,"count = " + count);
+        return count;
     }
 
     /**
@@ -170,6 +215,7 @@ public class XiuxiuUserInfoTable implements TableHelper{
         cv.put(SEX,info.getSex());
         cv.put(BIRTHDAY,info.getBirthday());
         cv.put(ACTIVE_TIME,info.getActive_time());
+        cv.put(UPDATE_TIME,System.currentTimeMillis());
         return cv;
     }
 }

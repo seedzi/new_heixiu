@@ -27,31 +27,33 @@ public class CallManager {
     }
 
     private CallManager(Context context){
-        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        context.registerReceiver(new CallReceiver(), callFilter);
+//        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+//        context.registerReceiver(new CallReceiver(), callFilter);
     }
 
-    private class CallReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // 拨打方username
-            String from = intent.getStringExtra("from");
-            // call type
-            String type = intent.getStringExtra("type");
-            //跳转到通话页面
-            CallVoicePage.startActivity(context,from,type,false);
-
-            android.util.Log.d(TAG,"from = " + from + ",type = " + type);
-        }
-    }
+//    private class CallReceiver extends BroadcastReceiver {
+//
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            // 拨打方username
+//            String from = intent.getStringExtra("from");
+//            // call type
+//            String type = intent.getStringExtra("type");
+//            //跳转到通话页面
+//            CallVoicePage.startActivity(context,from,type,false);
+//
+//            android.util.Log.d(TAG,"from = " + from + ",type = " + type);
+//        }
+//    }
 
 
     public void call2Person(String username){
         try {
+            android.util.Log.d(TAG,"call2Person() username = " + username);
             EMClient.getInstance().callManager().makeVoiceCall(username);
         } catch (EMServiceNotReadyException e) {
             // TODO Auto-generated catch block
+            android.util.Log.d(TAG,"call2Person() e = " + e.getMessage());
             e.printStackTrace();
         }
     }

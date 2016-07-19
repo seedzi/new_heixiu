@@ -2,10 +2,6 @@ package com.xiuxiu.main.discover;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -28,20 +23,13 @@ import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuQueryActiveUserResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
-import com.xiuxiu.call.CallManager;
-import com.xiuxiu.call.voice.CallVoicePage;
-import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
-import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.PersonDetailActivity;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.ToastUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -195,6 +183,13 @@ public class OnLineListManager implements  PullToRefreshBase.OnRefreshListener {
             Gson gson = new Gson();
             XiuxiuUserQueryResult xiuxiuUserInfoResult = gson.fromJson(response, XiuxiuUserQueryResult.class);
             if(xiuxiuUserInfoResult!=null && xiuxiuUserInfoResult.getUserinfos()!=null){
+                Collections.sort(xiuxiuUserInfoResult.getUserinfos(), new Comparator<XiuxiuUserInfoResult>() {
+                    public int compare(XiuxiuUserInfoResult arg0, XiuxiuUserInfoResult arg1) {
+                        return (int)(arg1.getActive_time() - arg0.getActive_time());
+                    }
+                });
+                android.util.Log.d("AAAA","getActive_time() = " + xiuxiuUserInfoResult.getUserinfos().get(0).getActive_time()
+                        + ", getXiuxiu_name() = " + xiuxiuUserInfoResult.getUserinfos().get(0).getXiuxiu_name());
                 adapter.clear();
                 adapter.addAll(xiuxiuUserInfoResult.getUserinfos());
                 adapter.notifyDataSetChanged();

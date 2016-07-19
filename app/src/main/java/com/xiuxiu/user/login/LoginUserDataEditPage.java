@@ -36,6 +36,7 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.UserEditDetailUploadManager;
 import com.xiuxiu.user.UserTxtEditActivity;
@@ -52,7 +53,7 @@ import java.util.List;
  * 首次登录后的第一次修改页面
  * Created by huzhi on 16-5-30.
  */
-public class LoginUserDataEditPage extends FragmentActivity implements View.OnClickListener{
+public class LoginUserDataEditPage extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = "LoginUserDataEditPage";
 

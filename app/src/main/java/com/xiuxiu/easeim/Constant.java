@@ -25,4 +25,16 @@ public class Constant extends EaseConstant {
 	public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";
 	public static final String ACTION_GROUP_CHANAGED = "action_group_changed";
 	public static final String ACTION_CONTACT_CHANAGED = "action_contact_changed";
+
+
+	// =======================================================================================
+	//  xiuxiu消息类型
+	// =======================================================================================
+	/*咻咻图片*/
+	public static final String XIUXIU_TYPE_IMG = "xiuxiu_task_type_img";
+	/*咻咻视频*/
+	public static final String XIUXIU_TYPE_VIDEO = "xiuxiu_task_type_video";
+	/*咻咻声音*/
+	public static final String XIUXIU_TYPE_VOICE = "xiuxiu_task_type_voice";
+
 }

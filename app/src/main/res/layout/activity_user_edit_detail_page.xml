@@ -144,6 +144,14 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/list_item_play"/>
 
+                <TextView
+                    android:id="@+id/yuyin_txt_no"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="100dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无语音介绍"/>
+
                 <ImageView
                     android:layout_marginRight="12dp"
                     android:layout_width="wrap_content"

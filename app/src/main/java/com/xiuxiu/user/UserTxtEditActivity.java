@@ -11,12 +11,13 @@ import android.widget.TextView;
 
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.utils.ToastUtil;
 
 /**
  * Created by huzhi on 16-5-15.
  */
-public class UserTxtEditActivity extends FragmentActivity implements View.OnClickListener{
+public class UserTxtEditActivity extends BaseActivity implements View.OnClickListener{
 
     public static void startActivity(FragmentActivity ac,String value){
         Intent intent = new Intent(ac,UserTxtEditActivity.class);

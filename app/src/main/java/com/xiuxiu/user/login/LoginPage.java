@@ -19,21 +19,24 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
-import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
+import com.xiuxiu.base.BaseActivity;
+import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.register.RegisterPage;
 import com.xiuxiu.user.thirdplatform.ThirdPlatformManager;
 import com.xiuxiu.utils.DateUtils;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.UiUtil;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 /**
  * Created by zhihu on 16-4-17.
  */
-public class LoginPage extends FragmentActivity implements View.OnClickListener{
+public class LoginPage extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = "LoginPage";
 
@@ -66,8 +69,7 @@ public class LoginPage extends FragmentActivity implements View.OnClickListener{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    EMClient.getInstance().chatManager().loadAllConversations();
-                    EaseUserCacheManager.getInstance().init();
+                    XiuxiuUtils.onAppStart(getApplicationContext());
                     XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                         @Override
                         public void run() {

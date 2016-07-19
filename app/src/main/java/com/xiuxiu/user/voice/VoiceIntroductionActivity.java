@@ -31,6 +31,7 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.FileUploadManager;
 import com.xiuxiu.utils.FileUtils;
@@ -42,7 +43,7 @@ import org.json.JSONObject;
 /**
  * Created by huzhi on 16-5-27.
  */
-public class VoiceIntroductionActivity extends FragmentActivity implements View.OnClickListener,
+public class VoiceIntroductionActivity extends BaseActivity implements View.OnClickListener,
         View.OnTouchListener {
 
     public static void startActivity(FragmentActivity ac){

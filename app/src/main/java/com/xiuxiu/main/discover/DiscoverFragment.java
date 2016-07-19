@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 
 import com.xiuxiu.R;
 import com.xiuxiu.bean.Friend;
-import com.xiuxiu.call.CallManager;
-import com.xiuxiu.call.voice.CallVoicePage;
-import com.xiuxiu.heixiubroadcast.HeixiuBroadCastPage;
-import com.xiuxiu.main.MainActivity;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadCastPage;
 import com.xiuxiu.widget.LayoutPagerAdapter;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -97,7 +94,7 @@ public class DiscoverFragment extends Fragment implements
         int id = v.getId();
         switch (id){
             case R.id.heixiu_broadcast: //咻咻
-                HeixiuBroadCastPage.startActivity(getActivity());
+                XiuxiuBroadCastPage.startActivity(getActivity());
                 break;
         }
     }

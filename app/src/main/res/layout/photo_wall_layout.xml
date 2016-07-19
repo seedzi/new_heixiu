@@ -5,11 +5,11 @@
         android:id="@+id/img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:scaleType="centerCrop"/>
     <ImageView
         android:id="@+id/bt"
         android:src="@drawable/user_detail_page_add_pic_bt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        />
 </FrameLayout>

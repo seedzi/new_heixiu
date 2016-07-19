@@ -15,8 +15,9 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/head_default"/>
         <TextView
+            android:id="@+id/name"
             android:layout_marginTop="17dp"
-            android:text="可心儿"
+            android:text=""
             android:textSize="20sp"
             android:textColor="#ffffff"
             android:layout_gravity="center_horizontal"
@@ -35,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="9sp"
-                android:text="24"
+                android:text="0"
                 android:gravity="center_vertical|right"
                 android:background="@drawable/male_age_bg"
                 android:paddingRight="12px"
@@ -51,10 +52,11 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/signature"
             android:layout_marginTop="10dp"
             android:textSize="13sp"
             android:textColor="#ffffff"
-            android:text="有高跟鞋也有运动鞋,喝茶也喝酒."
+            android:text=""
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -96,14 +98,14 @@
                 android:id="@+id/end_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/call_voice_end"/>
+                android:src="@drawable/call_voice_end_selector"/>
             <!-- 接电话 -->
             <ImageView
                 android:id="@+id/answer_call"
                 android:layout_marginLeft="80dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/call_voice_answer"/>
+                android:src="@drawable/call_voice_answer_selector"/>
         </LinearLayout>
 
 
@@ -117,6 +119,7 @@
             android:visibility="gone">
             <!-- 静音 -->
             <LinearLayout
+                android:id="@+id/mute_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -125,9 +128,10 @@
                     android:id="@+id/mute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/call_voice_mute_bt"/>
+                    android:src="@drawable/call_voice_mute_normal"/>
                 <TextView
                     android:text="静音"
+                    android:textColor="#ffffff"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -141,18 +145,20 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
                 <ImageView
+                    android:id="@+id/end_call_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/call_voice_end"/>
+                    android:src="@drawable/call_voice_end_selector"/>
                 <TextView
-                    android:id="@+id/end_call_2"
                     android:text="挂断"
                     android:layout_marginTop="5dp"
+                    android:textColor="#ffffff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <!-- 免提 -->
             <LinearLayout
+                android:id="@+id/hands_free_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -161,9 +167,10 @@
                     android:id="@+id/hands_free"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/call_voice_hands_free_bt"/>
+                    android:src="@drawable/call_voice_speaker_normal"/>
                 <TextView
                     android:text="免提"
+                    android:textColor="#ffffff"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

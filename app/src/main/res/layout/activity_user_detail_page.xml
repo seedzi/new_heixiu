@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="安妮贝贝"
+            android:text=""
             android:textColor="#000000"
             android:textSize="@dimen/line_txt_size_big"/>
 
@@ -44,6 +44,7 @@
 
         <TextView
             android:id="@+id/more"
+            android:visibility="gone"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
@@ -97,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="8sp"
                         android:paddingLeft="40px"
-                        android:text="22"
+                        android:text=""
                         android:textColor="#ffffff"
                         android:background="@drawable/male_age_bg"/>
                     <TextView
@@ -106,7 +107,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="6分钟前"
+                        android:text=""
                         android:textSize="@dimen/line_txt_size_small"
                         android:textColor="#a6a6a6"/>
                 </RelativeLayout>
@@ -173,15 +174,15 @@
                         android:layout_marginLeft="100dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:src="@drawable/list_item_play"/>
-                    <!--
                     <TextView
-                        android:id="@+id/yuyin_bt"
+                        android:id="@+id/yuyin_txt_no"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="100dp"
                         android:layout_width="wrap_content"
+                        android:text="无语音介绍"
                         android:layout_height="wrap_content"/>
-                     -->
                 </RelativeLayout>
 
                 <View
@@ -191,6 +192,7 @@
 
                 <!-- 不良纪录 -->
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/bu_liang_ji_lu_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -262,6 +264,8 @@
                     android:background="#ececeb"/>
                 <!-- 收到的礼物 -->
                 <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/gift_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -304,6 +308,7 @@
                 </RelativeLayout>
 
                 <View
+                    android:id="@+id/gift_layout_line"
                     android:layout_width="match_parent"
                     android:layout_height="10dp"
                     android:background="#f4f3f2"/>
@@ -319,7 +324,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="嘿咻号"
+                        android:text="羞咻号"
                         android:textColor="#a6a6a6"
                         android:textSize="@dimen/line_txt_size_normal"/>
 
@@ -328,7 +333,7 @@
                         android:layout_marginLeft="100dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="67665210"
+                        android:text=""
                         android:textColor="#000000"
                         android:textSize="@dimen/line_txt_size_normal"/>
                 </RelativeLayout>
@@ -359,7 +364,7 @@
                         android:layout_marginLeft="100dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="北京"
+                        android:text=""
                         android:textColor="#000000"
                         android:textSize="@dimen/line_txt_size_normal"/>
                 </RelativeLayout>
@@ -396,7 +401,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
                 <TextView
-                    android:text="今天还有3次免费机会"
+                    android:id="@+id/say_hello_txt"
+                    android:text="今天还有0次免费机会"
                     android:layout_marginTop="1dp"
                     android:textSize="12sp"
                     android:textColor="#4d4d4d"

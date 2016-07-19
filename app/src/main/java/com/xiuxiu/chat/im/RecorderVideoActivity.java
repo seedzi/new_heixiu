@@ -49,6 +49,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.chat.im.util.Utils;
 
 import java.io.BufferedOutputStream;
@@ -58,7 +59,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-public class RecorderVideoActivity extends FragmentActivity implements
+public class RecorderVideoActivity extends BaseActivity implements
 		OnClickListener, SurfaceHolder.Callback, OnErrorListener,
 		OnInfoListener {
 	private static final String TAG = "RecorderVideoActivity";

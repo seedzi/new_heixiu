@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import com.wheel.widget.WheelView;
 import com.wheel.widget.adapters.AbstractWheelTextAdapter;
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * 城市编辑页面
  * Created by huzhi on 16-5-24.
  */
-public class UserEditCityActivity extends FragmentActivity{
+public class UserEditCityActivity extends BaseActivity{
 
     private WheelView mWheelView;
 

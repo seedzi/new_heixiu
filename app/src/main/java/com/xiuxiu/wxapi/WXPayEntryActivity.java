@@ -9,6 +9,7 @@ import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.payment.WeiXinPayManager;
 
 import android.app.Activity;
@@ -16,7 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
+public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler{
 	
 	private static final String TAG = "WXPayEntryActivity";
 	

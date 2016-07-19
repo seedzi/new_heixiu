@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
@@ -18,19 +17,17 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.domain.EaseEmojicon;
-import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.xiuxiu.api.HeixiuApi;
-import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuApi;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.api.XiuxiuUserQueryResult;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
+import com.xiuxiu.call.voice.CallVoicePage;
+import com.xiuxiu.chat.ChatPage;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.user.invitation.ImModel;
 import com.xiuxiu.user.invitation.InviteMessage;
 import com.xiuxiu.user.invitation.InviteMessage.InviteMesageStatus;
@@ -178,7 +175,7 @@ public class ImHelper {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                HeixiuApi.queryUserInfoSyn(message.getUserName());
+                                XiuxiuApi.queryUserInfoSyn(message.getUserName());
                             }
                         }).start();
                     }
@@ -200,37 +197,48 @@ public class ImHelper {
 
             @Override
             public void onCmdMessageReceived(List<EMMessage> messages) {
-                android.util.Log.d(TAG,"onCmdMessageReceived");
-                for (EMMessage message : messages) {
-                    EMLog.d(TAG, "收到透传消息");
-                    //获取消息body
-                    EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action();//获取自定义action
+                android.util.Log.d("12345","onCmdMessageReceived");
+                try {
+                    for (EMMessage message : messages) {
+                        EMLog.d(TAG, "收到透传消息");
+                        //获取消息body
+                        EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                        final String action = cmdMsgBody.action();//获取自定义action
+                        android.util.Log.d("12345","action = " + action + ",messageId =" + message.getMsgId());
 
-                    //获取扩展属性 此处省略
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
-                    final String str = appContext.getString(com.hyphenate.easeui.R.string.receive_the_passthrough);
+                        if (EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION.equals(action)) {
+                            XiuxiuActionMsgManager.getInstance().add(message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID),
+                                    message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_STATUS));
+                            XiuxiuActionMsgManager.getInstance().notifyListener();
+                        }
+                        /*
+                        //获取扩展属性 此处省略
+                        EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
+                        final String str = appContext.getString(com.hyphenate.easeui.R.string.receive_the_passthrough);
 
-                    final String CMD_TOAST_BROADCAST = "hyphenate.demo.cmd.toast";
-                    IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
+                        final String CMD_TOAST_BROADCAST = "hyphenate.demo.cmd.toast";
+                        IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
 
-                    if(broadCastReceiver == null){
-                        broadCastReceiver = new BroadcastReceiver(){
+                        if (broadCastReceiver == null) {
+                            broadCastReceiver = new BroadcastReceiver() {
 
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                // TODO Auto-generated method stub
-                                Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
-                            }
-                        };
+                                @Override
+                                public void onReceive(Context context, Intent intent) {
+                                    // TODO Auto-generated method stub
+                                    Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
+                                }
+                            };
 
-                        //注册广播接收者
-                        appContext.registerReceiver(broadCastReceiver,cmdFilter);
+                            //注册广播接收者
+                            appContext.registerReceiver(broadCastReceiver, cmdFilter);
+                        }
+
+                        Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
+                        broadcastIntent.putExtra("cmd_value", str + action);
+                        appContext.sendBroadcast(broadcastIntent, null);
+                        */
                     }
-
-                    Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
-                    broadcastIntent.putExtra("cmd_value", str+action);
-                    appContext.sendBroadcast(broadcastIntent, null);
+                }catch (Exception e){
                 }
             }
 
@@ -404,9 +412,102 @@ public class ImHelper {
             }
         });*/
 
+        //不设置，则使用easeui默认的
+        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
+
+            @Override
+            public String getTitle(EMMessage message) {
+                //修改标题,这里使用默认
+                EaseUser user = getUserInfo(message.getFrom());
+                if(user != null){
+                    return getUserInfo(message.getFrom()).getNick() + " ";
+                }else{
+                    return message.getFrom() + " ";
+                }
+            }
+
+            @Override
+            public int getSmallIcon(EMMessage message) {
+                //设置小图标，这里为默认
+                return 0;
+            }
+
+            @Override
+            public String getDisplayedText(EMMessage message) {
+                // 设置状态栏的消息提示，可以根据message的类型做相应提示
+                String ticker = EaseCommonUtils.getMessageDigest(message, appContext);
+                if(message.getType() == EMMessage.Type.TXT){
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                }
+                EaseUser user = getUserInfo(message.getFrom());
+                if(user != null){
+                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
+                }else{
+                    return message.getFrom() + ": " + ticker;
+                }
+            }
+
+            @Override
+            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                 return fromUsersNum + "个咻咻用户，发来了" + messageNum + "条消息";
+            }
+
+            @Override
+            public Intent getLaunchIntent(EMMessage message) {
+                //设置点击通知栏跳转事件
+                Intent intent = new Intent(appContext, ChatPage.class);
+                //有电话时优先跳转到通话页面
+                /*
+                if(isVideoCalling){
+                    intent = new Intent(appContext, VideoCallActivity.class);
+                }else if(isVoiceCalling){
+                    intent = new Intent(appContext, VoiceCallActivity.class);
+                }else{
+                    EMMessage.ChatType chatType = message.getChatType();
+                    if (chatType == EMMessage.ChatType.Chat) { // 单聊信息
+                        intent.putExtra("userId", message.getFrom());
+                        intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
+                    } else { // 群聊信息
+                        // message.getTo()为群聊id
+                        intent.putExtra("userId", message.getTo());
+                        if(chatType == EMMessage.ChatType.GroupChat){
+                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                        }else{
+                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
+                        }
+
+                    }
+                }*/
+                EaseUser user = getUserInfo(message.getFrom());
+                String username = message.getFrom();
+                if(user!=null){
+                    username = user.getNick();
+                }
+                EMMessage.ChatType chatType = message.getChatType();
+                if (chatType == EMMessage.ChatType.Chat) { // 单聊信息
+                    intent.putExtra("userId", message.getFrom());
+                    intent.putExtra("userName", username);
+                    intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
+                } else { // 群聊信息
+                    // message.getTo()为群聊id
+                    intent.putExtra("userId", message.getTo());
+                    intent.putExtra("userName", username);
+                    if(chatType == EMMessage.ChatType.GroupChat){
+                        intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                    }else{
+                        intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
+                    }
+
+                }
+                return intent;
+//                Intent intent = new Intent(appContext, ChatPage.class);
+//                return intent;
+            }
+        });
+
     }
 
-    private EaseUser getUserInfo(String username){
+    private EaseUser getUserInfo(final String username){
         //获取user信息，demo是从内存的好友列表里获取，
         //实际开发中，可能还需要从服务器获取用户信息,
         //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
@@ -418,13 +519,17 @@ public class ImHelper {
         user = getContactList().get(username);
         if(user == null){
             XiuxiuUserInfoResult xiuxiuUserInfoResult = EaseUserCacheManager.getInstance().getBeanById(username);
-            user = XiuxiuUserInfoResult.toEaseUser(xiuxiuUserInfoResult);
+            if(xiuxiuUserInfoResult!=null) {
+                user = XiuxiuUserInfoResult.toEaseUser(xiuxiuUserInfoResult);
+            }else{
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        XiuxiuApi.queryUserInfoSyn(username);
+                    }
+                }).start();
+            }
         }
-        //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，demo未实现
-        /*
-        if(user == null && getRobotList() != null){
-            user = getRobotList().get(username);
-        }*/
         return user;
     }
 
@@ -447,18 +552,8 @@ public class ImHelper {
 
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
 
+         */
 
-        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
-        if(callReceiver == null){
-            callReceiver = new CallReceiver();
-        }
-
-        //注册通话广播接收者
-        appContext.registerReceiver(callReceiver, callFilter);
-        //注册连接监听
-        EMClient.getInstance().addConnectionListener(connectionListener);
-
-        */
         syncContactsListeners = new ArrayList<DataSyncListener>();
 
         // create the global connection listener
@@ -509,6 +604,31 @@ public class ImHelper {
         registerGroupAndContactListener();
         //注册消息事件监听
         registerEventListener();
+
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+        if(callReceiver == null){
+            callReceiver = new CallReceiver();
+        }
+        //注册通话广播接收者
+        appContext.registerReceiver(callReceiver, callFilter);
+        //注册连接监听
+        EMClient.getInstance().addConnectionListener(connectionListener);
+
+    }
+    private CallReceiver callReceiver;
+
+    private class CallReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 拨打方username
+            String from = intent.getStringExtra("from");
+            // call type
+            String type = intent.getStringExtra("type");
+            //跳转到通话页面
+            CallVoicePage.startActivity(context, from,false);
+
+            android.util.Log.d(TAG," CallReceiver onReceive  from = " + from + ",type = " + type);
+        }
     }
 
     private String username;
@@ -700,7 +820,7 @@ public class ImHelper {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        HeixiuApi.queryUserInfoSyn(username);
+                        XiuxiuApi.queryUserInfoSyn(username);
                     }
                 }).start();
             }

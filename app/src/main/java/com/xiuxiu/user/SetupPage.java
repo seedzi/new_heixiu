@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by zhihu on 16-5-2.
  */
-public class SetupPage extends FragmentActivity{
+public class SetupPage extends BaseActivity{
 
     public static void startActivity(FragmentActivity ac){
         Intent intent = new Intent(ac,SetupPage.class);

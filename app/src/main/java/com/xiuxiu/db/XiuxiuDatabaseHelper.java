@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -52,6 +54,7 @@ public class XiuxiuDatabaseHelper extends SQLiteOpenHelper {
 
     private void init() {
         registTableHelper(new XiuxiuUserInfoTable());
+        registTableHelper(new XiuxiuActionMsgTable());
     }
 
     @Override

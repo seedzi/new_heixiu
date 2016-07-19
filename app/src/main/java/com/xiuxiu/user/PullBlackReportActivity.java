@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by huzhi on 16-4-20.
  */
-public class PullBlackReportActivity extends FragmentActivity{
+public class PullBlackReportActivity extends BaseActivity{
 
     public static void startActivity(Context context){
         Intent intent = new Intent(context,PullBlackReportActivity.class);

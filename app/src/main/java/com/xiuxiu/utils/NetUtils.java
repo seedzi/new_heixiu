@@ -16,21 +16,26 @@ import java.util.Enumeration;
  */
 public class NetUtils {
 
-    public static String getWifiIpAddress(Context context){
+    public static String getIpAddress(Context context){
         if(isWifiActive(context)) {
-            //获取wifi服务
-            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            //判断wifi是否开启
-            if (!wifiManager.isWifiEnabled()) {
-                wifiManager.setWifiEnabled(true);
-            }
-            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            int ipAddress = wifiInfo.getIpAddress();
-            String ip = intToIp(ipAddress);
-            return ip;
+            return getWifiIpAddress(context);
         }else{
             return getLocalIpAddress();
         }
+    }
+
+
+    public static String getWifiIpAddress(Context context){
+        //获取wifi服务
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        //判断wifi是否开启
+        if (!wifiManager.isWifiEnabled()) {
+            wifiManager.setWifiEnabled(true);
+        }
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        int ipAddress = wifiInfo.getIpAddress();
+        String ip = intToIp(ipAddress);
+        return ip;
     }
 
     private static String intToIp(int i) {

@@ -706,8 +706,8 @@ public class EaseChatFragment extends EaseBaseFragment {
         EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
         sendMessage(message);
     }
-    
-    protected void sendMessage(EMMessage message){
+
+    public void sendMessage(EMMessage message){
         if (message == null) {
             return;
         }

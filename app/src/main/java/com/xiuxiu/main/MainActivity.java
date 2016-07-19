@@ -23,6 +23,7 @@ import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.api.XiuxiuWechatBean;
 import com.xiuxiu.api.XiuxiuWechatResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.easeim.Constant;
 import com.xiuxiu.main.chat.ChatFragment;
 import com.xiuxiu.main.chat.ConversationListManager;
@@ -33,7 +34,7 @@ import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.NetUtils;
 import com.xiuxiu.utils.XiuxiuUtils;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends BaseActivity {
 
     private static String TAG = "MainActivity";
 
@@ -58,9 +59,7 @@ public class MainActivity extends FragmentActivity {
         mInstance = this;
         requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_main);
-        XiuxiuUtils.onAppStart(this);
         registerBroadcastReceiver();
-//        test();
     }
 
     // ============================================================================================

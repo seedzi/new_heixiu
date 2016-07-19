@@ -170,7 +170,6 @@ public class ConversationListManager {
         });
         applicationItem = new ContactItemView(mContext);
         applicationItem.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
                 // 进入申请与通知页面
@@ -236,7 +235,6 @@ public class ConversationListManager {
         Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
             @Override
             public int compare(final Pair<Long, EMConversation> con1, final Pair<Long, EMConversation> con2) {
-
                 if (con1.first == con2.first) {
                     return 0;
                 } else if (con2.first > con1.first) {
@@ -245,16 +243,8 @@ public class ConversationListManager {
                     return -1;
                 }
             }
-
         });
     }
-
-
-
-
-
-
-
 
     class ContactSyncListener implements ImHelper.DataSyncListener {
         @Override

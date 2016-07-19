@@ -2,7 +2,6 @@ package com.xiuxiu.main.discover;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.TextViewCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,23 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
-import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
 import com.xiuxiu.call.CallManager;
 import com.xiuxiu.call.voice.CallVoicePage;
-import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
 import com.xiuxiu.main.MainActivity;
-import com.xiuxiu.user.PersonDetailActivity;
 import com.xiuxiu.user.voice.VoicePlayManager;
 import com.xiuxiu.utils.DateUtils;
 import com.xiuxiu.utils.ToastUtil;
-import com.xiuxiu.utils.UiUtil;
 
 import java.net.URLDecoder;
 
@@ -113,7 +105,7 @@ public class OnLineAdapter extends ArrayAdapter<XiuxiuUserInfoResult> implements
             @Override
             public void onClick(View v) {
                 CallManager.getInstance(MainActivity.getInstance()).call2Person(getItem(position).getXiuxiu_id());
-                CallVoicePage.startActivity(MainActivity.getInstance(), "", "", true);
+                CallVoicePage.startActivity(MainActivity.getInstance(),getItem(position).getXiuxiu_id(), true);
             }
         });
 

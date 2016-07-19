@@ -2,7 +2,6 @@ package com.xiuxiu.main.chat;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,13 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.util.DateUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -22,6 +22,7 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuPerson;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.user.voice.VoicePlayManager;
 import com.xiuxiu.utils.ScreenUtils;
 import com.xiuxiu.utils.UiUtil;
@@ -33,7 +34,7 @@ import java.util.List;
  * 用户资料详情页
  * Created by huzhi on 16-4-8.
  */
-public class UserDetailActivity extends FragmentActivity implements View.OnClickListener{
+public class UserDetailActivity extends BaseActivity implements View.OnClickListener{
 
     private static String TAG = UserDetailActivity.class.getSimpleName();
 
@@ -59,6 +60,9 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
     private List<String> mUrlList;
 
     PhotoAdpater mPhotoAdpater;
+
+    private final int REQUEST_CODE_USER_EDIT = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,11 +125,11 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
 
         if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getVoice())){
             findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("暂无语音介绍");
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.VISIBLE);
             findViewById(R.id.yuyin_layout).setOnClickListener(null);
         }else{
             findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
-            ((TextView)findViewById(R.id.yuyin_txt)).setText("语音介绍");
+            findViewById(R.id.yuyin_txt_no).setVisibility(View.GONE);
             findViewById(R.id.yuyin_layout).setOnClickListener(this);
         }
 
@@ -137,6 +141,11 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
             ((TextView)findViewById(R.id.charm_txt)).setText("魅力等级");
             XiuxiuPerson.setCharmValue(mCharmIv, XiuxiuUserInfoResult.getInstance().getCharm());
             mAgTv.setBackgroundResource(R.drawable.female_age_bg);
+        }
+
+        if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getGet_gift())){
+            findViewById(R.id.gift_layout).setVisibility(View.GONE);
+            findViewById(R.id.gift_layout_line).setVisibility(View.GONE);
         }
 
         setUpWalletHeight();
@@ -177,7 +186,6 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
-        refreshUserData();
     }
 
     @Override
@@ -188,7 +196,7 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
                 finish();
                 break;
             case R.id.edit:
-                UserEditDetailActivity.startActivity(UserDetailActivity.this);
+                UserEditDetailActivity.startActivity4Result(UserDetailActivity.this, REQUEST_CODE_USER_EDIT);
                 break;
             case R.id.yuyin_layout:
                 if(VoicePlayManager.getInstance().isPlaying()){
@@ -197,6 +205,14 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
                     VoicePlayManager.getInstance().play(XiuxiuUserInfoResult.getUrlVoice4Qiniu(XiuxiuUserInfoResult.getInstance().getVoice()));
                 }
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_USER_EDIT && resultCode == RESULT_OK){
+            refreshUserData();
         }
     }
 
@@ -230,7 +246,7 @@ public class UserDetailActivity extends FragmentActivity implements View.OnClick
                 gl = new GridView.LayoutParams(mPhotoItemWidth,mPhotoItemHeight);
                 convertView = new ImageView(getApplicationContext());
                 convertView.setLayoutParams(gl);
-                ((ImageView)convertView).setScaleType(ImageView.ScaleType.FIT_XY);
+                ((ImageView)convertView).setScaleType(ImageView.ScaleType.CENTER_CROP);
             }
             ((ImageView)convertView).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
             if(mUrlList!=null && position<mUrlList.size()){

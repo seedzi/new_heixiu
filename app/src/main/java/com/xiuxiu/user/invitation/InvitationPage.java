@@ -7,12 +7,13 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * 邀请朋友加入咻咻
  * Created by huzhi on 16-4-24.
  */
-public class InvitationPage extends FragmentActivity{
+public class InvitationPage extends BaseActivity{
 
     public static void startActivity(Context context){
         Intent intent = new Intent(context,InvitationPage.class);

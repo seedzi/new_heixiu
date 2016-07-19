@@ -36,4 +36,19 @@ public class EaseConstant {
     public static final String EXTRA_CHAT_TYPE = "chatType";
     public static final String EXTRA_USER_ID = "userId";
     public static final String EXTRA_USER_NAME = "userName";
+
+    // =========================================================================================
+    // 扩展消息类型
+    // =========================================================================================
+    public static final String MESSAGE_ATTR_IS_XIUXIU = "is_xiuxiu"; //是否是xiuxiu消息
+    public static final String MESSAGE_ATTR_IS_ASK_XIUXIU = "is_ASK_xiuxiu"; //是否是xiuxiu请求消息
+    public static final String MESSAGE_ATTR_XIUXIU_STATUS = "xiu_xiu_status"; //咻咻回执消息的状态: 1 同意　2.拒绝
+    public static final String MESSAGE_ATTR_XIUXIU_ACTION = "xiu_xiu_action"; //咻咻回执消息ACTION
+    public static final String MESSAGE_ATTR_XIUXIU_MSG_ID = "xiu_xiu_msg_id"; //咻咻消息的 msg ID 用于处理回执消息
+
+
+    public static final String MESSAGE_ATTR_XIUXIU_B_SIZE = "xiu_xiu_b_size"; //咻咻b的size
+
+    public static final String XIUXIU_STATUS_AGREE = "1"; //同意
+    public static final String XIUXIU_STATUS_REFUSE = "0"; //拒绝
 }

@@ -9,6 +9,8 @@ public class XiuxiuPayConfResult extends XiuxiuResult{
 
     public List<XiuxiuPayConf> result;
 
+    public String remove;
+
     public List<XiuxiuPayConf> getResult() {
         return result;
     }
@@ -16,4 +18,13 @@ public class XiuxiuPayConfResult extends XiuxiuResult{
     public void setResult(List<XiuxiuPayConf> result) {
         this.result = result;
     }
+
+    public String getRemove() {
+        return remove;
+    }
+
+    public void setRemove(String remove) {
+        this.remove = remove;
+    }
+
 }

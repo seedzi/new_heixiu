@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by huzhi on 16-6-25.
  */
-public class WealthLevelActivity extends FragmentActivity {
+public class WealthLevelActivity extends BaseActivity {
 
     public static void startActivity(Context context){
         Intent intent = new Intent(context,WealthLevelActivity.class);

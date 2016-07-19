@@ -6,17 +6,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuPerson;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
-import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
-
-import org.w3c.dom.ProcessingInstruction;
-import org.xml.sax.helpers.XMLFilterImpl;
 
 import java.util.List;
 

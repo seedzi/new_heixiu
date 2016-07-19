@@ -65,8 +65,6 @@ public class ImManager {
                 XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        EMClient.getInstance().groupManager().loadAllGroups();
-                        EMClient.getInstance().chatManager().loadAllConversations();
                         runnable.run();
                     }
                 });

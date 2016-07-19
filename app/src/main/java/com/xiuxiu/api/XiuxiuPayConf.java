@@ -11,6 +11,9 @@ public class XiuxiuPayConf {
 
     public String desc;
 
+    public int orderCode;
+
+    public int realcoin;
 
     public String getXiuxiuB() {
         return xiuxiuB;
@@ -34,5 +37,32 @@ public class XiuxiuPayConf {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public int getOrderCode() {
+        return orderCode;
+    }
+
+    public int getRealcoin() {
+        return realcoin;
+    }
+
+    public void setOrderCode(int orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public void setRealcoin(int realcoin) {
+        this.realcoin = realcoin;
+    }
+
+    @Override
+    public String toString() {
+        return "XiuxiuPayConf{" +
+                "xiuxiuB='" + xiuxiuB + '\'' +
+                ", cash=" + cash +
+                ", desc='" + desc + '\'' +
+                ", orderCode=" + orderCode +
+                ", realcoin=" + realcoin +
+                '}';
     }
 }

@@ -7,11 +7,12 @@ import android.view.View;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by huzhi on 16-6-21.
  */
-public class DialogActivity extends FragmentActivity implements View.OnClickListener{
+public class DialogActivity extends BaseActivity implements View.OnClickListener{
 
     public static void startActivity(FragmentActivity ac,int requestCode){
         Intent intent = new Intent(ac,DialogActivity.class);

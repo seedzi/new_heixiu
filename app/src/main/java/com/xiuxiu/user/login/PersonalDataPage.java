@@ -5,11 +5,12 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by huzhi on 16-4-27.
  */
-public class PersonalDataPage extends FragmentActivity{
+public class PersonalDataPage extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

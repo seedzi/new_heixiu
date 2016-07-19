@@ -42,9 +42,6 @@ public class EaseUserCacheManager {
     private Map<String,XiuxiuUserInfoResult> mData;
 
     public Map<String,XiuxiuUserInfoResult> getMap(){
-//        if(mData==null){
-//            mData = new ConcurrentHashMap<String, ChatNickNameAndAvatarBean>();
-//        }
         return mData;
     }
 

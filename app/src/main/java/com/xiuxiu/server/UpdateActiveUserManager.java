@@ -38,15 +38,6 @@ public class UpdateActiveUserManager {
 
     private TimerTask task;
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            // 要做的事情
-            super.handleMessage(msg);
-            updataActiveUser();
-        }
-    };
-
     public void start(){
         timer = new Timer();
         task = new TimerTask() {
@@ -54,7 +45,7 @@ public class UpdateActiveUserManager {
             public void run() {
                 Message message = new Message();
                 message.what = 1;
-                handler.sendMessage(message);
+                XiuxiuApplication.getInstance().getUIHandler().sendMessage(message);
             }
         };
         timer.schedule(task,0, 5*60*1000);//五分钟更新一次

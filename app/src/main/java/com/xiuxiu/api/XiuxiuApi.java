@@ -13,9 +13,9 @@ import com.xiuxiu.utils.Md5Util;
 /**
  * Created by huzhi on 16-5-4.
  */
-public class HeixiuApi {
+public class XiuxiuApi {
 
-    private static final String TAG = "HeixiuApi";
+    private static final String TAG = "XiuxiuApi";
 
     //==============================================================================================
     // 获取用户信息 并将信息存入缓存和数据库中

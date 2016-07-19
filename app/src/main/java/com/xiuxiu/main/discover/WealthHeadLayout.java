@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuPerson;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
-import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
 
 import java.util.List;
 

@@ -20,9 +20,6 @@ import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuAllUserResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuPerson;
-import com.xiuxiu.bean.ChatNickNameAndAvatarBean;
-import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.easeim.ChatNickNameAndAvatarCacheManager;
 import com.xiuxiu.utils.Md5Util;
 
 import java.util.ArrayList;

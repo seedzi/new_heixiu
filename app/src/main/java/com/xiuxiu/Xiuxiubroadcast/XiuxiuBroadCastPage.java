@@ -1,4 +1,4 @@
-package com.xiuxiu.heixiubroadcast;
+package com.xiuxiu.Xiuxiubroadcast;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,14 +6,15 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 
 import com.xiuxiu.R;
+import com.xiuxiu.base.BaseActivity;
 
 /**
  * Created by huzhi on 16-4-24.
  */
-public class HeixiuBroadCastPage extends FragmentActivity{
+public class XiuxiuBroadCastPage extends BaseActivity{
 
     public static void startActivity(FragmentActivity ac){
-        Intent intent = new Intent(ac,HeixiuBroadCastPage.class);
+        Intent intent = new Intent(ac,XiuxiuBroadCastPage.class);
         ac.startActivity(intent);
         ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
     }

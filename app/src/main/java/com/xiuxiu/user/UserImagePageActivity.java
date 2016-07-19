@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.base.BaseActivity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by huzhi on 16-6-16.
  */
-public class UserImagePageActivity extends FragmentActivity implements ViewPager.OnPageChangeListener{
+public class UserImagePageActivity extends BaseActivity implements ViewPager.OnPageChangeListener{
 
     private static String TAG = UserImagePageActivity.class.getSimpleName();
 

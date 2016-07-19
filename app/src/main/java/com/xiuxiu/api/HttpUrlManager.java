@@ -1,15 +1,6 @@
 package com.xiuxiu.api;
 
 
-import android.net.Uri;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.xiuxiu.XiuxiuApplication;
-import com.xiuxiu.utils.Md5Util;
 
 public class HttpUrlManager {
 	
@@ -32,8 +23,10 @@ public class HttpUrlManager {
 	public static String QUERY_BATCH_USERINFOS = "queryBatchUserInfos";
 	/**活跃用户查询*/
 	public static String QUERY_ACTIVE_USER = "queryActiveUser";
-	/**获取咻羞招呼时间*/
+	/**获取咻羞招呼次数*/
 	public static String GET_XX_TIMES = "getXXtimes";
+	/**消耗咻羞招呼次数*/
+	public static String COST_CALL_LIMIT_BY_TYPE = "costCallLimitByType";
 	/**活跃用户更新*/
 	public static String UPDATE_ACTIVE_USER = "updateActiveUser";
 	/**解散好友*/
@@ -42,6 +35,12 @@ public class HttpUrlManager {
 	public static String WEIXIN_PAY = "getWXPayParam";
 	/**加载支付配置*/
 	public static String GET_PAY_CONF = "getPayConf";
+	/**根据用户id得到用户两个钱包的咻咻钱币*/
+	public static String GET_USER_XIUXIU_COIN = "getUserXiuXiuCoin";
+	/**扣除用户咻咻币*/
+	public static String COST_USER_COIN = "costUserCoin";
+	/**一个用户向另一个用户付费*/
+	public static String TRANSFER_COIN = "transferCoin";
 
 
 	public static String commondUrl(){

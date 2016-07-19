@@ -14,6 +14,8 @@ import android.net.Uri;
 import com.xiuxiu.db.ChatNameAndAvatarTable;
 import com.xiuxiu.db.XiuxiuDatabaseHelper;
 import com.xiuxiu.db.XiuxiuUserInfoTable;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
 import com.xiuxiu.utils.CollectionUtil;
 
 import java.util.List;
@@ -34,11 +36,13 @@ public class XiuxiuProvider extends ContentProvider {
     private static final int ALL = 0;
     private static final int CHAT_NICKNAME_AVATAR = 1000;
     private static final int XIUXIU_USER_INFO = 1001;
+    private static final int XIUXIU_ACTION_MESSAGE = 1002;
 
     static {
         sURLMatcher.addURI(AUTHORITY, null, ALL);
         sURLMatcher.addURI(AUTHORITY, ChatNameAndAvatarTable.TABLE_NAME, CHAT_NICKNAME_AVATAR);
         sURLMatcher.addURI(AUTHORITY, XiuxiuUserInfoTable.TABLE_NAME, XIUXIU_USER_INFO);
+        sURLMatcher.addURI(AUTHORITY, XiuxiuActionMsgTable.TABLE_NAME, XIUXIU_ACTION_MESSAGE);
     }
 
     public static final String PARAM_RAW_QUERY_STRING = "rawQuery";
