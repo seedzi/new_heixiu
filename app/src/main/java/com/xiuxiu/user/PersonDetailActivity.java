@@ -37,7 +37,6 @@ import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.chat.ChatPage;
-import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.Constant;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
@@ -300,7 +299,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                     mCallTimes = mCallTimes -1;
                     TextView tv = (TextView) findViewById(R.id.say_hello_txt);
                     tv.setText("今天还有" + mCallTimes + "次免费机会");
-                    XiuxiuUtils.costXiuxiuTimes();
+                    XiuxiuUtils.costXiuxiuCallTimes();
                     enterConversationPage();
                 }else{
                     showProgressDialog();

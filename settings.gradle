@@ -1,2 +1,2 @@
-include ':easeui'
+include ':easeui', ':Qupaisdk-release'
 include ':app'

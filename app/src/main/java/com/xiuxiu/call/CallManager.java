@@ -1,14 +1,10 @@
 package com.xiuxiu.call;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.EMNoActiveCallException;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
-import com.xiuxiu.call.voice.CallVoicePage;
 
 /**
  * Created by huzhi on 16-6-26.

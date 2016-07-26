@@ -44,7 +44,7 @@ public class VoicePlayManager {
     }
 
     public void play(String path){
-        android.util.Log.d(TAG,"path = " + path);
+        android.util.Log.d(TAG,"imgPath = " + path);
         if(TextUtils.isEmpty(path)){
             ToastUtil.showMessage(mAc,"没有语音");
             return;

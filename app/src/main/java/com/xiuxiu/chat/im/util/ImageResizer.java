@@ -135,7 +135,7 @@ public class ImageResizer extends ImageWorker {
 	 * height.
 	 * 
 	 * @param filename
-	 *            The full path of the file to decode
+	 *            The full imgPath of the file to decode
 	 * @param reqWidth
 	 *            The requested width of the resulting bitmap
 	 * @param reqHeight

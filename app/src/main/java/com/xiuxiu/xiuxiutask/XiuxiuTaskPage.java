@@ -19,6 +19,8 @@ import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
+import com.xiuxiu.qupai.QuPaiManager;
+import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.utils.ToastUtil;
 
 import java.io.File;
@@ -28,10 +30,11 @@ import java.io.File;
  */
 public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener{
 
+    private static final String TAG = "XiuxiuTaskPage";
+
     public static void startActivity4Result(Fragment fra,int requestCode){
-        Intent intent = new Intent(fra.getContext(),XiuxiuTaskPage.class);
+        Intent intent = new Intent(fra.getActivity().getApplication(),XiuxiuTaskPage.class);
         fra.startActivityForResult(intent, requestCode);
-//        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
     }
 
     private View mVideoBt;
@@ -52,6 +55,13 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
     public static String XIUXIU_TITLE_VOICE_TXT = "咻咻语聊";
 
     private String mXiuxiuTitle = XIUXIU_TITLE_IMG_TXT;
+
+
+    private String mVideoFile = "";
+
+    private String mThum = "";
+
+    private String mDuration = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,45 +107,49 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                     return;
                 }
                 if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){//男性
-                    Intent intent = new Intent();
-                    intent.putExtra(XiuxiuTaskBean.TITLE_KEY,mXiuxiuTitle);
-                    intent.putExtra(XiuxiuTaskBean.CONTENT_KEY,mEditText.getText().toString());
-                    intent.putExtra(XiuxiuTaskBean.XIUXIUB_KEY,mXiuxiuBSizeEdt.getText().toString());
-                    intent.putExtra(XiuxiuTaskBean.TYPE_KEY,XiuxiuTaskBean.TYPE_ASK_XIUXIU);
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    sendMessage2ChatFragment(true);
                 }else{//女性
-                    if(mXiuxiuTitle.equals(XIUXIU_TITLE_IMG_TXT)){
+                    if(mXiuxiuTitle.equals(XIUXIU_TITLE_IMG_TXT)){ //图片任务
                         selectPicFromCamera();
+                    }else if(mXiuxiuTitle.equals(XIUXIU_TITLE_VIDEO_TXT)){ //视频任务
+                        QuPaiManager.getInstance().showRecordPage(this,REQUEST_CODE_VIDEO);
+                    }else{ //语聊任务
+                        sendMessage2ChatFragment(false);
                     }
                 }
                 break;
         }
     }
 
+
+    private String mImagePath = "";
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_CAMERA) { // 发送照片
                 if (cameraFile != null && cameraFile.exists()){
-                    Intent intent = new Intent();
-                    android.util.Log.d("12345",cameraFile.getAbsolutePath());
-                    intent.putExtra(XiuxiuTaskBean.TITLE_KEY, mXiuxiuTitle);
-                    intent.putExtra(XiuxiuTaskBean.CONTENT_KEY,mEditText.getText().toString());
-                    intent.putExtra(XiuxiuTaskBean.XIUXIUB_KEY,mXiuxiuBSizeEdt.getText().toString());
-                    intent.putExtra(XiuxiuTaskBean.TYPE_KEY,XiuxiuTaskBean.TYPE_IMAGE_XIUXIU);
-                    intent.putExtra(XiuxiuTaskBean.FILE_PATH_KEY,cameraFile.getAbsolutePath());
-                    setResult(RESULT_OK, intent);
-                    finish();
+                    mImagePath = cameraFile.getAbsolutePath();
+                    if(!TextUtils.isEmpty(mImagePath)){
+                        sendMessage2ChatFragment(false);
+                    }
                 }
-
+            } else if (requestCode == REQUEST_CODE_VIDEO){ //发送视频
+                RecordResult result =new RecordResult(data);
+                //得到视频地址，和缩略图地址的数组，返回十张缩略图
+                try {
+                    mVideoFile = result.getPath();
+                    mThum = result.getThumbnail()[0];
+                    mDuration = String.valueOf(result.getDuration()/1000000);
+                }catch (Exception e){}
+                sendMessage2ChatFragment(false);
             }
         }
     }
 
     protected File cameraFile;
     protected static final int REQUEST_CODE_CAMERA = 2;
+    protected static final int REQUEST_CODE_VIDEO = 3;
     /**
      * 照相获取图片
      */
@@ -151,5 +165,27 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
         startActivityForResult(
                 new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
                 REQUEST_CODE_CAMERA);
+    }
+
+
+    /**
+     *　生成任务给ChatFragment
+     * @param isNan2Nv 是否男发给女
+     */
+    private void sendMessage2ChatFragment(boolean isNan2Nv){
+        Intent intent = new Intent();
+        int type;
+        if(mXiuxiuTitle.equals(XIUXIU_TITLE_IMG_TXT)){ //图片任务
+            type = XiuxiuTaskBean.TYPE_IMAGE_XIUXIU;
+        } else if(mXiuxiuTitle.equals(XIUXIU_TITLE_VIDEO_TXT)){//视频任务
+            type = XiuxiuTaskBean.TYPE_VIDEO_XIUXIU;
+        } else {//语聊任务
+            type = XiuxiuTaskBean.TYPE_VOICE_XIUXIU;
+        }
+        XiuxiuTaskBean taskBean = XiuxiuTaskBean.createXiuxiuTaskBean(isNan2Nv, mXiuxiuTitle, mEditText.getText().toString(),
+                mXiuxiuBSizeEdt.getText().toString(), mImagePath, mVideoFile, mThum, mDuration, type);
+        intent.putExtra(XiuxiuTaskBean.TAG,taskBean);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

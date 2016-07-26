@@ -131,10 +131,10 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
 
     private void initListManager(){
         mConversationListManager = ConversationListManager.getInstance();
-        mConversationListManager.init(getContext());
+        mConversationListManager.init(getActivity().getApplication());
 
         mContactListManager = ContactListManager.getInstance();
-        mContactListManager.init(getContext());
+        mContactListManager.init(getActivity().getApplication());
 
     }
 

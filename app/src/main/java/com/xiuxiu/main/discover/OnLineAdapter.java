@@ -1,6 +1,7 @@
 package com.xiuxiu.main.discover;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,13 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.call.CallManager;
-import com.xiuxiu.call.voice.CallVoicePage;
+import com.xiuxiu.call.voice.VoiceCallActivity;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.voice.VoicePlayManager;
 import com.xiuxiu.utils.DateUtils;
@@ -104,13 +106,28 @@ public class OnLineAdapter extends ArrayAdapter<XiuxiuUserInfoResult> implements
         holder.headImg.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                CallManager.getInstance(MainActivity.getInstance()).call2Person(getItem(position).getXiuxiu_id());
-                CallVoicePage.startActivity(MainActivity.getInstance(),getItem(position).getXiuxiu_id(), true);
+//                CallManager.getInstance(MainActivity.getInstance()).call2Person(getItem(position).getXiuxiu_id());
+//                CallVoicePage.startActivity(MainActivity.getInstance(),getItem(position).getXiuxiu_id(), true);
+                startVoiceCall(getItem(position).getXiuxiu_id());
             }
         });
 
         return convertView;
     }
+
+    /**
+     * 拨打语音电话
+     */
+    protected void startVoiceCall(String toChatUsername) {
+        if (!EMClient.getInstance().isConnected()) {
+            Toast.makeText(MainActivity.getInstance(), R.string.not_connect_to_server, 0).show();
+        } else {
+            MainActivity.getInstance().startActivity(new Intent(MainActivity.getInstance(),
+                    VoiceCallActivity.class).putExtra("username", toChatUsername)
+                    .putExtra("isComingCall", false));
+        }
+    }
+
 
     FragmentActivity mAc;
 

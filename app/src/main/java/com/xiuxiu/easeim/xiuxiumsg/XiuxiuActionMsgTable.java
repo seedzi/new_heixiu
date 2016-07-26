@@ -37,13 +37,16 @@ public class XiuxiuActionMsgTable implements TableHelper {
 
     public static final String XIUXIU_ID = "xiuxiu_id";
 
+    public static final String LOOCK_COUNT = "look_count";
+
     private final String CREATE_TABLE =  String.format("create table %s(%s text primary key, " +
-                    "%s text, %s long, %s text);",
+                    "%s text, %s long, %s text, %s integer);",
             TABLE_NAME,
             ASK_ID,
             STATUS,
             UPDATE_TIME,
-            XIUXIU_ID);
+            XIUXIU_ID,
+            LOOCK_COUNT);
 
 
     @Override
@@ -113,6 +116,7 @@ public class XiuxiuActionMsgTable implements TableHelper {
         cv.put(STATUS, info.status);
         cv.put(UPDATE_TIME, System.currentTimeMillis());
         cv.put(XIUXIU_ID, XiuxiuLoginResult.getInstance().getXiuxiu_id());
+        cv.put(LOOCK_COUNT,info.loock_count);
         return cv;
     }
 
@@ -140,11 +144,63 @@ public class XiuxiuActionMsgTable implements TableHelper {
         return map;
     }
 
+    public static int queryLookCountById(String askId){
+        ContentResolver resolver = getResolver();
+        Uri queryUri = TABLE_URI;
+        queryUri = TABLE_URI.buildUpon().build();
+        Cursor cursor = resolver.query(queryUri, null, "xiuxiu_id = ? and ask_id = ? ", new String[]{XiuxiuLoginResult.getInstance().getXiuxiu_id(),askId},
+                null);
+        int  lookCount = 0;
+        if(cursor!=null && cursor.getCount()!=0){
+            cursor.moveToFirst();
+            do{
+                lookCount = cursor.getInt(cursor.getColumnIndex(LOOCK_COUNT));
+                break;
+            }while (cursor.moveToNext());
+        }
+        return lookCount;
+    }
+
+    /**
+     * 查询所有数据(本登录用户的)
+     * @return cursor
+     */
+    public static XiuxiuActionInfo queryById(String ask_id) {
+        ContentResolver resolver = getResolver();
+        Uri queryUri = TABLE_URI;
+        queryUri = TABLE_URI.buildUpon().build();
+        Cursor cursor = resolver.query(queryUri, null, "xiuxiu_id = ? and ask_id = ? ", new String[]{XiuxiuLoginResult.getInstance().getXiuxiu_id(),
+                        ask_id},
+                        null);
+        XiuxiuActionInfo info = new XiuxiuActionInfo();
+        if(cursor!=null && cursor.getCount()!=0){
+            cursor.moveToFirst();
+            do{
+                info.loock_count = cursor.getInt(cursor.getColumnIndex(LOOCK_COUNT));
+                info.ask_id = cursor.getString(cursor.getColumnIndex(ASK_ID));
+                info.status = cursor.getString(cursor.getColumnIndex(STATUS));
+                info.updateTime = cursor.getLong(cursor.getColumnIndex(UPDATE_TIME));
+                break;
+            }while (cursor.moveToNext());
+        }
+        return info;
+    }
+
+    public static synchronized void updateLookCountById(String askId){
+        String whereClause =  ASK_ID + " = ? ";
+        XiuxiuActionInfo info = queryById(askId);
+        info.loock_count = info.loock_count +1;
+        ContentValues values = getContentValues(info);
+        int result = getResolver().update(TABLE_URI, values, whereClause, new String[]{info.ask_id});
+        android.util.Log.d("12345","result = " + result);
+    }
+
 
     /**
      * 删除按_SORT_ID 正序排序的   保留1000条
      */
     public static synchronized void deleteByExceedLimit(){
+
         try {
             ContentResolver resolver = getResolver();
             int result = resolver.delete(TABLE_URI, UPDATE_TIME + " not in (select " +

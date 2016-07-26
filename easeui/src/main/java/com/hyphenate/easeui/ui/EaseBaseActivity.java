@@ -15,9 +15,11 @@
 package com.hyphenate.easeui.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.Window;
 
 import com.hyphenate.easeui.controller.EaseUI;
 
@@ -26,6 +28,8 @@ public class EaseBaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         //http://stackoverflow.com/questions/4341600/how-to-prevent-multiple-instances-of-an-activity-when-it-is-launched-with-differ/
         //理论上应该放在launcher activity,放在基类中所有集成此库的app都可以避免此问题
         if(!isTaskRoot()){

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -41,7 +38,7 @@ public class EaseUserUtils {
     public static void setUserAvatar(Context context, String username, ImageView imageView){
         android.util.Log.d(TAG,"setUserAvatar");
     	EaseUser user = getUserInfo(username);
-        if(user != null && user.getAvatar() != null){
+        if(imageView!=null&& user != null && user.getAvatar() != null){
             ImageLoader.getInstance().displayImage(user.getAvatar(),imageView);
         }
         /*

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
@@ -23,11 +24,13 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
+import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuApi;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.call.voice.CallVoicePage;
+import com.xiuxiu.call.voice.VoiceCallActivity;
 import com.xiuxiu.chat.ChatPage;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.invitation.ImModel;
 import com.xiuxiu.user.invitation.InviteMessage;
 import com.xiuxiu.user.invitation.InviteMessage.InviteMesageStatus;
@@ -106,6 +109,10 @@ public class ImHelper {
     private ImModel imModel;
 
     private UserDao userDao;
+
+    public boolean isVoiceCalling;
+    public boolean isVideoCalling;
+
 
     /**
      * HuanXin sync contacts status listener
@@ -204,13 +211,26 @@ public class ImHelper {
                         //获取消息body
                         EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                         final String action = cmdMsgBody.action();//获取自定义action
-                        android.util.Log.d("12345","action = " + action + ",messageId =" + message.getMsgId());
-
                         if (EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION.equals(action)) {
                             XiuxiuActionMsgManager.getInstance().add(message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID),
                                     message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_STATUS));
                             XiuxiuActionMsgManager.getInstance().notifyListener();
+                            if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE)){
+                                android.util.Log.d("12345","进入拨打判断");
+                                if (!EMClient.getInstance().isConnected()) {
+                                    android.util.Log.d("12345","!EMClient.getInstance().isConnected()");
+                                } else { //拨打电话
+                                    android.util.Log.d("12345", "拨打电话");
+                                    MainActivity.getInstance().startActivity(new Intent(MainActivity.getInstance(),
+                                            VoiceCallActivity.class).putExtra("username", message.getFrom())
+                                            .putExtra("isComingCall", false)
+                                            .putExtra("xiuxiub", message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE_COST_XIUXIUB)));
+                                }
+                            }
+                        }else{
+                            android.util.Log.d("12345","未进入拨打电话");
                         }
+
                         /*
                         //获取扩展属性 此处省略
                         EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
@@ -454,8 +474,6 @@ public class ImHelper {
 
             @Override
             public Intent getLaunchIntent(EMMessage message) {
-                //设置点击通知栏跳转事件
-                Intent intent = new Intent(appContext, ChatPage.class);
                 //有电话时优先跳转到通话页面
                 /*
                 if(isVideoCalling){
@@ -483,25 +501,31 @@ public class ImHelper {
                 if(user!=null){
                     username = user.getNick();
                 }
-                EMMessage.ChatType chatType = message.getChatType();
-                if (chatType == EMMessage.ChatType.Chat) { // 单聊信息
-                    intent.putExtra("userId", message.getFrom());
-                    intent.putExtra("userName", username);
-                    intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
-                } else { // 群聊信息
-                    // message.getTo()为群聊id
-                    intent.putExtra("userId", message.getTo());
-                    intent.putExtra("userName", username);
-                    if(chatType == EMMessage.ChatType.GroupChat){
-                        intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
-                    }else{
-                        intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
-                    }
+                //设置点击通知栏跳转事件
+                Intent intent = new Intent(appContext, ChatPage.class);
+                //有电话时优先跳转到通话页面
+                if(isVideoCalling){
+//                    intent = new Intent(appContext, VideoCallActivity.class); //added by huzhi 暂时不要
+                    intent = new Intent(appContext, VoiceCallActivity.class);
+                }else {
+                    EMMessage.ChatType chatType = message.getChatType();
+                    if (chatType == EMMessage.ChatType.Chat) { // 单聊信息
+                        intent.putExtra("userId", message.getFrom());
+                        intent.putExtra("userName", username);
+                        intent.putExtra("chatType", Constant.CHATTYPE_SINGLE);
+                    } else { // 群聊信息
+                        // message.getTo()为群聊id
+                        intent.putExtra("userId", message.getTo());
+                        intent.putExtra("userName", username);
+                        if (chatType == EMMessage.ChatType.GroupChat) {
+                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                        } else {
+                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
+                        }
 
+                    }
                 }
                 return intent;
-//                Intent intent = new Intent(appContext, ChatPage.class);
-//                return intent;
             }
         });
 
@@ -620,14 +644,20 @@ public class ImHelper {
     private class CallReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             // 拨打方username
             String from = intent.getStringExtra("from");
             // call type
             String type = intent.getStringExtra("type");
+                   /*
             //跳转到通话页面
             CallVoicePage.startActivity(context, from,false);
+            */
+//            android.util.Log.d(TAG, " CallReceiver onReceive  from = " + from + ",type = " + type);
 
-            android.util.Log.d(TAG," CallReceiver onReceive  from = " + from + ",type = " + type);
+            context.startActivity(new Intent(context, VoiceCallActivity.class).
+                    putExtra("username", from).putExtra("isComingCall", true).
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
 

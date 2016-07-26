@@ -9,4 +9,7 @@ public class XiuxiuActionInfo {
 
     public String status;
 
+    public long updateTime;
+
+    public int loock_count;
 }

@@ -80,6 +80,7 @@
             android:gravity="left|top"
             android:hint="填写你对索要照片的期望和要求...(智能查看3次)"
             android:textSize="13sp"
+            android:textColor="#d4d4d4"
             android:textColorHint="#d4d4d4"
             android:background="@null"/>
         

@@ -57,7 +57,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mInstance = this;
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //设置无标题
         setContentView(R.layout.activity_main);
         registerBroadcastReceiver();
     }

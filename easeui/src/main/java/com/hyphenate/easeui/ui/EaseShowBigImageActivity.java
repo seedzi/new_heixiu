@@ -57,9 +57,9 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setContentView(R.layout.ease_activity_show_big_image);
-		super.onCreate(savedInstanceState);
 
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.ease_activity_show_big_image);
 		image = (EasePhotoView) findViewById(R.id.image);
 		loadLocalPb = (ProgressBar) findViewById(R.id.pb_load_local);
 		default_res = getIntent().getIntExtra("default_image", R.drawable.ease_default_avatar);

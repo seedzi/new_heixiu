@@ -64,22 +64,30 @@
 
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/tv_call_state"
         android:layout_marginBottom="12dp"
         android:layout_above="@+id/bottom_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:text="等待接通..."
-        android:visibility="gone"/>
-    <com.xiuxiu.chat.TimeBar
-        android:id="@+id/time"
-        android:layout_marginBottom="12dp"
-        android:layout_above="@+id/bottom_layout"
+        android:textColor="#ffffff"/>
+    <com.xiuxiu.easeim.widget.MyChronometer
+        android:id="@+id/chronometer"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@id/tv_call_state"
         android:layout_width="wrap_content"
+        android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tv_network_status"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/chronometer"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"/>
 
     <FrameLayout
         android:id="@+id/bottom_layout"
@@ -88,29 +96,53 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp">
         <LinearLayout
-            android:id="@+id/before_call_layout"
+            android:id="@+id/ll_coming_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
             <!-- 结束电话 -->
-            <ImageView
-                android:id="@+id/end_call"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/call_voice_end_selector"/>
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/btn_refuse_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/call_voice_end_selector"/>
+                <TextView
+                    android:text="拒绝"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <!-- 接电话 -->
-            <ImageView
-                android:id="@+id/answer_call"
+            <LinearLayout
                 android:layout_marginLeft="80dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/call_voice_answer_selector"/>
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <ImageView
+                    android:id="@+id/btn_answer_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/call_voice_answer_selector"/>
+                <TextView
+                    android:text="接听"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#ffffff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/after_call_layout"
+            android:id="@+id/ll_voice_control"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -125,7 +157,7 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
                 <ImageView
-                    android:id="@+id/mute"
+                    android:id="@+id/iv_mute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/call_voice_mute_normal"/>
@@ -145,7 +177,7 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
                 <ImageView
-                    android:id="@+id/end_call_2"
+                    android:id="@+id/btn_hangup_call"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/call_voice_end_selector"/>
@@ -164,7 +196,7 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
                 <ImageView
-                    android:id="@+id/hands_free"
+                    android:id="@+id/iv_handsfree"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/call_voice_speaker_normal"/>

@@ -25,7 +25,7 @@ public class HttpUrlManager {
 	public static String QUERY_ACTIVE_USER = "queryActiveUser";
 	/**获取咻羞招呼次数*/
 	public static String GET_XX_TIMES = "getXXtimes";
-	/**消耗咻羞招呼次数*/
+	/**消耗咻羞次数*/
 	public static String COST_CALL_LIMIT_BY_TYPE = "costCallLimitByType";
 	/**活跃用户更新*/
 	public static String UPDATE_ACTIVE_USER = "updateActiveUser";

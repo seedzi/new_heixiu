@@ -19,6 +19,7 @@ import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.discover.OnLineListManager;
+import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.server.UpdateActiveUserManager;
 import com.xiuxiu.user.CharmLevelActivity;
 import com.xiuxiu.user.SetupPage;
@@ -253,6 +254,7 @@ public class UserFragment extends Fragment implements View.OnClickListener{
                         XiuxiuUserInfoResult.clear();
                         OnLineListManager.getInstance(getActivity()).destory();
                         TabsFragmentManager.getInstance().clear();
+                        QuPaiManager.getInstance().clearAccessToken();
                         ((MainActivity) getActivity()).finish();
                         LoginPage.startActivity(getActivity());
                     }

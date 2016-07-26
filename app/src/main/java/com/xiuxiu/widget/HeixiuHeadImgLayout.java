@@ -1,11 +1,14 @@
 package com.xiuxiu.widget;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
+import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ public class HeixiuHeadImgLayout extends LinearLayout{
     private List<ImageView> mList = new ArrayList<ImageView>();
 
     private Context mContext;
+
+    private boolean isInit = false;
 
     public HeixiuHeadImgLayout(Context context) {
         super(context);
@@ -40,6 +45,9 @@ public class HeixiuHeadImgLayout extends LinearLayout{
     }
 
     private void init(){
+        if(isInit){
+            return;
+        }
         calculationItemSize();
         LinearLayout.LayoutParams ll = null;
         for(int i=0;i<8;i++){
@@ -53,7 +61,9 @@ public class HeixiuHeadImgLayout extends LinearLayout{
             iv.setLayoutParams(ll);
             iv.setImageResource(R.drawable.head_default);
             addView(iv);
+            mList.add(iv);
         }
+        isInit = true;
     }
 
     private int mItemMargin;
@@ -66,5 +76,22 @@ public class HeixiuHeadImgLayout extends LinearLayout{
         mItemMargin = 26;
         mItemWidth = (ScreenUtils.getScreenWidth(mContext) - mItemMargin*7 - 2*ScreenUtils.dip2px(mContext,16))/8;
         mItemHeight = mItemWidth;
+    }
+
+    public void setData(List<String> imgurls){
+        if(imgurls==null){
+            return;
+        }
+        int position = 0;
+        for(ImageView iv:mList){
+           if(position < imgurls.size()){
+               if(!TextUtils.isEmpty(imgurls.get(position))){
+                   ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + imgurls.get(position),iv);
+               }
+               position++;
+           }else{
+               return;
+           }
+        }
     }
 }

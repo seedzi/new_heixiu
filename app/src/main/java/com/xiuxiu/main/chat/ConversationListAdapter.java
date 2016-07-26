@@ -1,7 +1,10 @@
 package com.xiuxiu.main.chat;
 
 import android.content.Context;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
@@ -25,6 +29,7 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.easeim.EaseUserCacheManager;
+import com.xiuxiu.easeim.XiuxiuCommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,8 +134,19 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
         if (conversation.getAllMsgCount() != 0) {
             // 把最后一条消息的内容作为item的message内容
             EMMessage lastMessage = conversation.getLastMessage();
-            holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))),
-                    TextView.BufferType.SPANNABLE);
+            boolean isXiuxiu = false;
+            try{
+                isXiuxiu = lastMessage.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU);
+            }catch (Exception e){}
+            if(isXiuxiu){
+                String txt = XiuxiuCommonUtils.getMessageDigest(lastMessage, this.getContext());
+                SpannableString styledText = new SpannableString(txt );
+                styledText.setSpan(new TextAppearanceSpan(getContext(), R.style.xiuxiu_font_style), 0, txt.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.message.setText(styledText,TextView.BufferType.SPANNABLE);
+            }else{
+                holder.message.setText(EaseSmileUtils.getSmiledText(getContext(), EaseCommonUtils.getMessageDigest(lastMessage, (this.getContext()))),
+                        TextView.BufferType.SPANNABLE);
+            }
             /*
             holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
             if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {

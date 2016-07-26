@@ -28,4 +28,7 @@
     <string name="rss_list_time_text_sec">秒前</string>
     <string name="rss_list_time_text_just">刚刚</string>
     <string name="date_fromate_anecdote">"MM-dd"</string>
+
+    <string name="network_unstable">网络不稳定</string>
+    <string name="no_call_data">没有通话数据</string>
 </resources>

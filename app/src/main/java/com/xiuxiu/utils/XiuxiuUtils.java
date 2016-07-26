@@ -3,6 +3,7 @@ package com.xiuxiu.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -11,16 +12,19 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.PathUtil;
+import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
+import com.xiuxiu.api.XiuxiuTimsResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
+import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.server.UpdateActiveUserManager;
 
 /**
@@ -58,6 +62,8 @@ public class XiuxiuUtils {
         }
         //7.因为不知道 PathUtil init()方法调用时机  目前这样手动调用 TODO　huzhi
         PathUtil.getInstance().initDirs("xiuxiu", "b", context);
+        //8.趣拍初始化
+        QuPaiManager.getInstance().init();
     }
 
     private static void doSomthingOnAppStartInBackground(final Context context) {
@@ -127,20 +133,40 @@ public class XiuxiuUtils {
         }
     };
 
-    public static void costXiuxiuTimes() {
+    public static void costXiuxiuCallTimes() {
         XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getCostXiuxiuTimesUrl(), mCostXiuxiuTimesListener, mCostXiuxiuTimesErroListener));
+                .add(new StringRequest(getCostXiuxiuTimesUrl("call"), mCostXiuxiuTimesListener, mCostXiuxiuTimesErroListener));
     }
-    private static String getCostXiuxiuTimesUrl() {
+
+    // ============================================================================================
+    //　消耗羞咻广播
+    // ============================================================================================
+    public static boolean costXiuxiuBroadcastTimes() {
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getCostXiuxiuTimesUrl("broadcast"), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"costXiuxiuBroadcastTimes()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuResult res = gson.fromJson(response, XiuxiuResult.class);
+            if(res!=null&&res.isSuccess()){
+                return true;
+            }
+        }catch (Exception e){}
+        return false;
+    }
+
+    private static String getCostXiuxiuTimesUrl(String type) {
         String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.COST_CALL_LIMIT_BY_TYPE)
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter("limitType", "call")
+                .appendQueryParameter("limitType", type)
                 .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .build().toString();
-        android.util.Log.d(TAG, "url = " + url);
+        android.util.Log.d(TAG, "getCostXiuxiuTimesUrl() url = " + url);
         return url;
     }
 
@@ -171,7 +197,7 @@ public class XiuxiuUtils {
     public static boolean costUserCoin(String costType,String costCoin){
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getCostUserCoinUrl(costType,costCoin), future, future));
+                .add(new StringRequest(getCostUserCoinUrl(costType, costCoin), future, future));
         try {
             String response = future.get();
             android.util.Log.d(TAG,"costUserCoin() response = " + response);
@@ -205,7 +231,6 @@ public class XiuxiuUtils {
         android.util.Log.d(TAG, "getCostUserCoinUrl() url = " + url);
         return url;
     }
-
 
     // ============================================================================================
     //　扣除咻咻b
@@ -269,6 +294,38 @@ public class XiuxiuUtils {
         return url;
     }
 
+    // ============================================================================================
+    //　获取咻咻广播次数
+    // ============================================================================================
+    public static int getXiuxiuBroadcastTimes() {
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getXiuxiuTimesUrl("broadcast"), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"getXiuxiuBroadcastTimes()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuTimsResult res = gson.fromJson(response, XiuxiuTimsResult.class);
+            if(res!=null&&res.isSuccess()){
+                int callTimes = res.getTimes();
+                return callTimes;
+            }
+        }catch (Exception e){}
+        return 0;
+    }
+    private static String getXiuxiuTimesUrl(String type) {
+        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.GET_XX_TIMES)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("limitType", type)
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .build().toString();
+        android.util.Log.d(TAG, "getXiuxiuTimesUrl() url = " + url);
+        return url;
+    }
+
 
     public interface CallBack{
 
@@ -280,7 +337,9 @@ public class XiuxiuUtils {
 
     }
 
-
+    // ============================================================================================
+    //　对话框
+    // ============================================================================================
     private static ProgressDialog mProgressDialog;
 
     public static void showProgressDialog(Context context){

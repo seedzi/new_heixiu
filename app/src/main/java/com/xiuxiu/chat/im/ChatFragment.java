@@ -6,29 +6,38 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRowImage;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
-import com.xiuxiu.easeim.widget.ChatRowAskXiuxiu;
-import com.xiuxiu.easeim.widget.ChatRowImgXiuxiu;
+import com.xiuxiu.easeim.widget.ChatRowImgNan2NvXiuxiu;
+import com.xiuxiu.easeim.widget.ChatRowImgNv2NanXiuxiu;
+import com.xiuxiu.easeim.widget.ChatRowVideoNan2NvXiuxiu;
+import com.xiuxiu.easeim.widget.ChatRowVideoNv2NanXiuxiu;
 import com.xiuxiu.easeim.widget.ChatRowVoiceCall;
+import com.xiuxiu.easeim.widget.ChatRowVoiceXiuxiu;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiu.qupai.QuPaiManager;
+import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.user.invitation.AddFriendsPage;
+import com.xiuxiu.xiuxiutask.XiuxiuQupaiPage;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskBean;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskPage;
 
@@ -51,30 +60,56 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
-    protected static final int REQUEST_CODE_XIUXIU = 15;//ask xiuxiu request code
+    protected static final int REQUEST_CODE_XIUXIU = 10001;//xiuxiu request code
+    protected static final int REQUEST_CODE_CAMERA = 10002;//男发女咻咻点击同意后进入相机页面
+    protected static final int REQUEST_CODE_VIDEO = 10003;//点击同意后进入视频页面
 
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
 
-    //咻咻的图片
-    private static final int MESSAGE_TYPE_SENT_IMAGE_XIUXIU = 5;
-    private static final int MESSAGE_TYPE_RECV_IMAGE_XIUXIU = 6;
-    //收费的语音
-    private static final int MESSAGE_TYPE_SENT_VOICE_CALL_XIUXIU = 7;
-    private static final int MESSAGE_TYPE_RECV_VOICE_CALL_XIUXIU = 8;
-    //收费的视频
-    private static final int MESSAGE_TYPE_SENT_VIDEO_XIUXIU = 9;
-    private static final int MESSAGE_TYPE_RECV_VIDEO_XIUXIU = 10;
-    //咻咻请求消息
-    private static final int MESSAGE_TYPE_SENT_ASK_XIUXIU = 11;
-    private static final int MESSAGE_TYPE_RECV_ASK_XIUXIU = 12;
+    //咻咻的图片(男给女发)
+    private static final int MESSAGE_XIUXIU_TYPE_IMG_NAN_2_NV_SENT = 5;
+    private static final int MESSAGE_XIUXIU_TYPE_IMG_NAN_2_NV_RECV = 6;
+    //咻咻的图片(女给男发)
+    private static final int MESSAGE_XIUXIU_TYPE_IMG_NV_2_NAN_SENT = 7;
+    private static final int MESSAGE_XIUXIU_TYPE_IMG_NV_2_NAN_RECV = 8;
+    //咻咻的视频(男给女发)
+    private static final int MESSAGE_XIUXIU_TYPE_VIDEO_NAN_2_NV_SENT = 9;
+    private static final int MESSAGE_XIUXIU_TYPE_VIDEO_NAN_2_NV_RECV = 10;
+    //咻咻的视频(女给男发)
+    private static final int MESSAGE_XIUXIU_TYPE_VIDEO_NV_2_NAN_SENT = 11;
+    private static final int MESSAGE_XIUXIU_TYPE_VIDEO_NV_2_NAN_RECV = 12;
+    //咻咻的语聊天(男给女发)
+    private static final int MESSAGE_XIUXIU_TYPE_VOICE_NAN_2_NV_SENT = 13;
+    private static final int MESSAGE_XIUXIU_TYPE_VOICE_NAN_2_NV_RECV = 14;
+    //咻咻的语聊(女给男发)
+    private static final int MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_SENT = 15;
+    private static final int MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_RECV = 16;
+
+    //拍照相关
+    private String mImagePath = "";//huzhi
+    //趣拍相关
+    private String mVideoFile = "";
+    private String mThum = "";
+    private String mDuration = "";
+
+    public static ChatFragment mInstance;
 
     // huzhi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        android.util.Log.d(TAG,"onCreateView()");
+        mInstance = this;
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mInstance = null;
+        android.util.Log.d(TAG, "onDestroyView()");
     }
 
     @Override
@@ -84,7 +119,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 
         // 咻羞任务入口
         RelativeLayout rootView = (RelativeLayout)inputMenu.getParent();
-        ImageView xiuxiuTaskBt = new ImageView(getContext());
+        ImageView xiuxiuTaskBt = new ImageView(getActivity().getApplicationContext());
         xiuxiuTaskBt.setImageResource(R.drawable.xiuxiu_task_bt_selector);
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -140,7 +175,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 case REQUEST_CODE_SELECT_VIDEO: //发送选中的视频
                     if (data != null) {
                         int duration = data.getIntExtra("dur", 0);
-                        String videoPath = data.getStringExtra("path");
+                        String videoPath = data.getStringExtra("imgPath");
                         File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
                         try {
                             FileOutputStream fos = new FileOutputStream(file);
@@ -162,26 +197,64 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                     }
                     break;
                 case REQUEST_CODE_XIUXIU:
-                    int xiuxiuType = data.getIntExtra(XiuxiuTaskBean.TYPE_KEY,0);
-                    switch (xiuxiuType){
-                        case XiuxiuTaskBean.TYPE_ASK_XIUXIU: //ask 咻咻
-                            sendAskXiuxiuMessage(data.getStringExtra(XiuxiuTaskBean.TITLE_KEY),
-                                    data.getStringExtra(XiuxiuTaskBean.CONTENT_KEY),
-                                    data.getStringExtra(XiuxiuTaskBean.XIUXIUB_KEY));
-                            break;
-                        case XiuxiuTaskBean.TYPE_IMAGE_XIUXIU:
-                            sendImgXiuxiuMessage(data);
-                            break;
+                    dealIntentData(data);
+                    break;
+                case REQUEST_CODE_CAMERA: //男发女咻咻点击同意后进入相机页面
+                    if (cameraFile != null && cameraFile.exists()){
+                        mImagePath = cameraFile.getAbsolutePath();
+                        if(!TextUtils.isEmpty(mImagePath)){
+                            String costXiuxiuB = mCurrentCostXiuxiuB;
+                            if(TextUtils.isEmpty(costXiuxiuB)){
+                                costXiuxiuB = "20";
+                            }
+                            XiuxiuTaskBean bean = XiuxiuTaskBean.createXiuxiuTaskBean(false,"咻羞图片","咻羞图片",costXiuxiuB,mImagePath);
+                            Intent intent = new Intent();
+                            intent.putExtra(XiuxiuTaskBean.TAG, bean);
+                            dealIntentData(intent);
+                        }
                     }
+                    break;
+                case REQUEST_CODE_VIDEO://男发女咻咻点击同意后进入趣拍摄影页面(先进入隐形页面　拍摄完成后再回来)
+                    dealIntentData(data);
+                    break;
                 default:
                     break;
             }
         }
     }
 
+    private void dealIntentData(Intent data){
+        XiuxiuTaskBean xiuxiuTaskBean = (XiuxiuTaskBean)data.getSerializableExtra(XiuxiuTaskBean.TAG);
+        if(xiuxiuTaskBean.isNan2Nv){
+            switch (xiuxiuTaskBean.type){
+                case XiuxiuTaskBean.TYPE_IMAGE_XIUXIU: //图片 咻咻　(男2女)
+                    sendXiuxiuImgNan2NvMessage(xiuxiuTaskBean);
+                    break;
+                case XiuxiuTaskBean.TYPE_VIDEO_XIUXIU: //视频　咻咻　(男2女)
+                    sendXiuxiuVideoNan2NvMessage(xiuxiuTaskBean);
+                    break;
+                case XiuxiuTaskBean.TYPE_VOICE_XIUXIU: //语聊　咻咻  (男2女)
+                    sendXiuxiuVoiceNan2NvMessage(xiuxiuTaskBean);
+                    break;
+            }
+        }else{
+            switch (xiuxiuTaskBean.type){
+                case XiuxiuTaskBean.TYPE_IMAGE_XIUXIU: //图片 咻咻　(女2男)
+                    sendXiuxiuImgNv2NanMessage(xiuxiuTaskBean);
+                    break;
+                case XiuxiuTaskBean.TYPE_VIDEO_XIUXIU: //视频　咻咻　(女2男)
+                    sendXiuxiuVideoNv2NanMessage(xiuxiuTaskBean);
+                    break;
+                case XiuxiuTaskBean.TYPE_VOICE_XIUXIU: //语聊　咻咻  (女2男)
+                    sendXiuxiuVoiceNv2NanMessage(xiuxiuTaskBean);
+                    break;
+            }
+        }
+    }
+
+
     @Override
     public void onSetMessageAttributes(EMMessage message) {
-        android.util.Log.d("12345","onSetMessageAttributes()");
         message.setAttribute("em_from_nick_name", XiuxiuUserInfoResult.getInstance().getXiuxiu_name()); //huzhi
     }
 
@@ -192,12 +265,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 
     @Override
     public void onAvatarClick(String username) {
-        android.util.Log.d(TAG,"onAvatarClick()");
+        android.util.Log.d(TAG, "onAvatarClick()");
     }
 
     @Override
     public boolean onMessageBubbleClick(EMMessage message) {
-        android.util.Log.d(TAG,"onMessageBubbleClick()");
+        android.util.Log.d(TAG, "onMessageBubbleClick()");
         return false;
     }
 
@@ -228,7 +301,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 
     @Override
     protected void addFriends(){
-        AddFriendsPage.startActivity(getContext(), toChatUsername);//huzhi
+        AddFriendsPage.startActivity(getActivity().getApplicationContext(), toChatUsername);//huzhi
     }
 
 
@@ -241,39 +314,45 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种 + 咻咻8种
-            return 12;
+            //音、视频通话发送、接收共4种 + 咻咻12种
+            return 4+12;
         }
 
         @Override
         public int getCustomChatRowType(EMMessage message) {
-            //１.收费图片
-            if(message.getType() == EMMessage.Type.IMAGE){
+            try {
                 if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_IMAGE_XIUXIU : MESSAGE_TYPE_SENT_IMAGE_XIUXIU;
+                    int type = message.getIntAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE);
+                    switch (type){
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG:            //１.收费图片
+                            if( message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV, false))   {
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_IMG_NAN_2_NV_RECV :
+                                        MESSAGE_XIUXIU_TYPE_IMG_NAN_2_NV_SENT;
+                            }else{
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_IMG_NV_2_NAN_RECV :
+                                        MESSAGE_XIUXIU_TYPE_IMG_NV_2_NAN_SENT;
+                            }
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VIDEO:            //2.收费视频
+                            if( message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV, false))   {
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_VIDEO_NAN_2_NV_RECV :
+                                        MESSAGE_XIUXIU_TYPE_VIDEO_NAN_2_NV_SENT;
+                            }else{
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_VIDEO_NV_2_NAN_RECV :
+                                        MESSAGE_XIUXIU_TYPE_VIDEO_NV_2_NAN_SENT;
+                            }
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VOICE:            //3.收费语聊
+                            if( message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV, false))   {
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_VOICE_NAN_2_NV_RECV :
+                                        MESSAGE_XIUXIU_TYPE_VOICE_NAN_2_NV_SENT;
+                            }else{
+                                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_RECV :
+                                        MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_SENT;
+                            }
+                    }
                 }
-            }
-            //2.收费视频
-            if(message.getType() == EMMessage.Type.VIDEO){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_XIUXIU : MESSAGE_TYPE_SENT_VIDEO_XIUXIU;
-                }
-            }
-            //3.收费语聊
-            if(message.getType() == EMMessage.Type.TXT){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)&&
-                        message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL_XIUXIU : MESSAGE_TYPE_SENT_VOICE_CALL_XIUXIU;
-                }
-            }
+            }catch (Exception e){}
 
-            //4.咻咻要求消息
-            if(message.getType() == EMMessage.Type.TXT){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_ASK_XIUXIU, false)){
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_ASK_XIUXIU : MESSAGE_TYPE_SENT_ASK_XIUXIU;
-                }
-            }
-
+            //暂时不要普通的视频以及音频
             if(message.getType() == EMMessage.Type.TXT){
                 //语音通话
                 if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
@@ -289,33 +368,27 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         @Override
         public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
 
-            //１.收费图片
-            if(message.getType() == EMMessage.Type.IMAGE){
+            try {
                 if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return new ChatRowImgXiuxiu(getActivity(), message, position, adapter);
+                    int type = message.getIntAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE);
+                    switch (type){
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG:            //１.收费图片
+                            if( message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV, false)){
+                                return new ChatRowImgNan2NvXiuxiu(getActivity(), message, position, adapter);
+                            }else{
+                                return new ChatRowImgNv2NanXiuxiu(getActivity(), message, position, adapter);
+                            }
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VIDEO:            //2.收费视频
+                            if( message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV, false)){
+                                return new ChatRowVideoNan2NvXiuxiu(getActivity(), message, position, adapter);
+                            }else{
+                                return new ChatRowVideoNv2NanXiuxiu(getActivity(), message, position, adapter);
+                            }
+                        case  EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VOICE:            //3.收费语聊
+                            return new ChatRowVoiceXiuxiu(getActivity(), message, position, adapter);
+                    }
                 }
-            }
-            //2.收费视频
-            if(message.getType() == EMMessage.Type.VIDEO){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return new ChatRowImgXiuxiu(getActivity(), message, position, adapter);
-                }
-            }
-            //3.收费语聊
-            if(message.getType() == EMMessage.Type.TXT){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_VOICE_CALL, false)&&
-                        message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)){
-                    return new EaseChatRowImage(getActivity(), message, position, adapter);
-                }
-            }
-
-            //4.咻咻请求消息(男给女发)
-            if(message.getType() == EMMessage.Type.TXT){
-                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, false)&&
-                message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_ASK_XIUXIU, false)){
-                    return new ChatRowAskXiuxiu(getActivity(), message, position, adapter);
-                }
-            }
+            }catch (Exception e){}
 
             if(message.getType() == EMMessage.Type.TXT){
                 // 语音通话,  视频通话
@@ -330,21 +403,96 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
 
 
-    //发送咻咻请求消息(男对女发)
+
     //==========================================================================
-    public void sendAskXiuxiuMessage(String title,String content,String xiuxiuB){
-        XiuxiuTaskBean xiuxiuTaskBean = XiuxiuTaskBean.createBean(title,content,xiuxiuB);
-        EMMessage message = EMMessage.createTxtSendMessage(XiuxiuTaskBean.createJsonString(xiuxiuTaskBean),
-                toChatUsername);
+    //发送咻咻请求消息(图片　男对女发)
+    public void sendXiuxiuImgNan2NvMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createTxtSendMessage(XiuxiuTaskBean.createJsonString(xiuxiuTaskBean), toChatUsername);
         message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU,true);
-        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_ASK_XIUXIU,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG);
         message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID,XiuxiuTaskBean.createXiuxiuMsgId());
         sendMessage(message);
     }
+    //发送咻咻请求消息(图片 女对男发)
+    public void sendXiuxiuImgNv2NanMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createImageSendMessage(xiuxiuTaskBean.imgPath, false, toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,false);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID, XiuxiuTaskBean.createXiuxiuMsgId());
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TXT_CONTENT, xiuxiuTaskBean.content);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_B_SIZE,xiuxiuTaskBean.xiuxiub);
+        sendMessage(message);
+    }
+
+    //==========================================================================
+    //发送咻咻请求消息(语聊　男对女发)
+    public void sendXiuxiuVoiceNan2NvMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createTxtSendMessage(XiuxiuTaskBean.createJsonString(xiuxiuTaskBean), toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VOICE);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID,XiuxiuTaskBean.createXiuxiuMsgId());
+        sendMessage(message);
+    }
+    //发送咻咻请求消息(语聊 女对男发)
+    public void sendXiuxiuVoiceNv2NanMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createTxtSendMessage(XiuxiuTaskBean.createJsonString(xiuxiuTaskBean), toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,false);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VOICE);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID, XiuxiuTaskBean.createXiuxiuMsgId());
+        sendMessage(message);
+    }
+
+    //==========================================================================
+    //发送咻咻请求消息(视频　男对女发)
+    public void sendXiuxiuVideoNan2NvMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createTxtSendMessage(XiuxiuTaskBean.createJsonString(xiuxiuTaskBean), toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VIDEO);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID,XiuxiuTaskBean.createXiuxiuMsgId());
+        sendMessage(message);
+    }
+    //发送咻咻请求消息(视频 女对男发)
+    public void sendXiuxiuVideoNv2NanMessage(XiuxiuTaskBean xiuxiuTaskBean){
+        if(xiuxiuTaskBean==null){
+            return;
+        }
+        EMMessage message = EMMessage.createVideoSendMessage(xiuxiuTaskBean.videoPath,
+                xiuxiuTaskBean.thumbPath, Integer.valueOf(xiuxiuTaskBean.videoLength), toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU, true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV,false);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE,EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VIDEO);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID, XiuxiuTaskBean.createXiuxiuMsgId());
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TXT_CONTENT, xiuxiuTaskBean.content);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_B_SIZE,xiuxiuTaskBean.xiuxiub);
+        sendMessage(message);
+    }
+
+
+    //==========================================================================
     //咻咻付费消息的同意回执
     public static void sendAgreeXiuxiuMessageAgree(String toUsername,String askId){
         EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
-        String action=EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION;//action可以自定义
+        String action = EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION;//action可以自定义
         EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
         cmdMsg.setReceipt(toUsername);
         cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_STATUS, EaseConstant.XIUXIU_STATUS_AGREE);
@@ -352,6 +500,20 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         cmdMsg.addBody(cmdBody);
         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
     }
+    //咻咻付费消息的同意回执
+    public static void sendAgreeXiuxiuMessageAgree4VoiceCall(String toUsername,String askId,String xiuxiub){
+        EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
+        String action = EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION;//action可以自定义
+        EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
+        cmdMsg.setReceipt(toUsername);
+        cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_STATUS, EaseConstant.XIUXIU_STATUS_AGREE);
+        cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE, true);
+        cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE_COST_XIUXIUB, xiuxiub);
+        cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID, askId);
+        cmdMsg.addBody(cmdBody);
+        EMClient.getInstance().chatManager().sendMessage(cmdMsg);
+    }
+
     //咻咻付费消息的拒绝回执
     public static void sendAgreeXiuxiuMessageRefuse(String toUsername,String askId){
         EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
@@ -364,14 +526,44 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
     }
 
-    //发送咻咻请求消息(图片 女对男发)
-    public void sendImgXiuxiuMessage(Intent data){
-        android.util.Log.d("12345","sendImgXiuxiuMessage()");
-        XiuxiuTaskBean xiuxiuTaskBean = XiuxiuTaskBean.createBean(data);
-        EMMessage message = EMMessage.createImageSendMessage(xiuxiuTaskBean.path, false, toChatUsername);
-        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_B_SIZE,xiuxiuTaskBean.xiuxiub);
-        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU,true);
-        message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_MSG_ID, XiuxiuTaskBean.createXiuxiuMsgId());
-        sendMessage(message);
+    // =============================================================================================
+    // 处理同意后的回调
+    // =============================================================================================
+    /**
+     * 用户点击同意后记录的咻咻B
+     */
+    private String mCurrentCostXiuxiuB;
+
+
+    public void dealXiuxiuTask4Agree(int type,String costXiuxiuB){
+        if(type == XiuxiuTaskBean.TYPE_IMAGE_XIUXIU){
+            selectPicFromCamera(costXiuxiuB);
+        }else{
+            selectVideoFromQuPai(costXiuxiuB);
+        }
+    }
+    /**
+     * 照相获取图片
+     */
+    public void selectPicFromCamera(String costXiuxiuB) {
+        if (!EaseCommonUtils.isExitsSdcard()) {
+            Toast.makeText(getActivity(), com.hyphenate.easeui.R.string.sd_card_does_not_exist,0).show();
+            return;
+        }
+        cameraFile = new File(PathUtil.getInstance().getImagePath(), EMClient.getInstance().getCurrentUser()
+                + System.currentTimeMillis() + ".jpg");
+        cameraFile.getParentFile().mkdirs();
+        startActivityForResult(
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
+                REQUEST_CODE_CAMERA);
+        mCurrentCostXiuxiuB = costXiuxiuB;
+    }
+    /**
+     * 趣拍获取视频
+     */
+    public void selectVideoFromQuPai(String costXiuxiuB){
+//        QuPaiManager.getInstance().showRecordPage(ChatFragment.this,REQUEST_CODE_VIDEO);
+//        mCurrentCostXiuxiuB = costXiuxiuB;
+        XiuxiuQupaiPage.startActivity4Result(ChatFragment.this,REQUEST_CODE_VIDEO,costXiuxiuB);
     }
 }

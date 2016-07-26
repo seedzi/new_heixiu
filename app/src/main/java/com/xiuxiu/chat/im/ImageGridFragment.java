@@ -181,7 +181,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				Toast.makeText(getActivity(), st, Toast.LENGTH_SHORT).show();
 				return;
 			}
-			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
+			Intent intent=getActivity().getIntent().putExtra("imgPath", vEntty.filePath).putExtra("dur", vEntty.duration);
 			getActivity().setResult(Activity.RESULT_OK, intent);
 			getActivity().finish();
 		}
@@ -387,7 +387,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
                 	cursor=null;
                 }
 				 
-				getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+				getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("imgPath", filePath).putExtra("dur", duration));
 				getActivity().finish();
 				
 			}
