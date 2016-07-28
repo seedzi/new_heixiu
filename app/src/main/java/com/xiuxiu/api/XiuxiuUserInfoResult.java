@@ -267,6 +267,42 @@ public class XiuxiuUserInfoResult {
         return picList;
     }
 
+    public List<Gift> getGiftList(){
+        try {
+            List<Gift> list = new ArrayList<>();
+            if(TextUtils.isEmpty(get_gift)){
+                return null;
+            }else{
+                android.util.Log.d("hehe","get_gift  = " + get_gift);
+                String[] strs = get_gift.split(",");
+                int i = 0;
+                for(String str: strs){
+                    Gift gift = new Gift();
+                    String[] cStrs = null;
+                    String s = "";
+                    if( i==0 && i==strs.length-1){
+                        s = str.substring(1,str.length()-1);
+                    }else if(i==strs.length-1){
+                        s = str.substring(0,str.length()-1);
+                    }else if(i==0){
+                        s = str.substring(1,str.length());
+                    }else{
+                        s = str;
+                    }
+                    cStrs = s.split(":");
+                    gift.type = Integer.valueOf(cStrs[0].replaceAll("\"", ""));
+                    gift.size = Integer.valueOf(cStrs[1].replaceAll("\"", ""));
+                    i++;
+                    list.add(gift);
+                }
+                return list;
+            }
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
     /**
      * @param user
      */
@@ -463,5 +499,10 @@ public class XiuxiuUserInfoResult {
                 ", get_gift=" + get_gift +
                 ", spam=" + spam +
                 '}';
+    }
+
+    public static class Gift{
+        public int type;
+        public int size;
     }
 }

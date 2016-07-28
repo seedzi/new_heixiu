@@ -33,8 +33,11 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
     private View buttonPressToSpeak;
     private ImageView faceNormal;
     private ImageView faceChecked;
+    private ImageView giftNormal;
+    private ImageView giftChecked;
 //    private Button buttonMore;
     private RelativeLayout faceLayout;
+    private RelativeLayout giftLayout;
     private Context context;
     private EaseVoiceRecorderView voiceRecorderView;
 
@@ -67,6 +70,9 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         faceNormal = (ImageView) findViewById(R.id.ease_chat_expression);
         faceChecked = (ImageView) findViewById(R.id.ease_chat_expression_checked);
         faceLayout = (RelativeLayout) findViewById(R.id.rl_face);
+        giftNormal = (ImageView) findViewById(R.id.ease_chat_gift);
+        giftChecked = (ImageView) findViewById(R.id.ease_chat_gift_checked);
+        giftLayout = (RelativeLayout) findViewById(R.id.gift_face);
 //        buttonMore = (Button) findViewById(R.id.btn_more);
 //        edittext_layout.setBackgroundResource(R.drawable.ease_input_bar_bg_normal);
         
@@ -78,6 +84,7 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         findViewById(R.id.rl_voice).setOnClickListener(this);
 //        buttonMore.setOnClickListener(this);
         faceLayout.setOnClickListener(this);
+        giftLayout.setOnClickListener(this);
         editText.setOnClickListener(this);
         editText.requestFocus();
         
@@ -137,7 +144,6 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
         // =============== 视频 图片 礼物  拍照  注册点击事件 huzhi ===================//
         mItemViews.add(findViewById(R.id.ease_chat_video));//视频
         mItemViews.add(findViewById(R.id.ease_chat_pic));//图片
-        mItemViews.add(findViewById(R.id.ease_chat_gift));//礼物
     }
     
     /**
@@ -214,6 +220,11 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             if(listener != null){
                 listener.onToggleEmojiconClicked();
             }
+        } else if(id == R.id.gift_face){
+            toggleGiftImage();
+            if(listener != null){
+                listener.onToggleGiftClicked();
+            }
         } else {
         }
     }
@@ -255,16 +266,35 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             buttonSend.setVisibility(View.VISIBLE);
         }*/
     }
-    
-    
+
+    protected void toggleGiftImage(){
+        if(giftNormal.getVisibility() == View.VISIBLE){
+            showSelectedGiftImage();
+        }else{
+            showNormalGiftImage();
+        }
+        showNormalVoiceImage();
+        showNormalFaceImage();
+    }
+
+    private void showNormalGiftImage(){
+        giftNormal.setVisibility(View.VISIBLE);
+        giftChecked.setVisibility(View.GONE);
+    }
+
+    private void showSelectedGiftImage(){
+        giftNormal.setVisibility(View.GONE);
+        giftChecked.setVisibility(View.VISIBLE);
+    }
+
     protected void toggleFaceImage(){
-        android.util.Log.d("aaaa","toggleFaceImage");
         if(faceNormal.getVisibility() == View.VISIBLE){
             showSelectedFaceImage();
         }else{
             showNormalFaceImage();
         }
         showNormalVoiceImage();
+        showNormalGiftImage();
     }
     
     private void showNormalFaceImage(){
@@ -284,16 +314,15 @@ public class EaseChatPrimaryMenu extends EaseChatPrimaryMenuBase implements OnCl
             showSelectedVoiceImage();
         }
         showNormalFaceImage();
+        showNormalGiftImage();
     }
 
     private void showNormalVoiceImage(){
-        android.util.Log.d("aaaa","showNormalVoiceImage");
         buttonSetModeVoice.setVisibility(View.VISIBLE);
         buttonSetModeKeyboard.setVisibility(View.INVISIBLE);
     }
 
     private void showSelectedVoiceImage(){
-        android.util.Log.d("aaaa","showSelectedVoiceImage");
         buttonSetModeVoice.setVisibility(View.INVISIBLE);
         buttonSetModeKeyboard.setVisibility(View.VISIBLE);
     }

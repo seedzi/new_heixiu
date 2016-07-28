@@ -202,6 +202,7 @@
             android:layout_marginLeft="25dp"
             android:scaleType="centerInside"
             android:src="@drawable/ease_chat_pic_selector"/>
+
         <RelativeLayout
             android:id="@+id/rl_face"
             android:layout_toRightOf="@id/ease_chat_pic"
@@ -225,15 +226,28 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/ease_chat_gift"
+        <RelativeLayout
+            android:id="@+id/gift_face"
             android:layout_toRightOf="@id/rl_face"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ease_chat_gift_selector"/>
+            android:layout_marginLeft="25dp">
+            <ImageView
+                android:id="@+id/ease_chat_gift"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ease_chat_gift"/>
+
+            <ImageView
+                android:id="@+id/ease_chat_gift_checked"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ease_chat_gift_press"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/btn_send"

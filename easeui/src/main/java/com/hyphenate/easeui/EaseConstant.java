@@ -65,4 +65,11 @@ public class EaseConstant {
     public static final String MESSAGE_ATTR_XIUXIU_TXT_CONTENT = "xiuxiu_txt_content"; //咻咻内容
 
 
+
+
+
+    public static final String MESSAGE_ATTR_IS_GIFT = "is_gift";//是否是礼物
+    public static final String MESSAGE_ATTR_GIFT_TYPE = "gift_type";//礼物类型
+
+
 }

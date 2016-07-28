@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <GridView
+        android:id="@+id/gift_wall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:numColumns="4"
+        android:verticalSpacing="4px"
+        android:horizontalSpacing="4px"
+        android:layout_marginLeft="7px"
+        android:layout_marginRight="7px"
+        android:layout_marginBottom="2dp"/>
+
+</FrameLayout>

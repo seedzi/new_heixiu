@@ -292,7 +292,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 if(isFromContactList){
-                    enterConversationPage();
+                    enterConversationPage(false);
                     return;
                 }
                 if(mCallTimes>0){
@@ -300,7 +300,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                     TextView tv = (TextView) findViewById(R.id.say_hello_txt);
                     tv.setText("今天还有" + mCallTimes + "次免费机会");
                     XiuxiuUtils.costXiuxiuCallTimes();
-                    enterConversationPage();
+                    enterConversationPage(false);
                 }else{
                     showProgressDialog();
                     new Thread(new Runnable() {
@@ -311,7 +311,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                                     @Override
                                     public void run() {
                                         dismisslProgressDialog();
-                                        enterConversationPage();
+                                        enterConversationPage(false);
                                     }
                                 });
                             }else{
@@ -332,21 +332,21 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.xiuxiu_ta_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                enterConversationPage(true);
             }
         });
 
 
     }
 
-    private void enterConversationPage(){
+    private void enterConversationPage(boolean enterXiuxiu){
         if(mXiuxiuUserInfoResult!=null) {
             ChatPage.startActivity(PersonDetailActivity.this,
-                    mXiuxiuUserInfoResult.getXiuxiu_id(), mXiuxiuUserInfoResult.getXiuxiu_name());
+                    mXiuxiuUserInfoResult.getXiuxiu_id(), mXiuxiuUserInfoResult.getXiuxiu_name(),enterXiuxiu);
             EaseUserCacheManager.getInstance().add(mXiuxiuUserInfoResult);
         }else{
             ChatPage.startActivity(PersonDetailActivity.this,
-                    xiuxiuId, xiuxiuId);
+                    xiuxiuId, xiuxiuId,enterXiuxiu);
         }
     }
 

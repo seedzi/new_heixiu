@@ -46,6 +46,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/voice_menu_container"
             ></FrameLayout>
+        <!-- 礼物的container -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gift_menu_container"
+            ></FrameLayout>
     </FrameLayout>
 
 </LinearLayout>

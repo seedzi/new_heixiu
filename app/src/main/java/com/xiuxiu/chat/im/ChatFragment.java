@@ -24,9 +24,13 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.hyphenate.easeui.widget.gift.GiftItemClickListener;
+import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
+import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.easeim.widget.ChatRowGift;
 import com.xiuxiu.easeim.widget.ChatRowImgNan2NvXiuxiu;
 import com.xiuxiu.easeim.widget.ChatRowImgNv2NanXiuxiu;
 import com.xiuxiu.easeim.widget.ChatRowVideoNan2NvXiuxiu;
@@ -37,6 +41,8 @@ import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.user.invitation.AddFriendsPage;
+import com.xiuxiu.utils.ToastUtil;
+import com.xiuxiu.utils.XiuxiuUtils;
 import com.xiuxiu.xiuxiutask.XiuxiuQupaiPage;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskBean;
 import com.xiuxiu.xiuxiutask.XiuxiuTaskPage;
@@ -88,6 +94,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     private static final int MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_SENT = 15;
     private static final int MESSAGE_XIUXIU_TYPE_VOICE_NV_2_NAN_RECV = 16;
 
+    //礼物
+    private static final int MESSAGE_GIFT_SENT = 17;
+    private static final int MESSAGE_GIFT_RECV = 18;
+
     //拍照相关
     private String mImagePath = "";//huzhi
     //趣拍相关
@@ -97,11 +107,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 
     public static ChatFragment mInstance;
 
+    private boolean isWhenCreateEnterXiuxiuTaskPage;
+
     // huzhi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        isWhenCreateEnterXiuxiuTaskPage = getActivity().getIntent().getBooleanExtra("enterXiuxiuTaskPage",false);
         android.util.Log.d(TAG,"onCreateView()");
         mInstance = this;
+        initGift();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -133,6 +147,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 XiuxiuTaskPage.startActivity4Result(ChatFragment.this, REQUEST_CODE_XIUXIU);
             }
         });
+        if(isWhenCreateEnterXiuxiuTaskPage){
+            xiuxiuTaskBt.performClick();
+        }
     }
 
     /**
@@ -314,8 +331,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种 + 咻咻12种
-            return 4+12;
+            //音、视频通话发送、接收共4种 + 咻咻12种 + 礼物2种
+            return 4+12+2;
         }
 
         @Override
@@ -351,6 +368,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                     }
                 }
             }catch (Exception e){}
+
+            if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_GIFT, false)){
+                return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_GIFT_RECV :
+                        MESSAGE_GIFT_SENT;
+            }
 
             //暂时不要普通的视频以及音频
             if(message.getType() == EMMessage.Type.TXT){
@@ -389,6 +411,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                     }
                 }
             }catch (Exception e){}
+
+            if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_GIFT, false)){
+                return new ChatRowGift(getActivity(), message, position, adapter);
+            }
 
             if(message.getType() == EMMessage.Type.TXT){
                 // 语音通话,  视频通话
@@ -525,6 +551,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         cmdMsg.addBody(cmdBody);
         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
     }
+    // =============================================================================================
+    // 发送礼物消息
+    // =============================================================================================
+    public void sendGiftMessage(int type){
+        EMMessage message = EMMessage.createTxtSendMessage("gift", toChatUsername);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_GIFT,true);
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_GIFT_TYPE,type);
+        sendMessage(message);
+    }
 
     // =============================================================================================
     // 处理同意后的回调
@@ -566,4 +601,35 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 //        mCurrentCostXiuxiuB = costXiuxiuB;
         XiuxiuQupaiPage.startActivity4Result(ChatFragment.this,REQUEST_CODE_VIDEO,costXiuxiuB);
     }
+
+
+    // =============================================================================================
+    // 处理礼物点击事件
+    // =============================================================================================
+    private void initGift(){
+        GiftManager.getInstance().setListener(new GiftItemClickListener() {
+            @Override
+            public void onItemClick(final int poistion) {
+                XiuxiuUtils.showProgressDialog(getActivity(),"加载中...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final boolean isSuccess = XiuxiuUtils.sendGift(String.valueOf(poistion),toChatUsername);
+                        XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(isSuccess){
+                                    sendGiftMessage(poistion);
+                                }else{
+                                    ToastUtil.showMessage(getActivity(),"余额不足");
+                                }
+                                XiuxiuUtils.dismisslProgressDialog();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+    }
+
 }

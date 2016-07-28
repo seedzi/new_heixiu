@@ -338,9 +338,45 @@ public class XiuxiuUtils {
     }
 
     // ============================================================================================
+    //　礼物
+    // ============================================================================================
+    public static boolean sendGift(String type,String toId){
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getGiftUrl(type,toId), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"sendGift()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuResult res = gson.fromJson(response, XiuxiuResult.class);
+            if(res!=null&&res.isSuccess()){
+                return true;
+            }
+
+        }catch (Exception e){}
+        return false;
+    }
+    private static String getGiftUrl(String type,String toId) {
+        String url = Uri.parse(HttpUrlManager.weixinPayUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.SEND_GIFT)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("giftType", type)
+                .appendQueryParameter("toId", toId)
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .build().toString();
+        android.util.Log.d(TAG, "getGiftUrl() url = " + url);
+        return url;
+    }
+
+    // ============================================================================================
     //　对话框
     // ============================================================================================
     private static ProgressDialog mProgressDialog;
+
+    public static void showProgressDialog(Context context,String txt){
+        mProgressDialog = ProgressDialog.show(context, "提示", txt);
+    }
 
     public static void showProgressDialog(Context context){
         mProgressDialog = ProgressDialog.show(context, "提示", "正在上传中...");

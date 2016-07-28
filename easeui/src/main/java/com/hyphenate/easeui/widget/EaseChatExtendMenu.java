@@ -44,11 +44,12 @@ public class EaseChatExtendMenu extends RelativeLayout{
         inflater.inflate(R.layout.ease_widget_chat_extend_menu2, this);
     }
 
-    private List<ChatMenuItemModel> itemModels = new ArrayList<ChatMenuItemModel>();
+//    private List<ChatMenuItemModel> itemModels = new ArrayList<ChatMenuItemModel>();
 
     /**
      * 初始化
      */
+    /*
     public void init(){
         for(int i=0;i<itemModels.size();i++){
             final ChatMenuItemModel chatMenuItemModel = itemModels.get(i);
@@ -60,7 +61,7 @@ public class EaseChatExtendMenu extends RelativeLayout{
                 }
             });
         }
-    }
+    }*/
 
     /**
      * 注册menu item
@@ -74,6 +75,7 @@ public class EaseChatExtendMenu extends RelativeLayout{
      * @param listener
      *            item点击事件
      */
+    /*
     public void registerMenuItem(String name, int drawableRes, int itemId, EaseChatExtendMenuItemClickListener listener) {
         ChatMenuItemModel item = new ChatMenuItemModel();
         item.name = name;
@@ -81,7 +83,7 @@ public class EaseChatExtendMenu extends RelativeLayout{
         item.id = itemId;
         item.clickListener = listener;
         itemModels.add(item);
-    }
+    }*/
 
     /**
      * 注册menu item
@@ -95,10 +97,11 @@ public class EaseChatExtendMenu extends RelativeLayout{
      * @param listener
      *            item点击事件
      */
+    /*
     public void registerMenuItem(int nameRes, int drawableRes, int itemId, EaseChatExtendMenuItemClickListener listener) {
         registerMenuItem(context.getString(nameRes), drawableRes, itemId, listener);
-    }
-
+    }*/
+        /*
     class ChatMenuItemModel{
         String name;
         int image;
@@ -107,5 +110,5 @@ public class EaseChatExtendMenu extends RelativeLayout{
     }
     public interface EaseChatExtendMenuItemClickListener{
         void onClick(int itemId, View view);
-    }
+    }*/
 }

@@ -41,6 +41,8 @@ public class HttpUrlManager {
 	public static String COST_USER_COIN = "costUserCoin";
 	/**一个用户向另一个用户付费*/
 	public static String TRANSFER_COIN = "transferCoin";
+	/**发送礼物*/
+	public static String SEND_GIFT = "sendGift";
 
 
 	public static String commondUrl(){

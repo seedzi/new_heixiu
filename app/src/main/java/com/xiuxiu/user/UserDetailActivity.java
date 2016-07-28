@@ -113,6 +113,7 @@ public class UserDetailActivity extends BaseActivity implements View.OnClickList
      * 刷新用户信息
      */
     private void refreshUserData(){
+        android.util.Log.d(TAG,"XiuxiuUserInfoResult.getInstance() = " + XiuxiuUserInfoResult.getInstance());
         mUrlList = XiuxiuUserInfoResult.getInstance().getPics();
         android.util.Log.d(TAG, "mUrlList = " + mUrlList);
         mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
@@ -146,12 +147,43 @@ public class UserDetailActivity extends BaseActivity implements View.OnClickList
         if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getGet_gift())){
             findViewById(R.id.gift_layout).setVisibility(View.GONE);
             findViewById(R.id.gift_layout_line).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.gift_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.gift_layout_line).setVisibility(View.VISIBLE);
+            setGifts(XiuxiuUserInfoResult.getInstance().getGiftList());
         }
 
         setUpWalletHeight();
 
         setUpBuliangjilv();
     }
+
+    private void setGifts(List<XiuxiuUserInfoResult.Gift> list){
+        if(list==null){
+            return;
+        }
+        int i = 0;
+        for(XiuxiuUserInfoResult.Gift gift: list){
+            if(i==0){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_1));
+            }else if(i==1){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_2));
+            }else if(i==2){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_3));
+            }else if(i==3){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_4));
+            }
+            i++;
+        }
+    }
+
+    private void setGiftItem(XiuxiuUserInfoResult.Gift gift,ViewGroup layout){
+        TextView sizeTv = (TextView) layout.findViewById(R.id.gift_size);
+        sizeTv.setText("x "+gift.size);
+        ImageView giftImg = (ImageView) layout.findViewById(R.id.gift_img);
+        TextView giftName = (TextView) layout.findViewById(R.id.gift_name);
+    }
+
 
     //设置不良记录
     private void setUpBuliangjilv(){

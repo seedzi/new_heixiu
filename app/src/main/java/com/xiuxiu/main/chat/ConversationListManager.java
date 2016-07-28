@@ -163,7 +163,7 @@ public class ConversationListManager {
                         Toast.makeText(MainActivity.getInstance(), R.string.Cant_chat_with_yourself, 0).show();
                     else {
                         // 进入聊天页面
-                        ChatPage.startActivity(MainActivity.getInstance(), username, username);
+                        ChatPage.startActivity(MainActivity.getInstance(), username, username,false);
                     }
                 }catch (Exception e){}
             }

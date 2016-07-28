@@ -19,12 +19,15 @@ public class ChatPage extends BaseActivity{
 
     public static final String EXTRA_USERNAME = "userName";
 
+    public static final String EXTRA_XIUXIU= "enterXiuxiuTaskPage";
+
     String toChatUserId;
 
-    public static void startActivity(FragmentActivity ac,String userId,String userName){
+    public static void startActivity(FragmentActivity ac,String userId,String userName,boolean isEnterXiuxiuTaskPage){
         Intent intent = new Intent(ac,ChatPage.class);
         intent.putExtra(EXTRA_USERID,userId);
         intent.putExtra(EXTRA_USERNAME,userName);
+        intent.putExtra(EXTRA_XIUXIU,isEnterXiuxiuTaskPage);
         ac.startActivity(intent);
         ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
     }

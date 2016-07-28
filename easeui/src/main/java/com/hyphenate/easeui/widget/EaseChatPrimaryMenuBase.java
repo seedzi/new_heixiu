@@ -100,6 +100,11 @@ public abstract class EaseChatPrimaryMenuBase extends RelativeLayout{
          * 文字输入框点击事件
          */
         void onEditTextClicked();
+
+        /**
+         * 隐藏或显示礼物menu按钮点击点击事件
+         */
+        void onToggleGiftClicked();
         
     }
 
