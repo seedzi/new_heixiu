@@ -134,7 +134,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         });
         mCityTextView = (TextView) findViewById(R.id.city_value);
         findViewById(R.id.city_layout).setOnClickListener(this);
-        findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.back).setVisibility(View.GONE);
     }
 
     private void initData(){
@@ -149,6 +149,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         String headurl = getIntent().getStringExtra(KEY_HEAD_IMG_PATH);
         ImageLoader.getInstance().displayImage(headurl,mHeadView);
         mUploadFilePath = headurl;
+        android.util.Log.d(TAG,"mUploadFilePath = " + mUploadFilePath);
         String sex = getIntent().getStringExtra(KEY_SEX);
         sex = "1";
         if("1".equals(sex)){
@@ -189,6 +190,23 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     }
 
     private void commit(){
+        if(TextUtils.isEmpty(mNickName.getText().toString())){
+            ToastUtil.showMessage(LoginUserDataEditPage.this,"昵称不能为空！");
+            return;
+        }
+        if(TextUtils.isEmpty(mCityTextView.getText().toString())){
+            ToastUtil.showMessage(LoginUserDataEditPage.this,"所在城市不能为空！");
+            return;
+        }
+        if(TextUtils.isEmpty(mSex)||"unknow".equals(mSex)){
+            ToastUtil.showMessage(LoginUserDataEditPage.this,"必须选择性别！");
+            return;
+        }
+        if(TextUtils.isEmpty(mUploadFilePath)){
+            ToastUtil.showMessage(LoginUserDataEditPage.this,"必须选择头像！");
+            return;
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginUserDataEditPage.this);
         String sex = "女性";
         if(mSex.equals("male")){
@@ -443,7 +461,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 if(!TextUtils.isEmpty(mNickName.getText().toString())) {
                     info.setXiuxiu_name(mNickName.getText().toString());
                 }
-                if(!TextUtils.isEmpty(mFileBeans.get(0).key)) {
+                if(mFileBeans!=null &&mFileBeans.get(0)!=null&&!TextUtils.isEmpty(mFileBeans.get(0).key)) {
                     info.setPic(mFileBeans.get(0).key);
                 }
                 if(!TextUtils.isEmpty(mBrithDayView.getText().toString())) {
@@ -454,9 +472,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 }
                 if(!TextUtils.isEmpty(mAge + "")){
                     info.setAge(mAge + "");
-                }
-                if(!TextUtils.isEmpty(mCityTextView.getText().toString())) {
-                    info.setCity(mCityTextView.getText().toString());
                 }
                 if(!TextUtils.isEmpty(mSex)) {
                     info.setSex(mSex);

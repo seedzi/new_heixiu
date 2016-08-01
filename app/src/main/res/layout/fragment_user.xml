@@ -36,7 +36,7 @@
             android:layout_marginLeft="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="大家叫我阳阳,活好不糊弄"
+            android:hint="对方很懒,还没有填写任何签名"
             android:textColor="#8b8b8b"
             android:textSize="@dimen/line_txt_size_normal"/>
 

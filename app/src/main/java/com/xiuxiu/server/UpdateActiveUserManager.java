@@ -43,6 +43,7 @@ public class UpdateActiveUserManager {
         task = new TimerTask() {
             @Override
             public void run() {
+                updataActiveUser();
                 Message message = new Message();
                 message.what = 1;
                 XiuxiuApplication.getInstance().getUIHandler().sendMessage(message);

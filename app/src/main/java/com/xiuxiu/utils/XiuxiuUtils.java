@@ -80,25 +80,20 @@ public class XiuxiuUtils {
     // 获取用户信息
     // ============================================================================================
     private static void queryUserInfo() {
-        Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Gson gson = new Gson();
-                android.util.Log.d(TAG,"user = " + response);
-                XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
-                if(res!=null && res.getUserinfos()!=null && res.getUserinfos().size()>0){
-                    XiuxiuUserInfoResult.save(res.getUserinfos().get(0));
-                }
-            }
-        };
-        Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                android.util.Log.d(TAG,"error = " + error);
-            }
-        };
+        RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getQueryUserInfoUrl(), mRefreshListener, mRefreshErroListener));
+                .add(new StringRequest(getQueryUserInfoUrl(), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"user = " + response);
+            Gson gson = new Gson();
+            XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
+            if(res!=null && res.getUserinfos()!=null && res.getUserinfos().size()>0){
+                XiuxiuUserInfoResult.save(res.getUserinfos().get(0));
+            }
+        }catch (Exception error){
+            android.util.Log.d(TAG,"error = " + error);
+        }
     }
     private static String getQueryUserInfoUrl() {
         String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()

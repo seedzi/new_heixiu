@@ -173,7 +173,9 @@ public class ConversationListManager {
             @Override
             public void onClick(View v) {
                 // 进入申请与通知页面
-                mContext.startActivity(new Intent(mContext, NewFriendsMsgActivity.class));
+                Intent intent = new Intent(mContext, NewFriendsMsgActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         });
         mPullToRefreshListView.getRefreshableView().addHeaderView(applicationItem);

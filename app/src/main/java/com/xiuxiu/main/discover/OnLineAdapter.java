@@ -102,16 +102,14 @@ public class OnLineAdapter extends ArrayAdapter<XiuxiuUserInfoResult> implements
                     R.string.date_fromate_anecdote);
             holder.onlineTimeTv.setText(timeTxt);
         }catch (Exception e){}
-
+        /*
         holder.headImg.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                CallManager.getInstance(MainActivity.getInstance()).call2Person(getItem(position).getXiuxiu_id());
-//                CallVoicePage.startActivity(MainActivity.getInstance(),getItem(position).getXiuxiu_id(), true);
                 startVoiceCall(getItem(position).getXiuxiu_id());
             }
         });
-
+        */
         return convertView;
     }
 

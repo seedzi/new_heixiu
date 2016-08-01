@@ -43,7 +43,12 @@ public class HttpUrlManager {
 	public static String TRANSFER_COIN = "transferCoin";
 	/**发送礼物*/
 	public static String SEND_GIFT = "sendGift";
-
+	/**查询财富排行榜*/
+	public static String QUERY_FORTUNR_USER = "queryFortuneUser";
+	/**查询魅力排行榜*/
+	public static String QUERY_CHARM_USER = "queryCharmUser";
+	/**投诉用户*/
+	public static String COMPLAIN_USER = "complainUser";
 
 	public static String commondUrl(){
 		return HOST + "/user_command";

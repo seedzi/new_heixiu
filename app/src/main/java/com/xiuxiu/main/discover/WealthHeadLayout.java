@@ -8,8 +8,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
+import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuPerson;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.main.MainActivity;
+import com.xiuxiu.user.PersonDetailActivity;
 
 import java.util.List;
 
@@ -76,55 +81,60 @@ public class WealthHeadLayout extends RelativeLayout implements View.OnClickList
 
     private ImageView wealth3;
 
-    private List<XiuxiuPerson> mData;
+    private List<XiuxiuUserInfoResult> mData;
 
-    public void setData(List<XiuxiuPerson> list){
+    public void setData(List<XiuxiuUserInfoResult> list){
         mData = list;
         int currentPosition = 0;
-        for(XiuxiuPerson xiuxiuperson:list){
+        for(XiuxiuUserInfoResult xiuxiuperson:list){
             setItem(xiuxiuperson,currentPosition);
             currentPosition ++;
         }
     }
 
-    private void setItem(XiuxiuPerson xiuxiuPerson,int position){
+    private XiuxiuUserInfoResult mFirstData,mSecondData,mThirdData;
+
+    public void setItem(XiuxiuUserInfoResult xiuxiuPerson,int position){
         switch (position){
             case 0:
+                mFirstData = xiuxiuPerson;
                 userName1.setText(xiuxiuPerson.getXiuxiu_name());
                 XiuxiuPerson.setWealthValue(wealth1, xiuxiuPerson.getCharm());
+                ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + xiuxiuPerson.getPic(), headImg1);
+                findViewById(R.id.first_viewgroup).setVisibility(View.VISIBLE);
                 break;
             case 1:
+                mSecondData = xiuxiuPerson;
                 userName2.setText(xiuxiuPerson.getXiuxiu_name());
                 XiuxiuPerson.setWealthValue(wealth2, xiuxiuPerson.getCharm());
+                ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + xiuxiuPerson.getPic(), headImg2);
+                findViewById(R.id.second_viewgroup).setVisibility(View.VISIBLE);
                 break;
             case 2:
+                mThirdData = xiuxiuPerson;
                 userName3.setText(xiuxiuPerson.getXiuxiu_name());
                 XiuxiuPerson.setWealthValue(wealth3, xiuxiuPerson.getCharm());
+                ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST + xiuxiuPerson.getPic(), headImg3);
+                findViewById(R.id.thrid_viewgroup).setVisibility(View.VISIBLE);
                 break;
         }
     }
 
     @Override
     public void onClick(View v) {
-        int position = 0;
+        XiuxiuUserInfoResult xiuxiuUser = null;
         if(v == headImg1){
-            position = 0;
+            xiuxiuUser = mFirstData;
         }else if(v == headImg2){
-            position = 1;
+            xiuxiuUser = mSecondData;
         }else if(v == headImg3){
-            position = 2;
+            xiuxiuUser = mThirdData;
         }
-        /*
-        try {
-            XiuxiuPerson xiuxiuUser = mData.get(position);
-            ChatPage.startActivity(mAc, xiuxiuUser.getXiuxiu_id(), xiuxiuUser.getXiuxiu_name());
-            ChatNickNameAndAvatarBean info = new ChatNickNameAndAvatarBean();
-            info.setAvatar("");
-            info.setXiuxiu_id(xiuxiuUser.getXiuxiu_id());
-            info.setNickName(xiuxiuUser.getXiuxiu_name());
-            ChatNickNameAndAvatarCacheManager.getInstance().add(info);
-        } catch (Exception e){
+        if(xiuxiuUser==null){
+            return;
         }
-        */
+        try{
+            PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), false);
+        }catch (Exception e){}
     }
 }

@@ -129,6 +129,8 @@
             android:theme="@style/Theme"
             android:name="com.xiuxiu.user.PullBlackReportActivity"
             android:label="@string/app_name">
+
+
         </activity>
         <!-- 用户详情页 -->
         <activity

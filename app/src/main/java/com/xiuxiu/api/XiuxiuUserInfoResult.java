@@ -344,7 +344,7 @@ public class XiuxiuUserInfoResult {
         if(!TextUtils.isEmpty(user.getSpam())){
             sharePreferenceWrap.putString(SPAM, user.getSpam());
         }
-        mInstance = getFromShareP();
+        reset();
     }
 
     /**
@@ -368,7 +368,7 @@ public class XiuxiuUserInfoResult {
         return user;
     }
 
-    public void reset(){
+    public static void reset(){
         mInstance = getFromShareP();
     }
 

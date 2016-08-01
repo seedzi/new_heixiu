@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -19,6 +20,8 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.login.LoginUserDataEditPage;
@@ -149,10 +152,18 @@ public class ThirdPlatformManager {
                                 mUiHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Toast.makeText(mAc, "登录成功", 0).show();
                                         dismisslProgressDialog();
                                         mAc.finish();
-                                        if(res.getIsFirstLogin()){
+
+                                        boolean isEnterFirstLoginPage = false;
+                                        XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
+                                        if(xiuxiuUserQueryResult!=null ){
+                                            if(TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
+                                                    || "unknown".equals(xiuxiuUserQueryResult.getSex())){
+                                                isEnterFirstLoginPage = true;
+                                            }
+                                        }
+                                        if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
                                             LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
                                         }else {
                                             MainActivity.startActivity(mAc);

@@ -29,7 +29,8 @@
             android:orientation="vertical"
             android:layout_centerVertical="true"
             android:gravity="center_horizontal"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp"
+            android:visibility="invisible">
             <ImageView
                 android:id="@+id/crown_2"
                 android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:visibility="invisible">
             <ImageView
                 android:id="@+id/crown_1"
                 android:layout_width="wrap_content"
@@ -111,7 +113,8 @@
             android:orientation="vertical"
             android:layout_centerVertical="true"
             android:gravity="center_horizontal"
-            android:paddingTop="10dp">
+            android:paddingTop="10dp"
+            android:visibility="invisible">
             <ImageView
                 android:id="@+id/crown_3"
                 android:layout_width="wrap_content"

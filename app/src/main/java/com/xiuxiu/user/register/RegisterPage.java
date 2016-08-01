@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -20,6 +21,7 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuAllUserResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.main.MainActivity;
@@ -88,7 +90,7 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
         public void onResponse(String response) {
             android.util.Log.d(TAG,"response = " + response);
             Gson gson = new Gson();
-            XiuxiuLoginResult res = gson.fromJson(response, XiuxiuLoginResult.class);
+            final XiuxiuLoginResult res = gson.fromJson(response, XiuxiuLoginResult.class);
 
             if (res.isSuccess()) {
                 android.util.Log.d(TAG,"res = " + res);
@@ -96,12 +98,33 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
                 ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
                     @Override
                     public void run() {
-                        android.util.Log.d(TAG,"环信完成");
-                        XiuxiuUtils.onAppStart(getApplicationContext());
-                        Toast.makeText(getApplication(), "登录成功", 0).show();
-                        finish();
-                        MainActivity.startActivity(RegisterPage.this);
-//                        LoginUserDataEditPage.startActivity(RegisterPage.this, "huzhi", "", "北京", "male");
+                        android.util.Log.d(TAG, "环信完成");
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                XiuxiuUtils.onAppStart(getApplicationContext());
+                                XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
+                                        android.util.Log.d(TAG, "XiuxiuUserInfoResult.getInstance() = " + xiuxiuUserQueryResult);
+                                        boolean isEnterFirstLoginPage = false;
+                                        if(xiuxiuUserQueryResult!=null ){
+                                            if(TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
+                                                    || "unknow".equals(xiuxiuUserQueryResult.getSex())){
+                                                android.util.Log.d(TAG,"xiuxiuUserQueryResult.getSex() = " + xiuxiuUserQueryResult.getSex());
+                                                isEnterFirstLoginPage = true;
+                                            }
+                                        }
+                                        if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
+                                            LoginUserDataEditPage.startActivity(RegisterPage.this, "huzhi", "male", "北京", "male");
+                                        }else {
+                                            MainActivity.startActivity(RegisterPage.this);
+                                        }
+                                    }
+                                });
+                            }
+                        }).start();
                     }
                 });
             }

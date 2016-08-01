@@ -29,6 +29,7 @@ public class AddFriendsPage extends BaseActivity implements View.OnClickListener
     public static void startActivity(Context context,String userId){
         Intent intent = new Intent(context,AddFriendsPage.class);
         intent.putExtra(ChatPage.EXTRA_USERID,userId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

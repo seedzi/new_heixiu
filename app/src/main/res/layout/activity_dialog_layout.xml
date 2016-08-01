@@ -10,6 +10,19 @@
         android:layout_gravity="bottom"
         android:background="#ffffff">
         <TextView
+            android:id="@+id/pull_black"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:text="拉黑举报"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_gray"/>
+
+        <TextView
             android:id="@+id/delete_friend"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -18,6 +31,7 @@
             android:textColor="#000000"
             android:text="删除好友"/>
         <View
+            android:id="@+id/delete_friend_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/color_gray"/>

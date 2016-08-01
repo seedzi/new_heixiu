@@ -66,7 +66,6 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
     public static void startActivity(Context context,String xiuxiu_id,boolean isFromContactList){
         Intent intent = new Intent(context,PersonDetailActivity.class);
         intent.putExtra("xiuxiu_id", xiuxiu_id);
-        intent.putExtra("isFromContactList", isFromContactList);
         context.startActivity(intent);
     }
 
@@ -104,8 +103,6 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
      * 免费打招呼次数
      */
     private int mCallTimes = -1;
-    /*是否从联系人列表进入*/
-    private boolean isFromContactList;
 
     private Handler mUiHandler = new Handler();
 
@@ -178,12 +175,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(){
-        isFromContactList = getIntent().getBooleanExtra("isFromContactList", false);
-        if(!isFromContactList){
-            findViewById(R.id.more).setVisibility(View.GONE);
-        }else{
-            findViewById(R.id.more).setVisibility(View.VISIBLE);
-        }
+        findViewById(R.id.more).setVisibility(View.VISIBLE);
         xiuxiuId= getIntent().getStringExtra("xiuxiu_id");
         android.util.Log.d(TAG, "xiuxiu_id = " + xiuxiuId);
 
@@ -193,14 +185,14 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.xiuxiu_ta_layout).setVisibility(View.VISIBLE);
 
-        if(isFromContactList){
+        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){
             ((TextView)((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(0)).setText("发消息");
             ((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(1).setVisibility(View.GONE);
             ((ViewGroup)findViewById(R.id.xiuxiu_ta_layout)).getChildAt(1).setVisibility(View.GONE);
         }else{
 
         }
-        if(!isFromContactList) {
+        if(ImHelper.getInstance().getContactList().get(xiuxiuId)==null) {
             getXiuxiuTimes();
         }
     }
@@ -291,7 +283,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isFromContactList){
+                if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){
                     enterConversationPage(false);
                     return;
                 }
@@ -362,7 +354,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         int id = v.getId();
         switch (id){
             case R.id.more:
-                DialogActivity.startActivity(PersonDetailActivity.this,MORE_BT_REQUEST_CODE);
+                DialogActivity.startActivity(PersonDetailActivity.this,MORE_BT_REQUEST_CODE,xiuxiuId);
                 break;
             case R.id.yuyin_layout:
                 if(VoicePlayManager.getInstance().isPlaying()){
@@ -378,8 +370,13 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == MORE_BT_REQUEST_CODE && resultCode == RESULT_OK){
-//            showProgressDialog();
-            releaseFriend(xiuxiuId);
+            int type = data.getIntExtra("type",0);
+            if(type == DialogActivity.OPERATION_DELETE_FRIEND)
+                releaseFriend(xiuxiuId);
+            else if(type == DialogActivity.OPERATION_PULL_BACK){
+                //拉黑并且举报
+                PullBlackReportActivity.startActivity(PersonDetailActivity.this,xiuxiuId);
+            }
         }
     }
 
