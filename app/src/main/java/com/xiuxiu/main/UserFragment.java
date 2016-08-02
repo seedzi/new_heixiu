@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.hyphenate.EMCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xiuxiu.R;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadCastSettingsPage;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastManager;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
@@ -26,6 +28,7 @@ import com.xiuxiu.user.SetupPage;
 import com.xiuxiu.user.UserDetailActivity;
 import com.xiuxiu.user.WalletActivity;
 import com.xiuxiu.user.WealthLevelActivity;
+import com.xiuxiu.user.XiuxiuSettingsPage;
 import com.xiuxiu.user.invitation.InvitationPage;
 import com.xiuxiu.user.login.LoginPage;
 import com.xiuxiu.utils.UiUtil;
@@ -231,6 +234,9 @@ public class UserFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.wallet:
                 WalletActivity.startActivity(getActivity());
+                break;
+            case R.id.xiuxiu_settings:
+                XiuxiuSettingsPage.startActivity(getActivity());
                 break;
         }
     }

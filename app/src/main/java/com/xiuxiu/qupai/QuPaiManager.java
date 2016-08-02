@@ -56,7 +56,7 @@ public class QuPaiManager {
             @Override
             public void onAuthError(int errorCode, String message) {
                 android.util.Log.d(TAG, "ErrorCode = " + errorCode + ",message = " + message);
-//                initOpotions();
+                initOpotions();
             }
             @Override
             public void onAuthComplte(int responseCode, String responseMessage) {

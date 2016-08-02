@@ -38,6 +38,7 @@
         android:background="#8b8b8b"/>
 
     <RelativeLayout
+        android:id="@+id/xiuxiu_yuyin"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -60,6 +61,7 @@
             android:src="@drawable/user_item_tag"/>
 
         <TextView
+            android:id="@+id/xiuxiu_yuyin_price"
             android:text="10咻币/分钟"
             android:textColor="#a6a6a6"
             android:layout_marginRight="10dp"
@@ -76,6 +78,7 @@
         android:background="#8b8b8b"/>
 
     <RelativeLayout
+        android:id="@+id/xiuxiu_pic"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -98,6 +101,7 @@
             android:src="@drawable/user_item_tag"/>
 
         <TextView
+            android:id="@+id/xiuxiu_pic_price"
             android:text="20咻币"
             android:textColor="#a6a6a6"
             android:layout_marginRight="10dp"
@@ -114,6 +118,7 @@
         android:background="#8b8b8b"/>
 
     <RelativeLayout
+        android:id="@+id/xiuxiu_video"
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -136,6 +141,7 @@
             android:src="@drawable/user_item_tag"/>
 
         <TextView
+            android:id="@+id/xiuxiu_video_price"
             android:text="90咻币"
             android:textColor="#a6a6a6"
             android:layout_marginRight="10dp"

@@ -19,6 +19,7 @@ import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuSettingsConstant;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.utils.ToastUtil;
@@ -83,6 +84,7 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
         mXiuxiuBSizeEdt = (EditText) findViewById(R.id.xiu_bi_size);
         mXiuxiuBSizeEdt.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         findViewById(R.id.xiuxiu_bt).setOnClickListener(this);
+        mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice() + "");
     }
 
     @Override
@@ -92,14 +94,17 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
             case R.id.video:
                 mEditText.setHint("填写你对索要视频的期望和要求...(智能查看三次)");
                 mXiuxiuTitle = XIUXIU_TITLE_VIDEO_TXT;
+                mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuVideoPrice()+"");
                 break;
             case R.id.pic:
                 mEditText.setHint("填写你对索要图片的期望和要求...(智能查看三次)");
                 mXiuxiuTitle = XIUXIU_TITLE_IMG_TXT;
+                mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice()+"");
                 break;
             case R.id.voice:
                 mEditText.setHint("填写你对索要声音的期望和要求...(智能查看三次)");
                 mXiuxiuTitle = XIUXIU_TITLE_VOICE_TXT;
+                mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuYuyinPrice()+"");
                 break;
             case R.id.xiuxiu_bt:
                 if(TextUtils.isEmpty(mEditText.getText().toString())){
@@ -120,7 +125,6 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
-
 
     private String mImagePath = "";
     @Override
