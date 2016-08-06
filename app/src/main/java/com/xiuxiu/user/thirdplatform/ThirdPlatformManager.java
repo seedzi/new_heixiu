@@ -73,7 +73,7 @@ public class ThirdPlatformManager {
      * 微信登录
      */
     public void thirdLoginWechat(){
-        showProgressDialog();
+//        showProgressDialog();
         if(mShareAPI == null) {
             mShareAPI = UMShareAPI.get(mAc);
         }
@@ -82,10 +82,9 @@ public class ThirdPlatformManager {
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
 //                Toast.makeText(mAc, "Authorize succeed", Toast.LENGTH_SHORT).show();
-                /*
                 for (String key : data.keySet()) {
                     android.util.Log.d("123456","data key = " + key);
-                }*/
+                }
                 mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
@@ -95,23 +94,22 @@ public class ThirdPlatformManager {
                         openId = map.get("openid");
                         headimgpath = map.get("headimgurl");
                         sex = map.get("sex");
-                        /*
                         for (String key : map.keySet()) {
                             android.util.Log.d("123456","key = " + key);
-                        }*/
+                        }
                         login();
                     }
 
                     @Override
                     public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
                         Toast.makeText( mAc, "get info fail", Toast.LENGTH_SHORT).show();
-                        dismisslProgressDialog();
+//                        dismisslProgressDialog();
                     }
 
                     @Override
                     public void onCancel(SHARE_MEDIA share_media, int i) {
                         Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-                        dismisslProgressDialog();
+//                        dismisslProgressDialog();
                     }
                 });
             }
@@ -119,13 +117,13 @@ public class ThirdPlatformManager {
             @Override
             public void onError(SHARE_MEDIA platform, int action, Throwable t) {
                 Toast.makeText( mAc, "Authorize fail", Toast.LENGTH_SHORT).show();
-                dismisslProgressDialog();
+//                dismisslProgressDialog();
             }
 
             @Override
             public void onCancel(SHARE_MEDIA platform, int action) {
                 Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-                dismisslProgressDialog();
+//                dismisslProgressDialog();
             }
         };
         mShareAPI.doOauthVerify(mAc, platform, umAuthListener);
@@ -150,7 +148,6 @@ public class ThirdPlatformManager {
                 ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
                     @Override
                     public void run() {
-
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -158,23 +155,22 @@ public class ThirdPlatformManager {
                                 mUiHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        dismisslProgressDialog();
-                                        mAc.finish();
-
                                         boolean isEnterFirstLoginPage = false;
                                         XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
-                                        if(xiuxiuUserQueryResult!=null ){
-                                            if(TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
-                                                    || "unknown".equals(xiuxiuUserQueryResult.getSex())){
+                                        if (xiuxiuUserQueryResult != null) {
+                                            if (TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
+                                                    || "unknown".equals(xiuxiuUserQueryResult.getSex())) {
                                                 isEnterFirstLoginPage = true;
                                             }
                                         }
+                                        LoginUserDataEditPage.startActivity(mAc, nickname, headimgpath, city, sex);
+                                        /*
                                         if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
                                             LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
                                         }else {
                                             MainActivity.startActivity(mAc);
                                             mAc.finish();
-                                        }
+                                        }*/
                                     }
                                 });
                             }
@@ -182,9 +178,8 @@ public class ThirdPlatformManager {
 
                     }
                 });
-            }else{
-                dismisslProgressDialog();
             }
+            dismisslProgressDialog();
         }
     };
     private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
@@ -199,7 +194,7 @@ public class ThirdPlatformManager {
      * 登录
      */
     private void login() {
-        android.util.Log.d(TAG,"login");
+        showProgressDialog();
         XiuxiuApplication.getInstance().getQueue()
                 .add(new StringRequest(getTopicListUrl(),
                         mRefreshListener, mRefreshErroListener));

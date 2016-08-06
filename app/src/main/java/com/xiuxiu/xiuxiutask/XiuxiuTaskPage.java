@@ -79,12 +79,14 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
         mVideoBt.setOnClickListener(this);
         mPicBt.setOnClickListener(this);
         mVoiceBt.setOnClickListener(this);
+        findViewById(R.id.back).setOnClickListener(this);
 
         mEditText = (EditText)findViewById(R.id.edit);
         mXiuxiuBSizeEdt = (EditText) findViewById(R.id.xiu_bi_size);
         mXiuxiuBSizeEdt.setInputType(EditorInfo.TYPE_CLASS_PHONE);
         findViewById(R.id.xiuxiu_bt).setOnClickListener(this);
         mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice() + "");
+        findViewById(R.id.pic).performClick();
     }
 
     @Override
@@ -92,17 +94,29 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
         int id = v.getId();
         switch (id){
             case R.id.video:
-                mEditText.setHint("填写你对索要视频的期望和要求...(智能查看三次)");
+                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())) {
+                    mEditText.setHint("填写你对索要图片的期望和要求...(只能查看三次)");
+                }else{
+                    mEditText.setHint("告诉对方这是一段怎样的视频...");
+                }
                 mXiuxiuTitle = XIUXIU_TITLE_VIDEO_TXT;
                 mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuVideoPrice()+"");
                 break;
             case R.id.pic:
-                mEditText.setHint("填写你对索要图片的期望和要求...(智能查看三次)");
+                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){
+                    mEditText.setHint("填写你对索要视频的期望和要求...(只能查看三次)");
+                }else{
+                    mEditText.setHint("告诉对方这是一张怎样的照片...");
+                }
                 mXiuxiuTitle = XIUXIU_TITLE_IMG_TXT;
                 mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice()+"");
                 break;
             case R.id.voice:
-                mEditText.setHint("填写你对索要声音的期望和要求...(智能查看三次)");
+                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())) {
+                    mEditText.setHint("填写你对索要声音的期望和要求...(只能查看三次)");
+                }else{
+                    mEditText.setHint("告诉对方想和TA聊些什么...");
+                }
                 mXiuxiuTitle = XIUXIU_TITLE_VOICE_TXT;
                 mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuYuyinPrice()+"");
                 break;
@@ -118,7 +132,7 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                         selectPicFromCamera();
                     }else if(mXiuxiuTitle.equals(XIUXIU_TITLE_VIDEO_TXT)){ //视频任务
                         if(!QuPaiManager.getInstance().isInit()){
-                            ToastUtil.showMessage(XiuxiuTaskPage.this,"初始化失败,如果使用次功能请您在网络流畅情况下退出app重新进入");
+                            ToastUtil.showMessage(XiuxiuTaskPage.this,"初始化失败,如果使用此功能请您在网络流畅情况下退出app重新进入");
                             return;
                         }
                         QuPaiManager.getInstance().showRecordPage(this,REQUEST_CODE_VIDEO);
@@ -126,6 +140,9 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                         sendMessage2ChatFragment(false);
                     }
                 }
+                break;
+            case R.id.back:
+                finish();
                 break;
         }
     }

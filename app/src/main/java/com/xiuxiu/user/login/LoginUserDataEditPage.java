@@ -107,8 +107,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
 
     private String mSex = "male";
 
-    private int mAge = -1;
-
     private View mCommitView;
 
     @Override
@@ -144,7 +142,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         });
         mCityTextView = (TextView) findViewById(R.id.city_value);
         findViewById(R.id.city_layout).setOnClickListener(this);
-        findViewById(R.id.back).setVisibility(View.GONE);
+        findViewById(R.id.back).setOnClickListener(this);
         mNickName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -187,21 +185,21 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     }
 
     private void checkCommitBtStatus(){
-        mCommitView.setEnabled(true);
+        mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg);
         if(TextUtils.isEmpty(mNickName.getText().toString())){
-            mCommitView.setEnabled(false);
+            mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg_disable);
         }
         if(TextUtils.isEmpty(mBrithDayView.getText().toString())){
-            mCommitView.setEnabled(false);
+            mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg_disable);
         }
         if(TextUtils.isEmpty(mCityTextView.getText().toString())){
-            mCommitView.setEnabled(false);
+            mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg_disable);
         }
         if(TextUtils.isEmpty(mUploadFilePath)){
-            mCommitView.setEnabled(false);
+            mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg_disable);
         }
         if(TextUtils.isEmpty(mSex)){
-            mCommitView.setEnabled(false);
+            mCommitView.setBackgroundResource(R.drawable.wallet_bt_bg_disable);
         }
         android.util.Log.d("123456","mUploadFilePath = " + mUploadFilePath);
     }
@@ -211,6 +209,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         String nickname = getIntent().getStringExtra(KEY_NICK_NAME);
         if(!TextUtils.isEmpty(nickname)){
             mNickName.setText(nickname);
+            mNickName.setSelection(nickname.length());
         }
         String city = getIntent().getStringExtra(KEY_CITY);
         if(!TextUtils.isEmpty(city)) {
@@ -220,7 +219,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         ImageLoader.getInstance().displayImage(headurl,mHeadView);
         mUploadFilePath = headurl;
         String sex = getIntent().getStringExtra(KEY_SEX);
-        sex = "1";
+        android.util.Log.d(TAG,"sex = " + sex);
         if("1".equals(sex)){
             ((RadioButton)(mSexRadioGroup.getChildAt(0))).performClick();
             mSex = "male";
@@ -330,33 +329,41 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     // ===========================================================================================
     // 年纪
     // ===========================================================================================
-    private String mYear;
-    private String mMonth;
-    private String mDay;
+    private String mYear = "1990";
+    private String mMonth = "1";
+    private String mDay = "1";
     private Calendar calendar = Calendar.getInstance();
+    private int mAge = -1;
+
+    private DatePickerDialog mDatePickerDialog;
     private void showAgeDialog(){
-        new DatePickerDialog(LoginUserDataEditPage.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                mYear = year + "";
-                mMonth = month + "";
-                mDay = day + "";
-                if(mMonth.length()==1){
-                    mMonth =  "0" + mMonth;
+        if(mDatePickerDialog == null) {
+            mDatePickerDialog = new DatePickerDialog(LoginUserDataEditPage.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int day) {
+                    month = month +1;
+                    mYear = year + "";
+                    mMonth = month  + "";
+                    mDay = day + "";
+                    android.util.Log.d(TAG,"mYear = " + mYear + ",mMonth = " + mMonth + ",mDay = " + mDay);
+                    if (mMonth.length() == 1) {
+                        mMonth = "0" + mMonth;
+                    }
+                    if (mDay.length() == 1) {
+                        mDay = "0" + mDay;
+                    } else if (String.valueOf(mDay).length() == 0) {
+                        mDay = "01";
+                    }
+                    mBrithDayView.setText(mYear + "-" + mMonth + "-" + mDay);
+                    mAge = calendar.get(Calendar.YEAR) - year;
+                    if (mAge < 0) {
+                        mAge = 0;
+                    }
                 }
-                if(mDay.length()==1){
-                    mDay = "0" + mDay;
-                }else if (String.valueOf(mDay).length()==0){
-                    mDay = "01";
-                }
-                mBrithDayView.setText( "" + mYear + mMonth + mDay);
-                mAge = calendar.get(Calendar.YEAR) - year;
-                if(mAge<0){
-                    mAge = 0;
-                }
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }, 1990, 0,
+                    1);
+        }
+        mDatePickerDialog.show();
     }
 
     // ===========================================================================================
@@ -395,7 +402,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 @Override
                 public void onLoadingStarted(String s, View view) {
                     dismisslProgressDialog();
-                    ToastUtil.showMessage(LoginUserDataEditPage.this,"修改失败!");
                 }
                 @Override
                 public void onLoadingFailed(String s, View view, FailReason failReason) {
@@ -421,12 +427,18 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                                 UserEditDetailUploadManager.getInstance().excute(mFileBeans,null,new UserEditDetailUploadManager.CallBack(){
                                     @Override
                                     public void onSuccess() {
-                                        XiuxiuApplication.getInstance().getQueue()
-                                                .add(new StringRequest(getUpdateUrl(), mRefreshListener, mRefreshErroListener));
+                                        XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                XiuxiuApplication.getInstance().getQueue()
+                                                        .add(new StringRequest(getUpdateUrl(), mRefreshListener, mRefreshErroListener));
+                                            }
+                                        });
                                     }
                                     @Override
                                     public void onFailure() {
                                         android.util.Log.d(TAG,"onFailure()");
+                                        android.util.Log.d("AAAAA","00002");
                                         ToastUtil.showMessage(LoginUserDataEditPage.this,"修改失败!");
                                         dismisslProgressDialog();
                                     }
@@ -456,8 +468,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                         XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                             @Override
                             public void run() {
-                                android.util.Log.d(TAG, "getUpdateUrl() " + getUpdateUrl());
-
                                 XiuxiuApplication.getInstance().getQueue()
                                         .add(new StringRequest(getUpdateUrl(), mRefreshListener, mRefreshErroListener));
                             }
@@ -494,12 +504,14 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
             builder.appendQueryParameter(XiuxiuUserInfoResult.AGE, mAge+"");
         }
         if(!TextUtils.isEmpty(mBrithDayView.getText().toString())){
-            builder.appendQueryParameter(XiuxiuUserInfoResult.BIRTHDAY, mBrithDayView.getText().toString());
+            builder.appendQueryParameter(XiuxiuUserInfoResult.BIRTHDAY, mBrithDayView.getText().toString().replaceAll("-", ""));
         }
         if(!TextUtils.isEmpty(mSex)){
             builder.appendQueryParameter(XiuxiuUserInfoResult.SEX, mSex);
         }
-        return builder.toString();
+        String url = builder.toString();
+        android.util.Log.d(TAG,"url = " + url);
+        return url;
     }
 
 
@@ -519,8 +531,9 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 if(mFileBeans!=null &&mFileBeans.get(0)!=null&&!TextUtils.isEmpty(mFileBeans.get(0).key)) {
                     info.setPic(mFileBeans.get(0).key);
                 }
+
                 if(!TextUtils.isEmpty(mBrithDayView.getText().toString())) {
-                    info.setBirthday(mBrithDayView.getText().toString());
+                    info.setBirthday(mBrithDayView.getText().toString().replaceAll("-",""));
                 }
                 if(!TextUtils.isEmpty(mCityTextView.getText().toString())) {
                     info.setCity(mCityTextView.getText().toString());

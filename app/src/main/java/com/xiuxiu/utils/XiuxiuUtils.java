@@ -3,6 +3,7 @@ package com.xiuxiu.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import com.android.volley.Response;
@@ -89,7 +90,11 @@ public class XiuxiuUtils {
             Gson gson = new Gson();
             XiuxiuUserQueryResult res = gson.fromJson(response, XiuxiuUserQueryResult.class);
             if(res!=null && res.getUserinfos()!=null && res.getUserinfos().size()>0){
-                XiuxiuUserInfoResult.save(res.getUserinfos().get(0));
+                XiuxiuUserInfoResult info = res.getUserinfos().get(0);
+                if(info!=null && !TextUtils.isEmpty(info.getBirthday())){
+                    info.setBirthday(DateUtils.time2Date(info.getBirthday()));
+                }
+                XiuxiuUserInfoResult.save(info);
             }
         }catch (Exception error){
             android.util.Log.d(TAG,"error = " + error);
@@ -390,9 +395,9 @@ public class XiuxiuUtils {
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
-                .appendQueryParameter("xiuxiu_id", xiuxiuId)
-                .appendQueryParameter("offset", "0")
-                .appendQueryParameter("count", "100")
+                .appendQueryParameter("xiuxiuid", xiuxiuId)
+//                .appendQueryParameter("offset", "0")
+//                .appendQueryParameter("count", "100")
                 .build().toString();
         android.util.Log.d(TAG, "getSearchBecomplainUsersUrl() url = " + url);
         return url;

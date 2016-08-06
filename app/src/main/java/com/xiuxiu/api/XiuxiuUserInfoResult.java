@@ -330,7 +330,8 @@ public class XiuxiuUserInfoResult {
             sharePreferenceWrap.putInt(CHARM, user.getCharm());
         }
         if(!TextUtils.isEmpty(user.getBirthday())) {
-            sharePreferenceWrap.putString(BIRTHDAY, DateUtils.time2Date(user.getBirthday()));
+            sharePreferenceWrap.putString(BIRTHDAY, user.getBirthday());
+//            sharePreferenceWrap.putString(BIRTHDAY, DateUtils.time2Date(user.getBirthday()));
         }
         if(!TextUtils.isEmpty(user.getVoice())){
             sharePreferenceWrap.putString(VOICE, user.getVoice());

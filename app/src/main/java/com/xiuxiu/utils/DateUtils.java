@@ -17,6 +17,8 @@ import java.util.TimeZone;
  */
 public class DateUtils {
 
+    private static final String TAG = "DateUtils";
+
     /**
      * 时间戳转换成日期
      * @param time
@@ -25,6 +27,7 @@ public class DateUtils {
     public static String time2Date(String time){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd");
         String sd = sdf.format(new Date(Long.parseLong(time)));
+        android.util.Log.d(TAG,"time = " + time + ",sd = " + sd);
         return sd;
     }
 

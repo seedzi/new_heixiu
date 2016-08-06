@@ -160,18 +160,58 @@
             android:label="@string/app_name">
         </activity>
 
-        <!-- 用户登陆 -->
-        <activity
+        <!-- 启动页面 -->
+        <activity android:name=".WelcomePage"
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.login.LoginPage"
             android:label="@string/app_name">
-            <!--  -->
+            <!-- -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
         </activity>
+
+
+        <!-- 用户登陆 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name="com.xiuxiu.user.login.LoginPage"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
+
+        <!-- 用户登录后的资料编辑页面 -->
+        <activity android:name=".user.login.LoginUserDataEditPage"
+            android:theme="@style/Theme"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+                -->
+        </activity>
+
+        <!-- 用户的资料页面 -->
+        <activity
+            android:theme="@style/Theme"
+            android:name="com.xiuxiu.user.PersonDetailActivity"
+            android:label="@string/app_name">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            -->
+        </activity>
+
 
         <!-- 用户资料修改 -->
         <activity
@@ -208,20 +248,6 @@
             </intent-filter>
             -->
         </activity>
-
-        <!-- 用户的资料页面 -->
-        <activity
-            android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.PersonDetailActivity"
-            android:label="@string/app_name">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
-
 
         <!-- 咻羞任务 -->
         <activity
@@ -277,18 +303,6 @@
             android:theme="@android:style/Theme.Translucent"
             android:name="com.xiuxiu.utils.DialogActivity"
             android:label="@string/app_name">
-        </activity>
-
-        <!-- 用户登录后的资料编辑页面 -->
-        <activity android:name=".user.login.LoginUserDataEditPage"
-            android:theme="@style/Theme"
-            android:label="@string/app_name">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-                -->
         </activity>
 
         <activity android:name=".user.invitation.AddFriendsPage"

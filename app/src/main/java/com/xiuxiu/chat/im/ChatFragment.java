@@ -600,7 +600,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 //        QuPaiManager.getInstance().showRecordPage(ChatFragment.this,REQUEST_CODE_VIDEO);
 //        mCurrentCostXiuxiuB = costXiuxiuB;
         if(!QuPaiManager.getInstance().isInit()){
-            ToastUtil.showMessage(getActivity(), "初始化失败,如果使用次功能请您在网络流畅情况下退出app重新进入");
+            ToastUtil.showMessage(getActivity(), "初始化失败,如果使用此功能请您在网络流畅情况下退出app重新进入");
             return;
         }
         XiuxiuQupaiPage.startActivity4Result(ChatFragment.this,REQUEST_CODE_VIDEO,costXiuxiuB);

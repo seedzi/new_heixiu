@@ -35,7 +35,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="#a7a7a7"/>
+        android:src="#f4f3f2"/>
 
     <TextView
         android:layout_marginTop="15dp"
@@ -98,7 +98,7 @@
         <TextView
             android:id="@+id/brithday_name"
             android:layout_marginLeft="15dp"
-            android:text="点击选择生日"
+            android:text="生日"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -106,8 +106,9 @@
             android:id="@+id/brithday_value"
             android:layout_marginLeft="30dp"
             android:textColorHint="#b7b6b6"
-            android:textColor="#000000"
+            android:textColor="#b7b6b6"
             android:textSize="16sp"
+            android:hint="点击选择出生日期"
             android:layout_toRightOf="@id/brithday_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -121,12 +122,11 @@
 
     <!-- 性别 -->
     <RelativeLayout
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp">
         <TextView
             android:id="@+id/sex_name"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:text="性别"
             android:textSize="16sp"
@@ -146,16 +146,30 @@
                 android:id="@+id/bt_male"
                 android:layout_weight="1"
                 android:text="男"
+                android:button="@null"
+                android:drawablePadding="5dp"
+                android:drawableLeft="@drawable/xiuxiu_checked_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
                 android:id="@+id/bt_female"
                 android:text="女"
+                android:button="@null"
+                android:drawablePadding="5dp"
+                android:layout_marginLeft="18dp"
+                android:drawableLeft="@drawable/xiuxiu_checked_selector"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RadioGroup>
+
+        <View
+            android:layout_toLeftOf="@id/sex_radio_group"
+            android:layout_width="1px"
+            android:layout_marginRight="22dp"
+            android:background="#dfdfdf"
+            android:layout_height="match_parent"/>
 
     </RelativeLayout>
 
@@ -216,6 +230,6 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_height="40dp"
-        android:background="@drawable/login_user_edit_bt_selector"/>
+        android:layout_height="44dp"
+        android:background="@drawable/wallet_bt_bg_disable"/>
 </LinearLayout>

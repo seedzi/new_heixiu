@@ -142,7 +142,24 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
         mCityTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getCity()));
         mNickNameTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
         mBrithdayS = XiuxiuUserInfoResult.getInstance().getBirthday();
-        android.util.Log.d(TAG, "mBrithdayS = " + mBrithdayS);
+        android.util.Log.d("123456", "mBrithdayS = " + mBrithdayS);
+        try {
+            if (!TextUtils.isEmpty(mBrithdayS)) {
+                int year = Integer.valueOf(mBrithdayS.substring(0, 4));
+                int month = Integer.valueOf(mBrithdayS.substring(4, 6));
+                int day = Integer.valueOf(mBrithdayS.substring(6, 8));
+
+                mYear = year;
+                mMonth = month;
+                mDay = day;
+                android.util.Log.d("123456", "year = " + year + ",month = " + month + ",day = " + day);
+                android.util.Log.d("123456", "mBrithdayS = " + mBrithdayS);
+            }
+        }catch (Exception e){
+
+        }
+
+
 
         mImgFiles = new ArrayList<UserEditDetailUploadManager.FileBean>();
         if(XiuxiuUserInfoResult.getInstance().getPics()!=null) {
@@ -227,33 +244,44 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
     private int mDay;
     private String mBrithdayS = "";
     private Calendar calendar = Calendar.getInstance();
+    private DatePickerDialog mDatePickerDialog;
     private void showAgeDialog(){
-        new DatePickerDialog(UserEditDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                android.util.Log.d(TAG,"year = " + year
-                    + ",month = " + month + ",day = " + day);
-                mYear = year;
-                mMonth = month;
-                mDay = day;
-                mAgeTv.setText("" + (calendar.get(Calendar.YEAR) - mYear));
+        android.util.Log.d("123456","mYear = " + mYear + ",mMonth = " + mMonth + ",mDay = " + mDay);
+        if(mDatePickerDialog==null) {
+            mDatePickerDialog = new DatePickerDialog(UserEditDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int day) {
+                    android.util.Log.d("123456", "year = " + year
+                            + ",month = " + month + ",day = " + day);
+                    month = month + 1;
+                    mYear = year;
+                    mMonth = month;
+                    mDay = day;
+                    mAgeTv.setText("" + (calendar.get(Calendar.YEAR) - mYear));
 
-                String monthS = mMonth + "";
-                String dayS = "" + mDay;
-                if(String.valueOf(mMonth).length()==1){
-                    monthS =  "0" + mMonth;
+                    String monthS = mMonth + "";
+                    String dayS = "" + mDay;
+                    if (String.valueOf(mMonth).length() == 1) {
+                        monthS = "0" + mMonth;
+                    }
+                    if (String.valueOf(mDay).length() == 1) {
+                        dayS = "0" + mDay;
+                    } else if (String.valueOf(mDay).length() == 0) {
+                        dayS = "01";
+                    }
+                    mBrithdayS = String.valueOf(mYear) + monthS + dayS;
+                    android.util.Log.d("123456", "mBrithdayS = " + mBrithdayS);
                 }
-                if(String.valueOf(mDay).length()==1){
-                    dayS = "0" + mDay;
-                }else if (String.valueOf(mDay).length()==0){
-                    dayS = "01";
-                }
-                mBrithdayS = String.valueOf(mYear) + monthS + dayS;
-                android.util.Log.d(TAG,"mBrithdayS = " + mBrithdayS);
-
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }, mYear, mMonth - 1, mDay);
+        }
+        //calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+             //   calendar.get(Calendar.DAY_OF_MONTH));
+        /*
+        if(mYear!=0 && mDay!=0){
+            android.util.Log.d("aaaa","mYear = " + mYear + ", mMonth = " + mMonth + ", mDay = " + mDay);
+            datePickerDialog.updateDate(mYear,mMonth,mDay);
+        }*/
+        mDatePickerDialog.show();
     }
 
     // ===========================================================================================
@@ -422,6 +450,8 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 XiuxiuUserInfoResult.getInstance().setXiuxiu_name(mNickName);
                 XiuxiuUserInfoResult.getInstance().setPic(UserEditDetailUploadManager.getKeys(mImgFiles));
                 XiuxiuUserInfoResult.save(XiuxiuUserInfoResult.getInstance());
+                android.util.Log.d("123456","XiuxiuUserInfoResult.getInstance() brithday = " +
+                        XiuxiuUserInfoResult.getInstance().getBirthday());
             }
             dismisslProgressDialog();
             ToastUtil.showMessage(UserEditDetailActivity.this, "服务器资料更新成功!");

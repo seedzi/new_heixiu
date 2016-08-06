@@ -58,45 +58,11 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
         mRootLayout = (ViewGroup)findViewById(R.id.root_layout);
         UiUtil.findViewById(mRootLayout,R.id.qq_login_bt).setOnClickListener(this);
         UiUtil.findViewById(mRootLayout,R.id.wechat_login_bt).setOnClickListener(this);
-
         init();
-        android.util.Log.d(TAG,"time = " + DateUtils.time2Date("1260028800000"));
     }
 
-    /**
-     * 如果登录了直接进入
-     */
     private void init(){
-        if(ImHelper.getInstance().isLoggedIn()){
-            boolean isEnterFirstLoginPage = false;
-            XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
-            if(xiuxiuUserQueryResult!=null ){
-                if(TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
-                        || "unknown".equals(xiuxiuUserQueryResult.getSex())){
-                    isEnterFirstLoginPage = true;
-                }
-            }
-            if(isEnterFirstLoginPage){
-                LoginUserDataEditPage.startActivity(LoginPage.this);
-                return;
-            }else{
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        XiuxiuUtils.onAppStart(getApplicationContext());
-                        XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                MainActivity.startActivity(LoginPage.this);
-                                finish();
-                            }
-                        });
-                    }
-                }).start();
-            }
-        }else{
-            ThirdPlatformManager.getInstance().setActivity(this);
-        }
+        ThirdPlatformManager.getInstance().setActivity(this);
     }
 
 
@@ -120,8 +86,8 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LoginUserDataEditPage.REQUEST_CODE ){
             if(resultCode == RESULT_OK){
-                finish();
                 MainActivity.startActivity(this);
+                finish();
             }
         }else{
             ThirdPlatformManager.getInstance().onActivityResult4Wechat(requestCode, requestCode, data);

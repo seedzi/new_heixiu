@@ -88,6 +88,32 @@ public class EaseGiftMenu extends FrameLayout {
                 convertView.setLayoutParams(gl);
             }
             ((ImageView)convertView).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
+            switch (position){
+                case 0:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_01);
+                    break;
+                case 1:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_02);
+                    break;
+                case 2:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_03);
+                    break;
+                case 3:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_04);
+                    break;
+                case 4:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_05);
+                    break;
+                case 5:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_06);
+                    break;
+                case 6:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_07);
+                    break;
+                case 7:
+                    ((ImageView)convertView).setImageResource(R.drawable.gift_08);
+                    break;
+            }
             /*
             if(position == mImgFiles.size()){//最后一个item
                 convertView.findViewById(R.id.img).setVisibility(View.GONE);
