@@ -223,6 +223,7 @@ public class CharmListManager implements  PullToRefreshBase.OnRefreshListener {
     private Response.ErrorListener mUserInfoErroListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
+            android.util.Log.d(TAG,"error = " + error.getMessage());
             ToastUtil.showMessage(MainActivity.getInstance(), "获取数据失败!");
             mPullToRefreshListView.onRefreshComplete();
         }

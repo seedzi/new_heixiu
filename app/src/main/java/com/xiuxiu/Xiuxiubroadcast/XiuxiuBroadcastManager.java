@@ -10,6 +10,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuActiveUserResult;
@@ -47,6 +48,7 @@ public class XiuxiuBroadcastManager {
         }
         for(XiuxiuUserInfoResult user:list){
             EMMessage message = EMMessage.createTxtSendMessage(txt, user.getXiuxiu_id());
+            message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST,true);
             //发送消息
             EMClient.getInstance().chatManager().sendMessage(message);
         }

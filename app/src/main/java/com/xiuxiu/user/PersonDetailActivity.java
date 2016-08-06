@@ -114,6 +114,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_user_detail_page);
         setupViews();
         initData();
+        searchBecomplainUsers();
     }
 
     private void setupViews(){
@@ -155,6 +156,18 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                 finish();
             }
         });
+    }
+
+    /**
+     * 获取用户被投诉标签
+     */
+    private void searchBecomplainUsers(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                XiuxiuUtils.searchBecomplainUsers(xiuxiuId);
+            }
+        }).start();
     }
 
     private void setupPhotoWall(){

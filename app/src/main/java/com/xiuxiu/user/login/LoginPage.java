@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,6 +20,7 @@ import com.xiuxiu.R;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
@@ -66,19 +68,32 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
      */
     private void init(){
         if(ImHelper.getInstance().isLoggedIn()){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    XiuxiuUtils.onAppStart(getApplicationContext());
-                    XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            MainActivity.startActivity(LoginPage.this);
-                            finish();
-                        }
-                    });
+            boolean isEnterFirstLoginPage = false;
+            XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
+            if(xiuxiuUserQueryResult!=null ){
+                if(TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
+                        || "unknown".equals(xiuxiuUserQueryResult.getSex())){
+                    isEnterFirstLoginPage = true;
                 }
-            }).start();
+            }
+            if(isEnterFirstLoginPage){
+                LoginUserDataEditPage.startActivity(LoginPage.this);
+                return;
+            }else{
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        XiuxiuUtils.onAppStart(getApplicationContext());
+                        XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity.startActivity(LoginPage.this);
+                                finish();
+                            }
+                        });
+                    }
+                }).start();
+            }
         }else{
             ThirdPlatformManager.getInstance().setActivity(this);
         }
@@ -103,7 +118,14 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ThirdPlatformManager.getInstance().onActivityResult4Wechat(requestCode, requestCode, data);
+        if(requestCode == LoginUserDataEditPage.REQUEST_CODE ){
+            if(resultCode == RESULT_OK){
+                finish();
+                MainActivity.startActivity(this);
+            }
+        }else{
+            ThirdPlatformManager.getInstance().onActivityResult4Wechat(requestCode, requestCode, data);
+        }
     }
 
 
@@ -126,28 +148,6 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
         public void onErrorResponse(VolleyError error) {
         }
     };
-
-    /**
-     * 登录
-     */
-    private void login() {
-        XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getTopicListUrl(), mRefreshListener, mRefreshErroListener));
-    }
-    private String getTopicListUrl() {
-        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.LOGIN_BY_PLAT)
-                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
-                .appendQueryParameter("password", Md5Util.md5())
-                .appendQueryParameter("xiuxiu_id", String.valueOf("1234560"))
-                .appendQueryParameter("xiuxiu_name", String.valueOf("huzhi1"))
-                .appendQueryParameter("attrs", String.valueOf("huzhi"))
-                .build().toString();
-    }
-
-    // ========================================= Volley ================================================//
-
-    // ========================================= test ================================================//
 
     private void enterRegister(){
         RegisterPage.startActivity(LoginPage.this);

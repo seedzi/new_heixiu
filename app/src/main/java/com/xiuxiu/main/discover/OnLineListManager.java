@@ -187,8 +187,6 @@ public class OnLineListManager implements  PullToRefreshBase.OnRefreshListener {
                         return (int)(arg1.getActive_time() - arg0.getActive_time());
                     }
                 });
-                android.util.Log.d("AAAA","getActive_time() = " + xiuxiuUserInfoResult.getUserinfos().get(0).getActive_time()
-                        + ", getXiuxiu_name() = " + xiuxiuUserInfoResult.getUserinfos().get(0).getXiuxiu_name());
                 adapter.clear();
                 adapter.addAll(xiuxiuUserInfoResult.getUserinfos());
                 adapter.notifyDataSetChanged();

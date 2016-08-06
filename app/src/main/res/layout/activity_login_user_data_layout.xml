@@ -66,15 +66,19 @@
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/nick_name_value"
+
+        <EditText
+            android:id="@+id/nick_name_edit"
+            android:background="@null"
             android:layout_marginLeft="30dp"
             android:hint="点击编辑昵称"
+            android:singleLine="true"
+            android:layout_marginRight="30dp"
             android:textColorHint="#b7b6b6"
             android:textColor="#000000"
             android:textSize="16sp"
             android:layout_toRightOf="@id/nick_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
@@ -94,7 +98,7 @@
         <TextView
             android:id="@+id/brithday_name"
             android:layout_marginLeft="15dp"
-            android:text="点击选择出生日期"
+            android:text="点击选择生日"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -139,12 +143,14 @@
             android:layout_marginRight="20dp"
             android:weightSum="2">
             <RadioButton
+                android:id="@+id/bt_male"
                 android:layout_weight="1"
                 android:text="男"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
+                android:id="@+id/bt_female"
                 android:text="女"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -211,5 +217,5 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_height="40dp"
-        android:background="@drawable/wallet_bt_bg"/>
+        android:background="@drawable/login_user_edit_bt_selector"/>
 </LinearLayout>

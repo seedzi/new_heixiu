@@ -81,18 +81,24 @@ public class ThirdPlatformManager {
         UMAuthListener umAuthListener = new UMAuthListener() {
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-                Toast.makeText(mAc, "Authorize succeed", Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(mAc, "Authorize succeed", Toast.LENGTH_SHORT).show();
+                /*
+                for (String key : data.keySet()) {
+                    android.util.Log.d("123456","data key = " + key);
+                }*/
                 mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                        Toast.makeText(mAc, "get info succeed", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mAc, "get info succeed", Toast.LENGTH_SHORT).show();
                         nickname = map.get("nickname");
                         city = map.get("province");
                         openId = map.get("openid");
                         headimgpath = map.get("headimgurl");
                         sex = map.get("sex");
-
+                        /*
+                        for (String key : map.keySet()) {
+                            android.util.Log.d("123456","key = " + key);
+                        }*/
                         login();
                     }
 
@@ -167,6 +173,7 @@ public class ThirdPlatformManager {
                                             LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
                                         }else {
                                             MainActivity.startActivity(mAc);
+                                            mAc.finish();
                                         }
                                     }
                                 });

@@ -70,15 +70,6 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
         switch (v.getId()){
             case R.id.login_bt:
                 login();
-                /*
-                ImManager.getInstance().login("11030", "23387", new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplication(), "登录成功", 0).show();
-                        finish();
-                        MainActivity.startActivity(RegisterPage.this);
-                    }
-                });*/
                 break;
 
         }
@@ -117,8 +108,9 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
                                             }
                                         }
                                         if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
-                                            LoginUserDataEditPage.startActivity(RegisterPage.this, "huzhi", "male", "北京", "male");
+                                            LoginUserDataEditPage.startActivity(RegisterPage.this);
                                         }else {
+                                            finish();
                                             MainActivity.startActivity(RegisterPage.this);
                                         }
                                     }
@@ -152,5 +144,14 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
                 .appendQueryParameter("xiuxiu_name", mUserNameEdt.getText().toString())
 //                .appendQueryParameter("attrs", String.valueOf("huzhi"))
                 .build().toString();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == LoginUserDataEditPage.REQUEST_CODE && resultCode == RESULT_OK){
+            finish();
+            MainActivity.startActivity(this);
+        }
     }
 }

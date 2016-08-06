@@ -56,7 +56,7 @@ public class QuPaiManager {
             @Override
             public void onAuthError(int errorCode, String message) {
                 android.util.Log.d(TAG, "ErrorCode = " + errorCode + ",message = " + message);
-                initOpotions();
+//                initOpotions();
             }
             @Override
             public void onAuthComplte(int responseCode, String responseMessage) {
@@ -84,6 +84,16 @@ public class QuPaiManager {
         }else{
             initOpotions();
         }
+    }
+
+    /**
+     * 判断趣拍是否初始化完毕
+     */
+    public boolean isInit(){
+        if(mQupaiService==null){
+            return false;
+        }
+        return true;
     }
 
     /**

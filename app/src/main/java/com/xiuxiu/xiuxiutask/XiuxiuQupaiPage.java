@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.qupai.RecordResult;
+import com.xiuxiu.utils.ToastUtil;
 
 /**
  * Created by huzhi on 16-7-26.
@@ -30,7 +31,7 @@ public class XiuxiuQupaiPage extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        android.util.Log.d(TAG,"onCreate");
+        android.util.Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         QuPaiManager.getInstance().showRecordPage(XiuxiuQupaiPage.this, 101);
         mCurrentCostXiuxiuB = getIntent().getStringExtra("xiuxiub");

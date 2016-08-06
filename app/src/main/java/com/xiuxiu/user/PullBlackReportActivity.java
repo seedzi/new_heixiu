@@ -68,6 +68,7 @@ public class PullBlackReportActivity extends BaseActivity implements View.OnClic
                     EMClient.getInstance().contactManager().deleteContact(toXiuxiuId);
                     EMClient.getInstance().contactManager().addUserToBlackList(toXiuxiuId, false);
                     ToastUtil.showMessage(PullBlackReportActivity.this,"拉黑举报成功!");
+                    finish();
                 } catch (Exception e) {
                     android.util.Log.d(TAG," e = " + e.getMessage());
                     e.printStackTrace();

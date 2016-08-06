@@ -338,7 +338,7 @@ public class XiuxiuUtils {
     public static boolean sendGift(String type,String toId){
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getGiftUrl(type,toId), future, future));
+                .add(new StringRequest(getGiftUrl(type, toId), future, future));
         try {
             String response = future.get();
             android.util.Log.d(TAG,"sendGift()  response = " + response);
@@ -364,6 +364,39 @@ public class XiuxiuUtils {
         return url;
     }
 
+
+    // ============================================================================================
+    //　查看被投诉用户与标签理由
+    // ============================================================================================
+    public static boolean searchBecomplainUsers(String xiuxiuId){
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getSearchBecomplainUsersUrl(xiuxiuId), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"searchBecomplainUsers()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuResult res = gson.fromJson(response, XiuxiuResult.class);
+            if(res!=null&&res.isSuccess()){
+                return true;
+            }
+
+        }catch (Exception e){}
+        return false;
+    }
+    private static String getSearchBecomplainUsersUrl(String xiuxiuId) {
+        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.SEARCH_BECOMPLAIN_USERS)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .appendQueryParameter("xiuxiu_id", xiuxiuId)
+                .appendQueryParameter("offset", "0")
+                .appendQueryParameter("count", "100")
+                .build().toString();
+        android.util.Log.d(TAG, "getSearchBecomplainUsersUrl() url = " + url);
+        return url;
+    }
     // ============================================================================================
     //　对话框
     // ============================================================================================

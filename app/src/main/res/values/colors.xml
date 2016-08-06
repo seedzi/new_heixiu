@@ -99,6 +99,7 @@
     <color name="tab_txt_check">#d6d6d6</color>
 
     <color name="wallet_bt_color">#00b8d0</color>
+    <color name="wallet_bt_color_disable">#c3c3c3</color>
 
     <!-- vip grade view color -->
     <color name="color_user_info_line_gray">#b4b4b4</color>

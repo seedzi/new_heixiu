@@ -117,6 +117,10 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                     if(mXiuxiuTitle.equals(XIUXIU_TITLE_IMG_TXT)){ //图片任务
                         selectPicFromCamera();
                     }else if(mXiuxiuTitle.equals(XIUXIU_TITLE_VIDEO_TXT)){ //视频任务
+                        if(!QuPaiManager.getInstance().isInit()){
+                            ToastUtil.showMessage(XiuxiuTaskPage.this,"初始化失败,如果使用次功能请您在网络流畅情况下退出app重新进入");
+                            return;
+                        }
                         QuPaiManager.getInstance().showRecordPage(this,REQUEST_CODE_VIDEO);
                     }else{ //语聊任务
                         sendMessage2ChatFragment(false);

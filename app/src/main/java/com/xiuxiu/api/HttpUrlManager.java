@@ -49,6 +49,8 @@ public class HttpUrlManager {
 	public static String QUERY_CHARM_USER = "queryCharmUser";
 	/**投诉用户*/
 	public static String COMPLAIN_USER = "complainUser";
+	/**分页查看被投诉用户与标签理由*/
+	public static String SEARCH_BECOMPLAIN_USERS = "searchBecomplainUsers";
 
 	public static String commondUrl(){
 		return HOST + "/user_command";

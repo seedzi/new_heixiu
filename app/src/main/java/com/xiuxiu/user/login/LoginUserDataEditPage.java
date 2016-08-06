@@ -12,12 +12,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -57,10 +60,15 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
 
     private static String TAG = "LoginUserDataEditPage";
 
+    public static final int REQUEST_CODE = 1001;
+
     public static void startActivity(FragmentActivity ac){
         Intent intent = new Intent(ac,LoginUserDataEditPage.class);
-        ac.startActivity(intent);
-        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
+        intent.putExtra(KEY_NICK_NAME,"");
+        intent.putExtra(KEY_HEAD_IMG_PATH,"");
+        intent.putExtra(KEY_CITY,"");
+        intent.putExtra(KEY_SEX,"male");
+        ac.startActivityForResult(intent, REQUEST_CODE);
     }
 
 
@@ -69,9 +77,8 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         intent.putExtra(KEY_NICK_NAME,nickname);
         intent.putExtra(KEY_HEAD_IMG_PATH,headimgpath);
         intent.putExtra(KEY_CITY,city);
-        intent.putExtra(KEY_SEX,sex);
-        ac.startActivity(intent);
-        ac.overridePendingTransition(R.anim.activity_slid_in_from_right, R.anim.activity_slid_out_no_change);
+        intent.putExtra(KEY_SEX, sex);
+        ac.startActivityForResult(intent, REQUEST_CODE);
     }
 
     public static String KEY_NICK_NAME = "nickname";
@@ -86,7 +93,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
 
     private ImageView mHeadView;
 
-    private TextView mNickName;
+    private EditText mNickName;
 
     private TextView mCityTextView;
 
@@ -100,7 +107,9 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
 
     private String mSex = "male";
 
-    private int mAge = 18;
+    private int mAge = -1;
+
+    private View mCommitView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,28 +123,89 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     private void setupViews(){
         mHeadView = (ImageView) findViewById(R.id.head_img);
         mHeadView.setOnClickListener(this);
-        mNickName = (TextView) findViewById(R.id.nick_name_value);
-        findViewById(R.id.nick_name_layout).setOnClickListener(this);
+        mNickName = (EditText) findViewById(R.id.nick_name_edit);
         mBrithDayView = (TextView) findViewById(R.id.brithday_value);
         findViewById(R.id.brithday_layout).setOnClickListener(this);
-        findViewById(R.id.commit).setOnClickListener(this);
+        mCommitView = findViewById(R.id.commit);
+        mCommitView.setOnClickListener(this);
         mSexRadioGroup = (RadioGroup) findViewById(R.id.sex_radio_group);
         mSexRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == 1) {
+                if (checkedId == R.id.bt_male) {
                     mSex = "male";
-                } else if (checkedId == 2) {
+                } else if (checkedId == R.id.bt_female) {
                     mSex = "female";
                 } else {
                     mSex = "unknow";
                 }
+                checkCommitBtStatus();
             }
         });
         mCityTextView = (TextView) findViewById(R.id.city_value);
         findViewById(R.id.city_layout).setOnClickListener(this);
         findViewById(R.id.back).setVisibility(View.GONE);
+        mNickName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkCommitBtStatus();
+            }
+        });
+        mBrithDayView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkCommitBtStatus();
+            }
+        });
+        mCityTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkCommitBtStatus();
+            }
+        });
+        checkCommitBtStatus();
     }
+
+    private void checkCommitBtStatus(){
+        mCommitView.setEnabled(true);
+        if(TextUtils.isEmpty(mNickName.getText().toString())){
+            mCommitView.setEnabled(false);
+        }
+        if(TextUtils.isEmpty(mBrithDayView.getText().toString())){
+            mCommitView.setEnabled(false);
+        }
+        if(TextUtils.isEmpty(mCityTextView.getText().toString())){
+            mCommitView.setEnabled(false);
+        }
+        if(TextUtils.isEmpty(mUploadFilePath)){
+            mCommitView.setEnabled(false);
+        }
+        if(TextUtils.isEmpty(mSex)){
+            mCommitView.setEnabled(false);
+        }
+        android.util.Log.d("123456","mUploadFilePath = " + mUploadFilePath);
+    }
+
 
     private void initData(){
         String nickname = getIntent().getStringExtra(KEY_NICK_NAME);
@@ -149,7 +219,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         String headurl = getIntent().getStringExtra(KEY_HEAD_IMG_PATH);
         ImageLoader.getInstance().displayImage(headurl,mHeadView);
         mUploadFilePath = headurl;
-        android.util.Log.d(TAG,"mUploadFilePath = " + mUploadFilePath);
         String sex = getIntent().getStringExtra(KEY_SEX);
         sex = "1";
         if("1".equals(sex)){
@@ -170,9 +239,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                         Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(i, RESULT_LOAD_IMAGE);
                 break;
-            case R.id.nick_name_layout:
-                UserTxtEditActivity.startActivity(LoginUserDataEditPage.this, mNickName.getText().toString());
-                break;
             case R.id.brithday_layout:
                 showAgeDialog();
                 break;
@@ -184,7 +250,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 break;
             case R.id.back:
                 finish();
-                MainActivity.startActivity(this);
                 break;
         }
     }
@@ -204,6 +269,10 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         }
         if(TextUtils.isEmpty(mUploadFilePath)){
             ToastUtil.showMessage(LoginUserDataEditPage.this,"必须选择头像！");
+            return;
+        }
+        if(mAge==-1){
+            ToastUtil.showMessage(LoginUserDataEditPage.this,"请选择出生日期！");
             return;
         }
 
@@ -235,17 +304,6 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
         builder.create().show();
     }
 
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        android.util.Log.d(TAG,"onKeyDown()");
-        if (keyCode == KeyEvent.KEYCODE_BACK) { //监控/拦截/屏蔽返回键
-            finish();
-            return false;
-        }
-        return true;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -264,12 +322,9 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
             mUploadFilePath = picturePath;
             ImageLoader.getInstance().displayImage("file:/" + mUploadFilePath, mHeadView);
             isImgFromLocal = true;
-        }else if(resultCode==RESULT_OK){
-            Bundle bundle =data.getExtras();
-            if(bundle.getString(UserTxtEditActivity.TXT_KEY)!=null){
-                mNickName.setText(bundle.getString(UserTxtEditActivity.TXT_KEY));
-            }
+            checkCommitBtStatus();
         }
+
     }
 
     // ===========================================================================================
@@ -479,8 +534,8 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
                 XiuxiuUserInfoResult.save(info);
                 dismisslProgressDialog();
                 ToastUtil.showMessage(LoginUserDataEditPage.this, "资料更新成功!");
+                setResult(RESULT_OK);
                 finish();
-                MainActivity.startActivity(LoginUserDataEditPage.this);
             }else{
                 dismisslProgressDialog();
                 ToastUtil.showMessage(LoginUserDataEditPage.this, "修改失败!");

@@ -30,6 +30,7 @@ import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.call.voice.VoiceCallActivity;
 import com.xiuxiu.chat.ChatPage;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiu.easeim.xiuxiumsg.XiuxiuSettingsConstant;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.invitation.ImModel;
 import com.xiuxiu.user.invitation.InviteMessage;
@@ -407,6 +408,38 @@ public class ImHelper {
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
+            }
+        });
+
+        //不设置，则使用easeui默认的
+        easeUI.setSettingsProvider(new EaseUI.EaseSettingsProvider() {
+            @Override
+            public boolean isSpeakerOpened() {
+                return true;
+            }
+            @Override
+            public boolean isMsgVibrateAllowed(EMMessage message) {
+                return XiuxiuSettingsConstant.isVibrationOn();
+            }
+            @Override
+            public boolean isMsgSoundAllowed(EMMessage message) {
+                return XiuxiuSettingsConstant.isVoicOn();
+            }
+            @Override
+            public boolean isMsgNotifyAllowed(EMMessage message) {
+                try{
+                    if(!XiuxiuSettingsConstant.isNewMessagePromptOn()){
+                        return false;
+                    }
+                    if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU)&&!XiuxiuSettingsConstant.isXiuxiuPromptOn()){
+                        return false;
+                    }
+                    if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST)&&!XiuxiuSettingsConstant.isXiuxiuPromptOn()){
+                        return false;
+                    }
+                }catch (Exception e){
+                }
+                return true;
             }
         });
 
