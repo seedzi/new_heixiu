@@ -35,9 +35,10 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#8b8b8b"/>
+        android:background="#ececeb"/>
 
     <RelativeLayout
+        android:layout_marginTop="10dp"
         android:id="@+id/xiuxiu_yuyin"
         android:background="#ffffff"
         android:layout_width="match_parent"
@@ -75,7 +76,7 @@
         android:paddingLeft="13dp"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#8b8b8b"/>
+        android:background="#ececeb"/>
 
     <RelativeLayout
         android:id="@+id/xiuxiu_pic"
@@ -115,7 +116,7 @@
         android:paddingLeft="13dp"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#8b8b8b"/>
+        android:background="#ececeb"/>
 
     <RelativeLayout
         android:id="@+id/xiuxiu_video"

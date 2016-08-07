@@ -6,13 +6,12 @@
 
     <GridView
         android:id="@+id/gift_wall"
+        android:background="#ededed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:numColumns="4"
-        android:verticalSpacing="4px"
-        android:horizontalSpacing="4px"
-        android:layout_marginLeft="7px"
-        android:layout_marginRight="7px"
+        android:verticalSpacing="2px"
+        android:horizontalSpacing="1px"
         android:layout_marginBottom="2dp"/>
 
 </FrameLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -41,8 +44,8 @@ public class EaseGiftMenu extends FrameLayout {
 
         //设置照片墙大小
         int screenWidth = EaseCommonUtils.getScreenWidth(getContext());
-        int width = screenWidth - EaseCommonUtils.dip2px(getContext(),14);
-        mGiftItemWidth = (width - EaseCommonUtils.dip2px(getContext(),12))/4;
+        int width = screenWidth - 3;
+        mGiftItemWidth = width/4;
         mGiftItemHeight = mGiftItemWidth;
 
         GridView giftGrid = (GridView) findViewById(R.id.gift_wall);
@@ -82,74 +85,72 @@ public class EaseGiftMenu extends FrameLayout {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             GridView.LayoutParams gl = null;
+            LinearLayout.LayoutParams ll = null;
+            Holder holder = null;
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.ease_item_gift,null);
                 gl = new GridView.LayoutParams(mGiftItemWidth, mGiftItemHeight);
+                ll = new LinearLayout.LayoutParams(mGiftItemWidth/2, mGiftItemHeight/2);
+                ll.gravity = Gravity.CENTER_HORIZONTAL;
                 convertView.setLayoutParams(gl);
+                holder = new Holder();
+                holder.giftIv = (ImageView) convertView.findViewById(R.id.gift_img);
+                holder.giftIv.setLayoutParams(ll);
+                holder.titleTv = (TextView) convertView.findViewById(R.id.gift_title);
+                holder.priceTv = (TextView) convertView.findViewById(R.id.gift_price);
+                convertView.setTag(holder);
             }
-            ((ImageView)convertView).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
+            holder = (Holder) convertView.getTag();
+            holder.giftIv.setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
             switch (position){
                 case 0:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_01);
+                    holder.giftIv.setImageResource(R.drawable.gift_01);
+                    holder.titleTv.setText("玫瑰");
+                    holder.priceTv.setText("1咻币");
                     break;
                 case 1:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_02);
+                    holder.giftIv.setImageResource(R.drawable.gift_02);
+                    holder.titleTv.setText("香蕉");
+                    holder.priceTv.setText("1咻币");
                     break;
                 case 2:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_03);
+                    holder.giftIv.setImageResource(R.drawable.gift_03);
+                    holder.titleTv.setText("杜蕾斯");
+                    holder.priceTv.setText("1咻币");
                     break;
                 case 3:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_04);
+                    holder.giftIv.setImageResource(R.drawable.gift_04);
+                    holder.titleTv.setText("+奶油cake");
+                    holder.priceTv.setText("1咻币");
                     break;
                 case 4:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_05);
+                    holder.giftIv.setImageResource(R.drawable.gift_05);
+                    holder.titleTv.setText("我爱你");
+                    holder.priceTv.setText("３咻币");
                     break;
                 case 5:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_06);
+                    holder.giftIv.setImageResource(R.drawable.gift_06);
+                    holder.titleTv.setText("钻戒");
+                    holder.priceTv.setText("５咻币");
                     break;
                 case 6:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_07);
+                    holder.giftIv.setImageResource(R.drawable.gift_07);
+                    holder.titleTv.setText("香水");
+                    holder.priceTv.setText("５咻币");
                     break;
                 case 7:
-                    ((ImageView)convertView).setImageResource(R.drawable.gift_08);
+                    holder.giftIv.setImageResource(R.drawable.gift_08);
+                    holder.titleTv.setText("跑车");
+                    holder.priceTv.setText("８咻币");
                     break;
             }
-            /*
-            if(position == mImgFiles.size()){//最后一个item
-                convertView.findViewById(R.id.img).setVisibility(View.GONE);
-                convertView.findViewById(R.id.bt).setVisibility(View.VISIBLE);
-                convertView.findViewById(R.id.bt).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(
-                                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, RESULT_LOAD_IMAGE);
-                    }
-                });
-            }else{
-                convertView.findViewById(R.id.img).setVisibility(View.VISIBLE);
-                convertView.findViewById(R.id.bt).setVisibility(View.GONE);
-                convertView.findViewById(R.id.img).setTag(position);
-                convertView.findViewById(R.id.img).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showDeleteItemDialog((Integer) v.getTag());
-                    }
-                });
-                if(TextUtils.isEmpty(mImgFiles.get(position).localPath)){
-                    ImageLoader.getInstance().displayImage(
-                            HttpUrlManager.QI_NIU_HOST + mImgFiles.get(position).key,
-                            (ImageView) convertView.findViewById(R.id.img));
-                }else{
-                    ImageLoader.getInstance().displayImage(
-                            "file:/" + mImgFiles.get(position).localPath,
-                            (ImageView) convertView.findViewById(R.id.img));
-                }
-
-            }
-            convertView.setBackgroundColor(Color.parseColor("#a6a6a6"));
-            */
             return convertView;
+        }
+
+        private class Holder{
+            private ImageView giftIv;
+            private TextView titleTv;
+            private TextView priceTv;
         }
     }
 }
