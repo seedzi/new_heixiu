@@ -121,6 +121,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     private void setupViews(){
         mHeadView = (ImageView) findViewById(R.id.head_img);
         mHeadView.setOnClickListener(this);
+        findViewById(R.id.head_img_txt).setOnClickListener(this);
         mNickName = (EditText) findViewById(R.id.nick_name_edit);
         mBrithDayView = (TextView) findViewById(R.id.brithday_value);
         findViewById(R.id.brithday_layout).setOnClickListener(this);
@@ -233,6 +234,7 @@ public class LoginUserDataEditPage extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
+            case R.id.head_img_txt:
             case R.id.head_img:
                 Intent i = new Intent(
                         Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

@@ -47,6 +47,8 @@ public class XiuxiuSettingsPage extends BaseActivity implements View.OnClickList
         mPicPriceTv.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice()+"咻币");
 
         mVideoPriceTv.setText(XiuxiuSettingsConstant.getXiuxiuVideoPrice()+"咻币");
+
+        findViewById(R.id.back).setOnClickListener(this);
     }
 
     private TextView mYuyinPriceTv;
@@ -66,6 +68,9 @@ public class XiuxiuSettingsPage extends BaseActivity implements View.OnClickList
                 break;
             case R.id.xiuxiu_video:
                 showDialog("视频");
+                break;
+            case R.id.back:
+                finish();
                 break;
         }
 

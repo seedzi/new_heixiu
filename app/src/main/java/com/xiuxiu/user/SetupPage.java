@@ -44,6 +44,7 @@ public class SetupPage extends BaseActivity implements View.OnClickListener{
         mXiuxiuCheck = (CheckBox) findViewById(R.id.xiuxiu_check);
         mXiuxiuBroadcastCheck = (CheckBox) findViewById(R.id.xiuxiu_broadcast_check);
 
+        findViewById(R.id.back).setOnClickListener(this);
     }
 
     private void initData(){
@@ -76,6 +77,9 @@ public class SetupPage extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.xiuxiu_broadcast_layout:
                 mXiuxiuBroadcastCheck.setChecked(!mXiuxiuBroadcastCheck.isChecked());
+                break;
+            case R.id.back:
+                finish();
                 break;
         }
 

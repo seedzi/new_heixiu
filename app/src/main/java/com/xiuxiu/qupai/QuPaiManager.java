@@ -50,7 +50,7 @@ public class QuPaiManager {
     private QupaiService mQupaiService;
 
     public void startAuth(Context context){
-
+        android.util.Log.d(TAG, "startAuth");
         AuthService service = AuthService.getInstance();
         service.setQupaiAuthListener(new QupaiAuthListener() {
             @Override
@@ -76,10 +76,13 @@ public class QuPaiManager {
 
     private String mAccessToken;
 
+    private static boolean isInit = false;
+
     public void init(){
         SharePreferenceWrap sharePreferenceWrap = new SharePreferenceWrap(SHARE_PREFERENCE_NAME);
         mAccessToken = sharePreferenceWrap.getString(KEY_ACCESS_TOKEN,"");
-        if(TextUtils.isEmpty(mAccessToken)){
+        android.util.Log.d(TAG, "mAccessToken = " + mAccessToken);
+        if(!isInit || TextUtils.isEmpty(mAccessToken)){
             startAuth(XiuxiuApplication.getInstance().getApplicationContext());
         }else{
             initOpotions();
@@ -103,61 +106,65 @@ public class QuPaiManager {
         android.util.Log.d(TAG,"initOpotions()");
         try {
             mQupaiService =  QupaiManager.getQupaiService(XiuxiuApplication.getInstance().getApplicationContext());
+
+            //UI设置参数
+            UISettings _UISettings = new UISettings() {
+                @Override
+                public boolean hasEditor() {
+                    return true;//是否需要编辑功能
+                }
+                @Override
+                public boolean hasImporter() {
+                    return true;//是否需要导入功能
+                }
+                @Override
+                public boolean hasGuide() {
+                    return false;//是否启动引导功能，建议用户第一次使用时设置为true
+                }
+                @Override
+                public boolean hasSkinBeautifer() {
+                    return true;//是否显示美颜图标
+                }
+            };
+            //压缩参数
+            MovieExportOptions movie_options = new MovieExportOptions.Builder()
+    //                    .setVideoBitrate(mVideoBitrate)
+                    .configureMuxer("movflags", "+faststart")
+                    .build();
+
+            //输出视频的参数
+            ProjectOptions projectOptions = new ProjectOptions.Builder()
+                    //输出视频宽高目前只能设置1：1的宽高，建议设置480*480.
+                    .setVideoSize(480, 480)
+                            //帧率
+                    .setVideoFrameRate(30)
+                            //时长区间
+                    .setDurationRange(2,8)
+                    .get();
+            //缩略图参数,可设置取得缩略图的数量，默认10张
+            ThumbnailExportOptions thumbnailExportOptions =new ThumbnailExportOptions.Builder().setCount(1).get();
+            VideoSessionCreateInfo info =new VideoSessionCreateInfo.Builder()
+                    //水印地址，如"assets://Qupai/watermark/qupai-logo.png"
+    //                    .setWaterMarkPath(waterMarkPath)
+                    //水印的位置
+    //                .setWaterMarkPosition(1)
+                            //摄像头方向,可配置前置或后置摄像头
+                    .setCameraFacing(Camera.CameraInfo.CAMERA_FACING_FRONT)
+                            //美颜百分比,设置之后内部会记住，多次设置无效
+                    .setBeautyProgress(80)
+                            //默认是否开启
+                    .setBeautySkinOn(true)
+                    .setMovieExportOptions(movie_options)
+                    .setThumbnailExportOptions(thumbnailExportOptions)
+                    .build();
+            //初始化，建议在application里面做初始化，这里做是为了方便开发者认识参数的意义
+            mQupaiService.initRecord(info,projectOptions,_UISettings);
+
+            isInit = true;
         }catch (Exception e){
+            android.util.Log.d(TAG,"Exception = " + e.getMessage());
             return;
         }
-        //UI设置参数
-        UISettings _UISettings = new UISettings() {
-            @Override
-            public boolean hasEditor() {
-                return true;//是否需要编辑功能
-            }
-            @Override
-            public boolean hasImporter() {
-                return true;//是否需要导入功能
-            }
-            @Override
-            public boolean hasGuide() {
-                return false;//是否启动引导功能，建议用户第一次使用时设置为true
-            }
-            @Override
-            public boolean hasSkinBeautifer() {
-                return true;//是否显示美颜图标
-            }
-        };
-        //压缩参数
-        MovieExportOptions movie_options = new MovieExportOptions.Builder()
-//                    .setVideoBitrate(mVideoBitrate)
-                .configureMuxer("movflags", "+faststart")
-                .build();
-
-        //输出视频的参数
-        ProjectOptions projectOptions = new ProjectOptions.Builder()
-                //输出视频宽高目前只能设置1：1的宽高，建议设置480*480.
-                .setVideoSize(480, 480)
-                        //帧率
-                .setVideoFrameRate(30)
-                        //时长区间
-                .setDurationRange(2,8)
-                .get();
-        //缩略图参数,可设置取得缩略图的数量，默认10张
-        ThumbnailExportOptions thumbnailExportOptions =new ThumbnailExportOptions.Builder().setCount(1).get();
-        VideoSessionCreateInfo info =new VideoSessionCreateInfo.Builder()
-                //水印地址，如"assets://Qupai/watermark/qupai-logo.png"
-//                    .setWaterMarkPath(waterMarkPath)
-                //水印的位置
-//                .setWaterMarkPosition(1)
-                        //摄像头方向,可配置前置或后置摄像头
-                .setCameraFacing(Camera.CameraInfo.CAMERA_FACING_FRONT)
-                        //美颜百分比,设置之后内部会记住，多次设置无效
-                .setBeautyProgress(80)
-                        //默认是否开启
-                .setBeautySkinOn(true)
-                .setMovieExportOptions(movie_options)
-                .setThumbnailExportOptions(thumbnailExportOptions)
-                .build();
-        //初始化，建议在application里面做初始化，这里做是为了方便开发者认识参数的意义
-        mQupaiService.initRecord(info,projectOptions,_UISettings);
     }
 
     /**

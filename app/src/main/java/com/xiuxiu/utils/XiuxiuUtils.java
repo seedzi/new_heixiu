@@ -3,6 +3,7 @@ package com.xiuxiu.utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.widget.TextView;
 
@@ -21,10 +22,15 @@ import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuTimsResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
+import com.xiuxiu.api.XiuxiuWalletCoinResult;
+import com.xiuxiu.api.XiuxiuWalletCoinResultResult;
 import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
+import com.xiuxiu.easeim.ImHelper;
+import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
+import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.server.UpdateActiveUserManager;
 
@@ -43,28 +49,30 @@ public class XiuxiuUtils {
 
 
     private static void doSomthingOnAppStart(final Context context) {
-        //1.获取用户信息
+        //１.趣拍初始化
+        QuPaiManager.getInstance().init();
+        //２.获取用户信息
         queryUserInfo();
-        //2.更新活跃用户
+        //３.获取钱包信息
+        queryUserWalletInfo();
+        //４.更新活跃用户
         UpdateActiveUserManager.getInstance().start();
-        //3.获取所有群组信息
+        //５.获取所有群组信息
         EMClient.getInstance().groupManager().loadAllGroups();
-        //4.获取所有会话信息
+        //６.获取所有会话信息
         EMClient.getInstance().chatManager().loadAllConversations();
-        //5.初始化用户信息管理类以及数据库
+        //７.初始化用户信息管理类以及数据库
         EaseUserCacheManager.getInstance().init();
         if(XiuxiuUserInfoTable.queryCount()>1000) {
             XiuxiuUserInfoTable.deleteByExceedLimit();
         }
-        //6.初始化咻咻action消息管理类以及数据库
+        //８.初始化咻咻action消息管理类以及数据库
         XiuxiuActionMsgManager.getInstance().init();
         if(XiuxiuActionMsgTable.queryCount()>1000) {
             XiuxiuActionMsgTable.deleteByExceedLimit();
         }
-        //7.因为不知道 PathUtil init()方法调用时机  目前这样手动调用 TODO　huzhi
-        PathUtil.getInstance().initDirs("xiuxiu", "b", context);
-        //8.趣拍初始化
-        QuPaiManager.getInstance().init();
+        //９.因为不知道 PathUtil init()方法调用时机  目前这样手动调用 TODO　huzhi
+        PathUtil.getInstance().initDirs("xiuxiu", "im", context);
     }
 
     private static void doSomthingOnAppStartInBackground(final Context context) {
@@ -80,7 +88,7 @@ public class XiuxiuUtils {
     // ============================================================================================
     // 获取用户信息
     // ============================================================================================
-    private static void queryUserInfo() {
+    public static void queryUserInfo() {
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
                 .add(new StringRequest(getQueryUserInfoUrl(), future, future));
@@ -103,6 +111,37 @@ public class XiuxiuUtils {
     private static String getQueryUserInfoUrl() {
         String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
                 .appendQueryParameter("m", HttpUrlManager.QUERY_USER_INFO)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .build().toString();
+        android.util.Log.d(TAG, "url = " + url);
+        return url;
+    }
+
+    // ============================================================================================
+    // 获取用户钱包信息
+    // ============================================================================================
+    public static void queryUserWalletInfo() {
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getUserWalletUrl(), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"user = " + response);
+            Gson gson = new Gson();
+            XiuxiuWalletCoinResultResult res = gson.fromJson(response, XiuxiuWalletCoinResultResult.class);
+            if(res!=null && res.isSuccess() && res.getResult()!=null){
+                XiuxiuWalletCoinResult.save(res.getResult());
+            }
+        }catch (Exception error){
+            android.util.Log.d(TAG,"error = " + error);
+        }
+    }
+    private static String getUserWalletUrl() {
+        String url = Uri.parse(HttpUrlManager.weixinPayUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.GET_USER_XIUXIU_COIN)
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
@@ -395,7 +434,7 @@ public class XiuxiuUtils {
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
-                .appendQueryParameter("xiuxiuid", xiuxiuId)
+                .appendQueryParameter("xiuxiu_id", xiuxiuId)
 //                .appendQueryParameter("offset", "0")
 //                .appendQueryParameter("count", "100")
                 .build().toString();
@@ -421,4 +460,39 @@ public class XiuxiuUtils {
         }
     }
 
+
+
+    // ============================================================================================
+    // 判读是否进入首次登录编辑页面
+    // ============================================================================================
+    public static boolean isEnterFirstLoginPage(){
+        boolean isEnterFirstLoginPage = false;
+        XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
+        if (xiuxiuUserQueryResult != null) {
+            if (TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
+                    || "unknown".equals(xiuxiuUserQueryResult.getSex())) {
+                isEnterFirstLoginPage = true;
+            }
+        }
+        return isEnterFirstLoginPage;
+    }
+
+    // ============================================================================================
+    // 完成初始化进入app
+    // ============================================================================================
+    public static void initAndEnterMainPage(final FragmentActivity mAc){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                XiuxiuUtils.onAppStart(mAc.getApplicationContext());
+                XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.startActivity(mAc);
+                        mAc.finish();
+                    }
+                });
+            }
+        }).start();
+    }
 }

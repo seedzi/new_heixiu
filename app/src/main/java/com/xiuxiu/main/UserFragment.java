@@ -1,6 +1,7 @@
 package com.xiuxiu.main;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastManager;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.api.XiuxiuWalletCoinResult;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.discover.OnLineListManager;
 import com.xiuxiu.qupai.QuPaiManager;
@@ -93,8 +95,9 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         //魅力值
         mCharmValueLayout = (ViewGroup) mRootView.findViewById(R.id.charm_value);
         UiUtil.findTextViewById(mCharmValueLayout, R.id.item_name).setText("魅力值");
-        UiUtil.findImageViewById(mCharmValueLayout, R.id.img).setImageResource(R.drawable.charm_icon);
+        UiUtil.findImageViewById(mCharmValueLayout, R.id.img).setImageResource(R.drawable.user_icon_charm);
         UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setText("等级 2");
+        UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setTextColor(Color.parseColor("#00b8d0"));
         mCharmValueLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +108,9 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         //财富值
         mWealthValueLayout = (ViewGroup) mRootView.findViewById(R.id.wealth_value);
         UiUtil.findTextViewById(mWealthValueLayout, R.id.item_name).setText("财富值");
-        UiUtil.findImageViewById(mWealthValueLayout, R.id.img).setImageResource(R.drawable.charm_icon);
+        UiUtil.findImageViewById(mWealthValueLayout, R.id.img).setImageResource(R.drawable.user_icon_wealth);
         UiUtil.findTextViewById(mWealthValueLayout, R.id.tag_txt).setText("等级 2");
+        UiUtil.findTextViewById(mWealthValueLayout, R.id.tag_txt).setTextColor(Color.parseColor("#00b8d0"));
         mWealthValueLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,31 +121,32 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         //咻羞设置
         mXiuxiuSettingsLayout = (ViewGroup) mRootView.findViewById(R.id.xiuxiu_settings);
         UiUtil.findTextViewById(mXiuxiuSettingsLayout, R.id.item_name).setText("咻羞设置");
-        UiUtil.findImageViewById(mXiuxiuSettingsLayout, R.id.img).setImageResource(R.drawable.charm_icon);
+        UiUtil.findImageViewById(mXiuxiuSettingsLayout, R.id.img).setImageResource(R.drawable.user_icon_wallet);
         mXiuxiuSettingsLayout.setOnClickListener(this);
 
         //钱包
         mWalletLayout = (ViewGroup) mRootView.findViewById(R.id.wallet);
-        UiUtil.findImageViewById(mWalletLayout, R.id.img).setImageResource(R.drawable.wallet_icon);
+        UiUtil.findImageViewById(mWalletLayout, R.id.img).setImageResource(R.drawable.user_icon_wallet);
         mWalletLayout.setOnClickListener(this);
+        UiUtil.findTextViewById(mWalletLayout, R.id.tag_txt).setTextColor(Color.parseColor("#00b8d0"));
 
         //邀请朋友
         mInviteFriendsLayout = (ViewGroup) mRootView.findViewById(R.id.invite_friends);
         UiUtil.findTextViewById(mInviteFriendsLayout, R.id.item_name).setText("邀请朋友");
-        UiUtil.findImageViewById(mInviteFriendsLayout, R.id.img).setImageResource(R.drawable.add_friends_icon);
+        UiUtil.findImageViewById(mInviteFriendsLayout, R.id.img).setImageResource(R.drawable.user_icon_add_friends);
         UiUtil.findTextViewById(mInviteFriendsLayout, R.id.tag_txt).setText("邀请返现金");
         mInviteFriendsLayout.setOnClickListener(this);
 
         //意见反馈
         mSetUpLayout = (ViewGroup) mRootView.findViewById(R.id.feedback);
         UiUtil.findTextViewById(mSetUpLayout, R.id.item_name).setText("意见反馈");
-        UiUtil.findImageViewById(mSetUpLayout, R.id.img).setImageResource(R.drawable.feedback_icon);
+        UiUtil.findImageViewById(mSetUpLayout, R.id.img).setImageResource(R.drawable.user_icon_feedback);
         mSetUpLayout.setOnClickListener(this);
 
         //设置
         mFeedbackLayout = (ViewGroup) mRootView.findViewById(R.id.setup);
         UiUtil.findTextViewById(mFeedbackLayout, R.id.item_name).setText("设置");
-        UiUtil.findImageViewById(mFeedbackLayout, R.id.img).setImageResource(R.drawable.settings_icon);
+        UiUtil.findImageViewById(mFeedbackLayout, R.id.img).setImageResource(R.drawable.user_icon_settings);
         mFeedbackLayout.setOnClickListener(this);
 
         //退出
@@ -164,9 +169,10 @@ public class UserFragment extends Fragment implements View.OnClickListener{
             UiUtil.findViewById(mRootView, R.id.xiuxiu_settings_line).setVisibility(View.GONE);
         }
 
-        mNameTv = UiUtil.findTextViewById(mRootView,R.id.user_name);
+        mNameTv = UiUtil.findTextViewById(mRootView, R.id.user_name);
         mSignTv = UiUtil.findTextViewById(mRootView, R.id.description);
-        mHeadIv = UiUtil.findImageViewById(mRootView,R.id.head_img);
+        mHeadIv = UiUtil.findImageViewById(mRootView, R.id.head_img);
+        mRootView.findViewById(R.id.top_layout).setOnClickListener(this);
     }
 
     private void refreshData(){
@@ -193,33 +199,32 @@ public class UserFragment extends Fragment implements View.OnClickListener{
             UiUtil.findViewById(mRootView, R.id.wealth_value_line).setVisibility(View.GONE);
             mCharmValueLayout.setVisibility(View.VISIBLE);
             UiUtil.findViewById(mRootView, R.id.charm_value_line).setVisibility(View.VISIBLE);
-            XiuxiuUserInfoResult.setCharmValue(UiUtil.findImageViewById(mCharmValueLayout, R.id.img), XiuxiuUserInfoResult.getInstance().getCharm());
             UiUtil.findTextViewById(mCharmValueLayout, R.id.tag_txt).setText("等级 " + XiuxiuUserInfoResult.getInstance().getCharmValue());
         }else{//男性用户
             mCharmValueLayout.setVisibility(View.GONE);
             UiUtil.findViewById(mRootView, R.id.charm_value_line).setVisibility(View.GONE);
             mWealthValueLayout.setVisibility(View.VISIBLE);
             UiUtil.findViewById(mRootView, R.id.wealth_value_line).setVisibility(View.VISIBLE);
-            XiuxiuUserInfoResult.setWealthValue(UiUtil.findImageViewById(mWealthValueLayout, R.id.img), XiuxiuUserInfoResult.getInstance().getFortune());
             UiUtil.findTextViewById(mWealthValueLayout, R.id.tag_txt).setText("等级 " + XiuxiuUserInfoResult.getInstance().getFortuneValue());
             mXiuxiuSettingsLayout.setVisibility(View.GONE);
         }
         UiUtil.findTextViewById(mWalletLayout, R.id.item_name).setText(isFemale ? "钱包" : "充值");
-        UiUtil.findTextViewById(mWalletLayout, R.id.tag_txt).setText(isFemale ? "余额:23114 羞币" : "一元购100咻羞币,限购1次");
+        XiuxiuWalletCoinResult xiuxiu = XiuxiuWalletCoinResult.getFromShareP();
+        int size = xiuxiu.getRecharge_coin() + xiuxiu.getEarn_coin();
+        UiUtil.findTextViewById(mWalletLayout, R.id.tag_txt).setText(isFemale ? "余额: "+ size + "羞币" : "一元购100咻羞币,限购1次");
     }
 
     @Override
     public void onResume() {
         super.onResume();
         refreshData();
-//        mNameTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
-//        mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
+            case R.id.top_layout:
             case R.id.user_detail:
                 UserDetailActivity.startActivity(getActivity());
                 break;

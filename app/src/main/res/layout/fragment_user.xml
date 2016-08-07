@@ -20,7 +20,7 @@
         <TextView
             android:id="@+id/user_name"
             android:layout_toRightOf="@id/head_img"
-            android:layout_marginTop="23dp"
+            android:layout_marginTop="20dp"
             android:layout_marginLeft="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:id="@+id/description"
             android:layout_toRightOf="@id/head_img"
             android:layout_below="@id/user_name"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginLeft="12dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
             android:background="#ffffff">
             <TextView
                 android:id="@+id/item_name"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"

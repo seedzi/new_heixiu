@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +23,9 @@ import com.xiuxiu.api.XiuxiuWalletCoinResultResult;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.user.wallet.WalletRechargePage;
 import com.xiuxiu.utils.Md5Util;
+import com.xiuxiu.utils.XiuxiuUtils;
+
+import java.util.logging.LogRecord;
 
 /**
  * Created by huzhi on 16-4-8.
@@ -47,10 +51,23 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    private Handler mUiHandler = new Handler();
+
     @Override
     protected void onResume() {
         super.onResume();
-        queryUserWalletInfo();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                XiuxiuUtils.queryUserWalletInfo();
+                mUiHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshData();
+                    }
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -83,41 +100,4 @@ public class WalletActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    // ============================================================================================
-    // 获取用户信息
-    // ============================================================================================
-    private void queryUserWalletInfo() {
-        Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Gson gson = new Gson();
-                android.util.Log.d(TAG,"response = " + response);
-                XiuxiuWalletCoinResultResult res = gson.fromJson(response, XiuxiuWalletCoinResultResult.class);
-                android.util.Log.d(TAG,"res = " + res.getResult());
-                if(res!=null && res.isSuccess() && res.getResult()!=null){
-                    XiuxiuWalletCoinResult.save(res.getResult());
-                    refreshData();
-                }
-            }
-        };
-        Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                android.util.Log.d(TAG,"error = " + error);
-            }
-        };
-        XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getUserWalletUrl(), mRefreshListener, mRefreshErroListener));
-    }
-    private String getUserWalletUrl() {
-        String url = Uri.parse(HttpUrlManager.weixinPayUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.GET_USER_XIUXIU_COIN)
-                .appendQueryParameter("password", Md5Util.md5())
-                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
-                .build().toString();
-        android.util.Log.d(TAG, "url = " + url);
-        return url;
-    }
 }

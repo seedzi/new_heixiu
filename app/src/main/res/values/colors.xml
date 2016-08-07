@@ -118,5 +118,6 @@
     <color name="xiuxiu_voice_progressbar_bg_color">#f4f4f4</color>
 
     <color name="transparent">#00000000</color>
-
+    <color name="head_img_default">#f4f3f2</color>
+    <color name="user_fragment_blue">#a6a6a6</color>
 </resources>

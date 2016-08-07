@@ -13,10 +13,12 @@ import android.view.View;
 import com.xiuxiu.R;
 
 public class VipGradeView extends View {
+
+	private static final String TAG = VipGradeView.class.getSimpleName();
 	
 	private int mGrade = 1;
 
-	private final int GRADE_COUNT = 8;
+	private final int GRADE_COUNT = 7;
 	
 	private Paint mPaint;
 	
@@ -58,7 +60,7 @@ public class VipGradeView extends View {
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
+//		super.onDraw(canvas);
 		int lineWidth =   getWidth()-mNode.getWidth();
 		if(GRADE_COUNT==0||GRADE_COUNT==1)
 			mItemWidth = lineWidth;
@@ -72,12 +74,14 @@ public class VipGradeView extends View {
 		canvas.drawRect(mRect, mPaint);		
 		//画亮线
 		mPaint.setColor(getResources().getColor(R.color.color_user_info_line));
-		mRect = new Rect(mNode.getWidth()/2, mNode.getHeight()*5/12   , mItemWidth*mGrade, mNode.getHeight()*7/12);
-		canvas.drawRect(mRect, mPaint);
+
+		mRect = new Rect(mNode.getWidth()/2, mNode.getHeight()*5/12   , mItemWidth*(mGrade-1), mNode.getHeight()*7/12);
+		if(mGrade>1)
+			canvas.drawRect(mRect, mPaint);
 		//画点
 		mPaint = new Paint();
 		for(int i=0;i<GRADE_COUNT;i++){
-			if(i==mGrade){
+			if(i==(mGrade-1)){
 				canvas.drawBitmap(mNode, mItemWidth*i, 0, mPaint);
 			}
 			/*
@@ -95,6 +99,7 @@ public class VipGradeView extends View {
 		else if(grade>=GRADE_COUNT)
 			mGrade = GRADE_COUNT -1;
 		mGrade = grade;
+		invalidate();
 	}
 	
 }

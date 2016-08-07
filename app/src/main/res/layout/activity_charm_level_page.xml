@@ -46,6 +46,7 @@
         android:background="#12b0c4"
         android:gravity="center">
         <TextView
+            android:id="@+id/v_grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
@@ -67,11 +68,12 @@
         android:orientation="vertical">
         
         <com.xiuxiu.widget.VipGradeView
+            android:id="@+id/vip_grade_view"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginRight="13dp"/>
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,12 +81,16 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="13dp"
+
+            android:weightSum="7">
+            <!--
+                        android:layout_marginLeft="13dp"
             android:layout_marginRight="13dp"
-            android:weightSum="8">
+            -->
             <TextView
                 android:layout_weight="1"
                 android:text="等级1"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -92,6 +98,7 @@
             <TextView
                 android:layout_weight="1"
                 android:text="等级2"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -99,6 +106,7 @@
             <TextView
                 android:layout_weight="1"
                 android:text="等级3"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -106,6 +114,7 @@
             <TextView
                 android:layout_weight="1"
                 android:text="等级4"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -113,6 +122,7 @@
             <TextView
                 android:layout_weight="1"
                 android:text="等级5"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -120,6 +130,7 @@
             <TextView
                 android:layout_weight="1"
                 android:text="等级6"
+                android:gravity="center"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
                 android:layout_width="0dp"
@@ -129,67 +140,53 @@
                 android:text="等级7"
                 android:textColor="#a6a6a6"
                 android:textSize="9sp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:layout_weight="1"
-                android:text="等级8"
-                android:textColor="#a6a6a6"
-                android:textSize="9sp"
+                android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_1" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_2" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_3" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_4" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_5" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_6" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
+    <include android:id="@+id/grade_7" layout="@layout/charm_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#8b8b8b"/>
-    <include layout="@layout/charm_grade_item_layout" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-
-
     <TextView
         android:layout_marginTop="9dp"
         android:textSize="11sp"
         android:textColor="#b9b9b9"
         android:layout_marginLeft="13dp"
-        android:text="魅力值体现了女生在嘿咻的受欢迎程度,主要通过收到招呼,礼物,完善资料提升."
+        android:text="魅力值体现了女生在咻羞的受欢迎程度,主要通过收到招呼,礼物,完善资料提升."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

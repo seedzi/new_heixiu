@@ -1,2 +1,5 @@
 include ':easeui', ':Qupaisdk-release'
 include ':app'
+
+//include ':hyphenatechatsdk'
+//project(':hyphenatechatsdk').projectDir = new File('../emclient-android/hyphenatechatsdk')

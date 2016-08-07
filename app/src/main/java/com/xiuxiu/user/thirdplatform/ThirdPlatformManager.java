@@ -23,7 +23,6 @@ import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
 import com.xiuxiu.easeim.ImManager;
-import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.utils.Md5Util;
 import com.xiuxiu.utils.XiuxiuUtils;
@@ -82,9 +81,6 @@ public class ThirdPlatformManager {
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
 //                Toast.makeText(mAc, "Authorize succeed", Toast.LENGTH_SHORT).show();
-                for (String key : data.keySet()) {
-                    android.util.Log.d("123456","data key = " + key);
-                }
                 mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
@@ -94,9 +90,7 @@ public class ThirdPlatformManager {
                         openId = map.get("openid");
                         headimgpath = map.get("headimgurl");
                         sex = map.get("sex");
-                        for (String key : map.keySet()) {
-                            android.util.Log.d("123456","key = " + key);
-                        }
+
                         login();
                     }
 
@@ -145,41 +139,40 @@ public class ThirdPlatformManager {
             final XiuxiuLoginResult res = gson.fromJson(response, XiuxiuLoginResult.class);
             if (res.isSuccess()) {
                 XiuxiuLoginResult.save(res);
-                ImManager.getInstance().login(res.getXiuxiu_id(), res.getPasswordForYX(), new Runnable() {
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        new Thread(new Runnable() {
+                        XiuxiuUtils.queryUserInfo(); //1.获取用户信息
+                        boolean isEnterFirstLoginPage = XiuxiuUtils.isEnterFirstLoginPage();//2.是否进入首次登录编辑页面
+                        if (res.getIsFirstLogin() || isEnterFirstLoginPage) { //如果进入登录编辑页面
+                            mUiHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    LoginUserDataEditPage.startActivity(mAc, nickname, headimgpath, city, sex);
+                                }
+                            });
+                        } else {//如果直接登录
+                            ImManager.getInstance().login(XiuxiuLoginResult.getInstance().getXiuxiu_id(),
+                                    XiuxiuLoginResult.getInstance().getPasswordForYX(),
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            XiuxiuUtils.initAndEnterMainPage(mAc);
+                                        }
+                                    });
+                        }
+                        mUiHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                XiuxiuUtils.onAppStart(mAc);
-                                mUiHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        boolean isEnterFirstLoginPage = false;
-                                        XiuxiuUserInfoResult xiuxiuUserQueryResult = XiuxiuUserInfoResult.getInstance();
-                                        if (xiuxiuUserQueryResult != null) {
-                                            if (TextUtils.isEmpty(xiuxiuUserQueryResult.getSex())
-                                                    || "unknown".equals(xiuxiuUserQueryResult.getSex())) {
-                                                isEnterFirstLoginPage = true;
-                                            }
-                                        }
-                                        LoginUserDataEditPage.startActivity(mAc, nickname, headimgpath, city, sex);
-                                        /*
-                                        if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
-                                            LoginUserDataEditPage.startActivity(mAc,nickname,headimgpath,city,sex);
-                                        }else {
-                                            MainActivity.startActivity(mAc);
-                                            mAc.finish();
-                                        }*/
-                                    }
-                                });
+                                dismisslProgressDialog();
                             }
-                        }).start();
-
+                        });
                     }
-                });
+                }).start();
+            }else{
+                dismisslProgressDialog();
+                Toast.makeText( mAc, "连接错误,登录失败", Toast.LENGTH_SHORT).show();
             }
-            dismisslProgressDialog();
         }
     };
     private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {

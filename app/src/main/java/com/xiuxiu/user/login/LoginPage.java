@@ -25,6 +25,7 @@ import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
+import com.xiuxiu.easeim.ImManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
 import com.xiuxiu.main.MainActivity;
@@ -86,8 +87,14 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LoginUserDataEditPage.REQUEST_CODE ){
             if(resultCode == RESULT_OK){
-                MainActivity.startActivity(this);
-                finish();
+                ImManager.getInstance().login(XiuxiuLoginResult.getInstance().getXiuxiu_id(),
+                        XiuxiuLoginResult.getInstance().getPasswordForYX(),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                XiuxiuUtils.initAndEnterMainPage(LoginPage.this);
+                            }
+                        });
             }
         }else{
             ThirdPlatformManager.getInstance().onActivityResult4Wechat(requestCode, requestCode, data);

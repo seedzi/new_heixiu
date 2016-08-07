@@ -34,11 +34,11 @@
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="#f4f3f2"/>
+        android:layout_height="100dp"/>
 
     <TextView
-        android:layout_marginTop="15dp"
+        android:id="@+id/head_img_txt"
+        android:layout_marginTop="13dp"
         android:text="修改头像"
         android:textColor="#a7a7a7"
         android:textSize="12sp"
@@ -106,7 +106,6 @@
             android:id="@+id/brithday_value"
             android:layout_marginLeft="30dp"
             android:textColorHint="#b7b6b6"
-            android:textColor="#b7b6b6"
             android:textSize="16sp"
             android:hint="点击选择出生日期"
             android:layout_toRightOf="@id/brithday_name"
