@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f4f3f2">
+    android:background="#ffffff">
 
     <!-- 标题 -->
     <RelativeLayout
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="你的当前财富等级"
             android:textSize="11sp"
-            android:textColor="#7f14f1"/>
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
     <LinearLayout
@@ -140,48 +140,67 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="#f4f3f2"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#8b8b8b"
+        android:visibility="gone"/>
+
     <include android:id="@+id/grade_1" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_2" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_3" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_4" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_5"  layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_6" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
+        android:layout_marginLeft="13dp"
         android:background="#8b8b8b"/>
     <include android:id="@+id/grade_7" layout="@layout/wealth_grade_item_layout" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#8b8b8b"/>
+        android:background="#8b8b8b"
+        android:visibility="gone"/>
 
     <TextView
-        android:layout_marginTop="9dp"
+        android:paddingTop="9dp"
         android:textSize="11sp"
         android:textColor="#b9b9b9"
-        android:layout_marginLeft="13dp"
+        android:paddingLeft="13dp"
+        android:background="#f4f3f2"
         android:text="财富值体现了男生在咻羞的财富能力,充值并消费1元,增加1财富分值."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

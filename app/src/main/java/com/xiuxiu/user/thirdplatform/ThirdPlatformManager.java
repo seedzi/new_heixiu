@@ -199,7 +199,6 @@ public class ThirdPlatformManager {
                 .appendQueryParameter("password", Md5Util.md5())
                 .appendQueryParameter("weixin_token", openId)
                 .appendQueryParameter("xiuxiu_name", nickname)
-                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .build().toString();
     }
 

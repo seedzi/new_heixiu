@@ -107,6 +107,8 @@ public class UserDetailActivity extends BaseActivity implements View.OnClickList
         findViewById(R.id.back).setOnClickListener(this);
 
         findViewById(R.id.bottom_layout).setVisibility(View.GONE);
+
+        findViewById(R.id.charm_layout).setOnClickListener(this);
     }
 
     /**
@@ -235,6 +237,13 @@ public class UserDetailActivity extends BaseActivity implements View.OnClickList
                     VoicePlayManager.getInstance().pause();
                 }else{
                     VoicePlayManager.getInstance().play(XiuxiuUserInfoResult.getUrlVoice4Qiniu(XiuxiuUserInfoResult.getInstance().getVoice()));
+                }
+                break;
+            case R.id.charm_layout:
+                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){
+                    WealthLevelActivity.startActivity(UserDetailActivity.this);
+                }else{
+                    CharmLevelActivity.startActivity(UserDetailActivity.this);
                 }
                 break;
         }

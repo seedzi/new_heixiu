@@ -3,7 +3,6 @@ package com.xiuxiu.user;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -37,7 +36,6 @@ import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
-import com.xiuxiu.user.login.LoginUserDataEditPage;
 import com.xiuxiu.user.voice.VoiceIntroductionActivity;
 import com.xiuxiu.user.voice.VoicePlayManager;
 import com.xiuxiu.utils.FileUtils;
@@ -100,19 +98,9 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
     private void setupViews(){
         mLayout = (ViewGroup)findViewById(R.id.root_layout);
         mPhotoWall = (GridView) UiUtil.findViewById(mLayout, R.id.photo_wall);
-        //设置照片墙大小
-        int width = mScreenWidth - ScreenUtils.dip2px(getApplicationContext(),14);
-        mPhotoItemWidth = (width - ScreenUtils.dip2px(getApplicationContext(),12))/4;
-        mPhotoItemHeight = mPhotoItemWidth;
-        int height = mPhotoItemHeight*2 + ScreenUtils.dip2px(getApplicationContext(),4);
-        LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width,height);
-        ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
-        mPhotoWall.setLayoutParams(ll);
-        mPhotoWall.setHorizontalSpacing(4);
-        mPhotoWall.setVerticalSpacing(4);
-
         mPhotoAdpater = new PhotoAdpater();
         mPhotoWall.setAdapter(mPhotoAdpater);
+        setPhotoWallSize();
 
         mSignTv = (TextView) findViewById(R.id.user_sign_value);
         findViewById(R.id.signature_layout).setOnClickListener(this);
@@ -137,7 +125,6 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
 
     private void initData(){
         mSignTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
-        mTitleTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
         mAgeTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getAge()));
         mCityTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getCity()));
         mNickNameTv.setText(URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getXiuxiu_name()));
@@ -156,7 +143,6 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 android.util.Log.d("123456", "mBrithdayS = " + mBrithdayS);
             }
         }catch (Exception e){
-
         }
 
 
@@ -169,11 +155,12 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 mImgFiles.add(bean);
             }
         }
+        setPhotoWallSize();
+
         mVoiceKey = XiuxiuUserInfoResult.getInstance().getVoice();
         if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getVoice())){
             findViewById(R.id.yuyin_bt).setVisibility(View.GONE);
             findViewById(R.id.yuyin_txt_no).setVisibility(View.VISIBLE);
-            ((TextView)findViewById(R.id.yuyin_txt_no)).setText("点击上传语音介绍");
         }else{
             findViewById(R.id.yuyin_bt).setVisibility(View.VISIBLE);
             findViewById(R.id.yuyin_txt_no).setVisibility(View.GONE);
@@ -207,7 +194,7 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.signature_layout:
                 UserTxtEditActivity.startActivity(UserEditDetailActivity.this,
-                        URLDecoder.decode(XiuxiuUserInfoResult.getInstance().getSign()));
+                        mSignTv.getText().toString());
                 break;
             case R.id.city_layout:
                 showCityDialog();
@@ -220,7 +207,7 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.nick_name_layout:
                 UserTxtEditActivity.startActivity(UserEditDetailActivity.this,
-                        mNickNameTv.getText().toString(),UserTxtEditActivity.REQUEST_CODE_2);
+                        mNickNameTv.getText().toString(),UserTxtEditActivity.REQUEST_CODE_NICKNAME);
                 break;
             case R.id.yuyin_bt:
                 if(VoicePlayManager.getInstance().isPlaying()){
@@ -334,7 +321,7 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
             GridView.LayoutParams gl = null;
             if(convertView == null){
                 convertView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.photo_wall_layout,null);
-                gl = new GridView.LayoutParams(mPhotoItemWidth,mPhotoItemHeight);
+                gl = new GridView.LayoutParams(mPhotoItemWidth,mPhotoItemWidth);
                 convertView.setLayoutParams(gl);
             }
             ((ImageView)convertView.findViewById(R.id.img)).setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
@@ -534,6 +521,7 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
             fileBean.localPath = picturePath;
             mImgFiles.add(fileBean);
             mPhotoAdpater.notifyDataSetChanged();
+            setPhotoWallSize();
 
         }else if(requestCode == VoiceIntroductionActivity.REQUEST_CODE){ //语音
             if(resultCode==RESULT_OK) {
@@ -541,14 +529,14 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
                 mVoiceKey = FileUploadManager.getInstance().generateUserVoiceFileName(FileUtils.getFileSuffix(mVoicPath));
                 android.util.Log.d(TAG,"mVoiceKey = " + mVoiceKey);
             }
-        }else if(requestCode == UserTxtEditActivity.REQUEST_CODE_2){
+        }else if(requestCode == UserTxtEditActivity.REQUEST_CODE_NICKNAME){
             if(resultCode==RESULT_OK) {
                 if(data.getStringExtra(UserTxtEditActivity.TXT_KEY)!=null){
                     mNickNameTv.setText(data.getStringExtra(UserTxtEditActivity.TXT_KEY));
                     mNickName = data.getStringExtra(UserTxtEditActivity.TXT_KEY);
                 }
             }
-        }if(requestCode == UserTxtEditActivity.REQUEST_CODE && resultCode==RESULT_OK){
+        }if(requestCode == UserTxtEditActivity.REQUEST_CODE_SIGNATURE && resultCode==RESULT_OK){
             Bundle bundle =data.getExtras();
             if(bundle.getString(UserTxtEditActivity.TXT_KEY)!=null){
                 mSignTv.setText(bundle.getString(UserTxtEditActivity.TXT_KEY));
@@ -556,6 +544,30 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    //设置照片墙大小
+    private void setPhotoWallSize(){
+        int width = mScreenWidth - ScreenUtils.dip2px(getApplicationContext(),14);
+        mPhotoItemWidth = (width - ScreenUtils.dip2px(getApplicationContext(),12))/4;
+        if(mImgFiles==null||mImgFiles.size()<4){
+            if(mPhotoItemHeight==mPhotoItemWidth)
+                return;
+        }else {
+            if(mPhotoItemHeight==mPhotoItemWidth*2)
+                return;
+        }
+
+        if(mImgFiles==null||mImgFiles.size()<4){
+            mPhotoItemHeight = mPhotoItemWidth;
+        }else{
+            mPhotoItemHeight = mPhotoItemWidth*2;
+        }
+        int height = mPhotoItemHeight + ScreenUtils.dip2px(getApplicationContext(),4);
+        LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(width,height);
+        ll.setMargins(ScreenUtils.dip2px(getApplicationContext(), 7), 0, ScreenUtils.dip2px(getApplicationContext(), 7), 0);
+        mPhotoWall.setLayoutParams(ll);
+        mPhotoWall.setHorizontalSpacing(4);
+        mPhotoWall.setVerticalSpacing(4);
+    }
 
     // ============================================================================================
     // 删除对话框
@@ -569,6 +581,7 @@ public class UserEditDetailActivity extends BaseActivity implements View.OnClick
             public void onClick(DialogInterface dialog, int which) {
                 mImgFiles.remove(position);
                 mPhotoAdpater.notifyDataSetChanged();
+                setPhotoWallSize();
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

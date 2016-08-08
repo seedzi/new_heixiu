@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:paddingLeft="12sp"
-        android:paddingRight="12sp">
+        android:paddingRight="12sp"
+        android:background="#ffffff">
         <TextView
             android:id="@+id/back"
             android:layout_centerVertical="true"
@@ -181,7 +182,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="100dp"
                         android:layout_width="wrap_content"
-                        android:text="无语音介绍"
+                        android:hint="无语音介绍"
+                        android:textSize="@dimen/line_txt_size_normal"
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
 
@@ -368,12 +370,6 @@
                         android:textColor="#000000"
                         android:textSize="@dimen/line_txt_size_normal"/>
                 </RelativeLayout>
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:background="#f4f3f2"/>
             </LinearLayout>
         </ScrollView>
 

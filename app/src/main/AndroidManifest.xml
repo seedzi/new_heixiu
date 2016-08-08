@@ -369,6 +369,12 @@
         </activity>
 
         <!-- ###################   友盟   ################### -->
+
+        <!-- 反馈 -->
+        <activity
+            android:name="com.umeng.fb.ConversationActivity"/>
+
+
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:theme="@style/Theme.UMDefault"
@@ -389,8 +395,10 @@
             android:name="UMENG_APPKEY"
             android:value="5729959767e58e9905000715" >
         </meta-data>
-
-        <meta-data android:value="000001" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:value="000001"
+            android:name="UMENG_CHANNEL">
+        </meta-data>
 
     </application>
 </manifest>

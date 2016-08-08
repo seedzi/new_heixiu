@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.xiuxiu.R;
-import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
 import com.xiuxiu.utils.ToastUtil;
 
@@ -22,19 +21,21 @@ public class UserTxtEditActivity extends BaseActivity implements View.OnClickLis
     public static void startActivity(FragmentActivity ac,String value){
         Intent intent = new Intent(ac,UserTxtEditActivity.class);
         intent.putExtra("txt",value);
-        ac.startActivityForResult(intent, REQUEST_CODE);
+        intent.putExtra("request_code",REQUEST_CODE_SIGNATURE);
+        ac.startActivityForResult(intent, REQUEST_CODE_SIGNATURE);
     }
 
 
     public static void startActivity(FragmentActivity ac,String value,int code){
         Intent intent = new Intent(ac,UserTxtEditActivity.class);
         intent.putExtra("txt",value);
+        intent.putExtra("request_code",REQUEST_CODE_NICKNAME);
         ac.startActivityForResult(intent, code);
     }
 
-    public static int REQUEST_CODE = 103;
+    public static int REQUEST_CODE_SIGNATURE = 103;
 
-    public static int REQUEST_CODE_2 = 104;
+    public static int REQUEST_CODE_NICKNAME = 104;
 
     private EditText mEdit;
 
@@ -57,13 +58,20 @@ public class UserTxtEditActivity extends BaseActivity implements View.OnClickLis
         String txt = getIntent().getStringExtra("txt");
         if(!TextUtils.isEmpty(txt)){
             mEdit.setText(txt);
+            mEdit.setSelection(txt.length());
         }
         mTitleTv = (TextView) findViewById(R.id.title);
+        if(getIntent().getIntExtra("request_code",-1)==REQUEST_CODE_SIGNATURE){
+            mTitleTv.setText("签名编辑");
+        }else if(getIntent().getIntExtra("request_code",-1)==REQUEST_CODE_NICKNAME){
+            mTitleTv.setText("昵称编辑");
+        }
+        /*
         if(!TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getXiuxiu_name())) {
             mTitleTv.setText(XiuxiuUserInfoResult.getInstance().getXiuxiu_name());
         }else{
             mTitleTv.setText(XiuxiuUserInfoResult.getInstance().getXiuxiu_id());
-        }
+        }*/
     }
 
     @Override

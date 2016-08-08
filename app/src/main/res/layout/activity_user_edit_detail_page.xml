@@ -8,7 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bar_height"
         android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        android:paddingRight="12dp"
+        android:background="#ffffff">
         <TextView
             android:id="@+id/back"
             android:layout_centerVertical="true"
@@ -69,6 +70,7 @@
                 android:layout_marginRight="7px"/>
 
             <View
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
                 android:background="#f4f3f2"/>
@@ -150,7 +152,9 @@
                     android:layout_marginLeft="100dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="无语音介绍"/>
+                    android:textColor="@color/app_theme_color"
+                    android:textSize="@dimen/line_txt_size_normal"
+                    android:text="点击上传语音介绍"/>
 
                 <ImageView
                     android:layout_marginRight="12dp"
@@ -189,7 +193,9 @@
                     android:layout_marginLeft="100dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="深情即是一桩悲剧，必得以死来句读。"
+                    android:hint="填写个人签名"
+                    android:textColorHint="@color/app_theme_color"
+                    android:text=""
                     android:textColor="#000000"
                     android:layout_centerVertical="true"
                     android:textSize="@dimen/line_txt_size_normal"/>

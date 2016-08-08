@@ -1,10 +1,8 @@
 package com.xiuxiu.user.voice;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -16,28 +14,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.hyphenate.EMError;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
 import com.xiuxiu.R;
-import com.xiuxiu.XiuxiuApplication;
-import com.xiuxiu.api.HttpUrlManager;
-import com.xiuxiu.api.XiuxiuLoginResult;
-import com.xiuxiu.api.XiuxiuResult;
-import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.base.BaseActivity;
-import com.xiuxiu.main.MainActivity;
-import com.xiuxiu.user.FileUploadManager;
-import com.xiuxiu.utils.FileUtils;
 import com.xiuxiu.utils.ToastUtil;
-
-import org.json.JSONObject;
 
 
 /**
@@ -93,7 +74,6 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
             mMediaPlayer.release();
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -250,7 +230,6 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
         }
     }
 
-
     // ====================================  play ====================================================
 
     private boolean isPlaying = false;
@@ -297,11 +276,9 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
             }catch (Exception e){
             }
         }
-
     }
 
     private void stopPlayVoice(){
-        android.util.Log.d("ccc","stopPlayVoice");
         isPlaying = false;
         isPause = false;
         mMediaPlayer.stop();
@@ -316,87 +293,4 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
         mMediaPlayer.pause();
         mControl.setImageResource(R.drawable.user_voice_play_icon);
     }
-
-    // ============================================================================================
-    // 网络层
-    // ============================================================================================
-        /*
-    private ProgressDialog mProgressDialog;
-
-    private void showProgressDialog(){
-        mProgressDialog = ProgressDialog.show(this, "提示", "正在上传中...");
-    }
-
-    private void dismisslProgressDialog(){
-        if(mProgressDialog!=null){
-            mProgressDialog.dismiss();
-        }
-    }
-
-
-
-
-     private String mUploadFilePath;
-    private void updateUserData() {
-        if(voiceRecorder == null || TextUtils.isEmpty( voiceRecorder.getVoiceFilePath())){
-            return;
-        }
-        FileUploadManager.getInstance().upload( voiceRecorder.getVoiceFilePath(),
-                FileUploadManager.getInstance().generateUserVoiceFileName(FileUtils.getFileNameBySuffix(voiceRecorder.getVoiceFilePath())),
-                new UpCompletionHandler() {
-                    @Override
-                    public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
-                        android.util.Log.d("aaaa","s = " + s);
-                        android.util.Log.d("aaaa","responseInfo = " + responseInfo);
-                        android.util.Log.d("aaaa","jsonObject = " + jsonObject);
-                        if (responseInfo != null && responseInfo.isOK() && !TextUtils.isEmpty(s)) {
-                            mUploadFilePath = HttpUrlManager.QI_NIU_HOST + s;
-                            android.util.Log.d("aaaa","mUploadFilePath = " + mUploadFilePath);
-                            XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    XiuxiuApplication.getInstance().getQueue()
-                                            .add(new StringRequest(getUpdateUrl(), mRefreshListener, mRefreshErroListener));
-                                }
-                            });
-                        }
-                    }
-                });
-    }
-
-    private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            Gson gson = new Gson();
-            XiuxiuResult res = gson.fromJson(response, XiuxiuResult.class);
-            android.util.Log.d("cccc","error response= " + response);
-            if(res.isSuccess()){
-                XiuxiuUserInfoResult info = new XiuxiuUserInfoResult();
-                info.setVoice(mUploadFilePath);
-                XiuxiuUserInfoResult.save(info);
-                dismisslProgressDialog();
-                ToastUtil.showMessage(VoiceIntroductionActivity.this, "资料更新成功!");
-                finish();
-            }else{
-                dismisslProgressDialog();
-                ToastUtil.showMessage(VoiceIntroductionActivity.this, "修改失败!");
-            }
-        }
-    };
-    private Response.ErrorListener mRefreshErroListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            android.util.Log.d("cccc","error = " + error.getMessage());
-            dismisslProgressDialog();
-            ToastUtil.showMessage(VoiceIntroductionActivity.this, "修改失败!");
-        }
-    };
-    private String getUpdateUrl() {
-        return Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.UPDATE_USER_INFO)
-                .appendQueryParameter(XiuxiuUserInfoResult.XIUXIU_ID, XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter(XiuxiuUserInfoResult.VOICE, mUploadFilePath)
-                .build().toString();
-    }
-    */
 }

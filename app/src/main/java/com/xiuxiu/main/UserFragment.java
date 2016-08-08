@@ -243,6 +243,10 @@ public class UserFragment extends Fragment implements View.OnClickListener{
             case R.id.xiuxiu_settings:
                 XiuxiuSettingsPage.startActivity(getActivity());
                 break;
+            case R.id.feedback:
+//                FeedbackAgent agent = new FeedbackAgent(context);
+//                agent.startFeedbackActivity();
+                break;
         }
     }
 
