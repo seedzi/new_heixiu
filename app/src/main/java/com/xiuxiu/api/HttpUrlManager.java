@@ -51,6 +51,8 @@ public class HttpUrlManager {
 	public static String COMPLAIN_USER = "complainUser";
 	/**分页查看被投诉用户与标签理由*/
 	public static String SEARCH_BECOMPLAIN_USERS = "searchUserLables";
+	/**获取礼物列表*/
+	public static String GET_GIFTS_DISPATH = "getGiftsDispath";
 
 	public static String commondUrl(){
 		return HOST + "/user_command";

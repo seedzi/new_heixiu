@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.ui;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hyphenate.EMChatRoomChangeListener;
@@ -18,6 +19,8 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.model.EmojiconExampleGroupData;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
@@ -148,8 +151,11 @@ public class EaseChatFragment extends EaseBaseFragment {
 
         extendMenuItemClickListener = new MyItemClickListener();
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
-        // init input menu
-        inputMenu.init(null);
+        // init input menu changed by huzhi
+        List<EaseEmojiconGroupEntity> emojiconGroupList = new ArrayList<EaseEmojiconGroupEntity>();
+        emojiconGroupList.add(EmojiconExampleGroupData.getData());
+        inputMenu.init(emojiconGroupList);
+//        inputMenu.init(null);
 
         registerExtendMenuItem();
 

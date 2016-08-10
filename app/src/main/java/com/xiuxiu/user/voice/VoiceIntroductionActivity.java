@@ -62,6 +62,7 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
 
         mTimeTxt = (TextView)findViewById(R.id.time_txt);
         findViewById(R.id.save).setOnClickListener(this);
+        findViewById(R.id.back).setOnClickListener(this);
     }
 
     @Override
@@ -96,6 +97,9 @@ public class VoiceIntroductionActivity extends BaseActivity implements View.OnCl
                 bundle.putString("data", voiceRecorder.getVoiceFilePath());
                 intent.putExtras(bundle);
                 setResult(RESULT_OK,intent);
+                finish();
+                break;
+            case R.id.back:
                 finish();
                 break;
             default:

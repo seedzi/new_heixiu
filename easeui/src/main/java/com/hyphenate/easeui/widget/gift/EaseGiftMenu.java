@@ -102,6 +102,7 @@ public class EaseGiftMenu extends FrameLayout {
             }
             holder = (Holder) convertView.getTag();
             holder.giftIv.setImageDrawable(new ColorDrawable(Color.parseColor("#a6a6a6")));
+            int price = -1;
             switch (position){
                 case 0:
                     holder.giftIv.setImageResource(R.drawable.gift_01);
@@ -126,23 +127,29 @@ public class EaseGiftMenu extends FrameLayout {
                 case 4:
                     holder.giftIv.setImageResource(R.drawable.gift_05);
                     holder.titleTv.setText("我爱你");
-                    holder.priceTv.setText("３咻币");
+                    holder.priceTv.setText("3咻币");
                     break;
                 case 5:
                     holder.giftIv.setImageResource(R.drawable.gift_06);
                     holder.titleTv.setText("钻戒");
-                    holder.priceTv.setText("５咻币");
+                    holder.priceTv.setText("5咻币");
                     break;
                 case 6:
                     holder.giftIv.setImageResource(R.drawable.gift_07);
                     holder.titleTv.setText("香水");
-                    holder.priceTv.setText("５咻币");
+                    holder.priceTv.setText("5咻币");
                     break;
                 case 7:
                     holder.giftIv.setImageResource(R.drawable.gift_08);
                     holder.titleTv.setText("跑车");
-                    holder.priceTv.setText("８咻币");
+                    holder.priceTv.setText("8咻币");
                     break;
+            }
+            if(GiftManager.getInstance().getGifts().get(position)!=null){
+                price = GiftManager.getInstance().getGifts().get(position);
+            }
+            if(price!=-1) {
+                holder.priceTv.setText(price + "咻币");
             }
             return convertView;
         }

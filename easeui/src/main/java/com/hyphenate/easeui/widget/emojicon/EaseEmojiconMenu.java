@@ -63,17 +63,19 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
 	}
 	
 	public void init(List<EaseEmojiconGroupEntity> groupEntities){
+        //huzhi
+        /**/
 	    if(groupEntities == null || groupEntities.size() == 0){
 	        return;
 	    }
+        android.util.Log.d("aaaaa","groupEntities.size()  = " + groupEntities.size() );
 	    for(EaseEmojiconGroupEntity groupEntity : groupEntities){
 	        emojiconGroupList.add(groupEntity);
 	        tabBar.addTab(groupEntity.getIcon());
 	    }
-	    
 	    pagerView.setPagerViewListener(new EmojiconPagerViewListener());
         pagerView.init(emojiconGroupList, emojiconColumns,bigEmojiconColumns);
-        
+
         tabBar.setTabBarItemClickListener(new EaseScrollTabBarItemClickListener() {
             
             @Override
@@ -81,7 +83,7 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
                 pagerView.setGroupPostion(position);
             }
         });
-	    
+
 	}
 	
 	

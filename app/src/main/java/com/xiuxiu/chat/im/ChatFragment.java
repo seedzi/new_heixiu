@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,10 +21,12 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.model.EmojiconExampleGroupData;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.gift.GiftItemClickListener;
 import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
@@ -126,6 +129,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         android.util.Log.d(TAG, "onDestroyView()");
     }
 
+    ImageView xiuxiuTaskBt;
+    private int _xDelta;
+    private int _yDelta;
     @Override
     protected void setUpView() {
         setChatFragmentListener(this);
@@ -133,13 +139,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 
         // 咻羞任务入口
         RelativeLayout rootView = (RelativeLayout)inputMenu.getParent();
-        ImageView xiuxiuTaskBt = new ImageView(getActivity().getApplicationContext());
+        xiuxiuTaskBt = new ImageView(getActivity().getApplicationContext());
         xiuxiuTaskBt.setImageResource(R.drawable.xiuxiu_task_bt_selector);
         RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         rl.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         rl.addRule(RelativeLayout.BELOW, R.id.title_bar);
-        rl.setMargins(0, 36, 10, 0);
+        rl.setMargins(0, 25, 10, 0);
         rootView.addView(xiuxiuTaskBt, rl);
         xiuxiuTaskBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +153,41 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 XiuxiuTaskPage.startActivity4Result(ChatFragment.this, REQUEST_CODE_XIUXIU);
             }
         });
+        xiuxiuTaskBt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int X = (int) event.getRawX();
+                final int Y = (int) event.getRawY();
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) xiuxiuTaskBt
+                                .getLayoutParams();
+                        _yDelta = Y - lParams.topMargin;
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        break;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) xiuxiuTaskBt
+                                .getLayoutParams();
+                        layoutParams.topMargin = Y - _yDelta;
+                        if (layoutParams.topMargin < 0) {
+                            layoutParams.topMargin = 0;
+                        }
+                        if (layoutParams.topMargin > 1000) {
+                            layoutParams.topMargin = 1000;
+                        }
+                        xiuxiuTaskBt.setLayoutParams(layoutParams);
+                        break;
+                }
+                xiuxiuTaskBt.requestLayout();
+                return true;
+            }
+        });
+
         if(isWhenCreateEnterXiuxiuTaskPage){
             xiuxiuTaskBt.performClick();
         }

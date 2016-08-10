@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -76,7 +77,7 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         style="?android:attr/progressBarStyleHorizontal"
-        android:background="@color/xiuxiu_voice_progressbar_bg_color"/>
+        android:background="#f4f4f4"/>
 
 
     <ImageView

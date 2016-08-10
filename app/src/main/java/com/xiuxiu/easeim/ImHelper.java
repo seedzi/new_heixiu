@@ -20,8 +20,11 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.model.EmojiconExampleGroupData;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.xiuxiu.R;
@@ -444,7 +447,6 @@ public class ImHelper {
         });
 
         //设置表情provider
-        /*
         easeUI.setEmojiconInfoProvider(new EaseUI.EaseEmojiconInfoProvider() {
 
             @Override
@@ -463,7 +465,7 @@ public class ImHelper {
                 //返回文字表情emoji文本和图片(resource id或者本地路径)的映射map
                 return null;
             }
-        });*/
+        });
 
         //不设置，则使用easeui默认的
         easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {

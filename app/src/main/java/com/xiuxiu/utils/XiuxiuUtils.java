@@ -13,10 +13,12 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
+import com.xiuxiu.api.XiuxiuGiftResult;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuResult;
 import com.xiuxiu.api.XiuxiuTimsResult;
@@ -33,6 +35,12 @@ import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.server.UpdateActiveUserManager;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by huzhi on 16-6-18.
@@ -73,6 +81,8 @@ public class XiuxiuUtils {
         }
         //９.因为不知道 PathUtil init()方法调用时机  目前这样手动调用 TODO　huzhi
         PathUtil.getInstance().initDirs("xiuxiu", "im", context);
+        //10.获取礼物列表
+        getGiftsDispath();
     }
 
     private static void doSomthingOnAppStartInBackground(final Context context) {
@@ -494,5 +504,57 @@ public class XiuxiuUtils {
                 });
             }
         }).start();
+    }
+    // ============================================================================================
+    //　获取礼物列表
+    // ============================================================================================
+    public static void getGiftsDispath(){
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getGiftsDispathUrl(), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"getGiftsDispath()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuGiftResult res = gson.fromJson(response, XiuxiuGiftResult.class);
+            if(res!=null&&res.isSuccess()){
+                dealTxt(response);
+                android.util.Log.d(TAG,"getGiftsDispath()  res = " + res.gifts.toString());
+            }else{
+                android.util.Log.d(TAG,"no");
+            }
+        }catch (Exception e){
+            android.util.Log.d(TAG,"Exception  e = " +  e.getMessage());
+        }
+    }
+    private static String getGiftsDispathUrl() {
+        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.GET_GIFTS_DISPATH)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .build().toString();
+        android.util.Log.d(TAG, "getSearchBecomplainUsersUrl() url = " + url);
+        return url;
+    }
+
+    private static void dealTxt(String res){
+        if(TextUtils.isEmpty(res)){
+            return;
+        }
+        try {
+            res = res.substring(23,res.length()-2);
+            res.replaceAll("\"", "");
+            android.util.Log.d(TAG, "replaceAll res = " + res);
+            String[] strs = res.split(",");
+            for(String s:strs){
+                String[] chids = s.split(":");
+                GiftManager.getInstance().getGifts().put(Integer.valueOf(""+(chids[0].charAt(1))), Integer.valueOf(chids[1]));
+            }
+            android.util.Log.d(TAG,"gifts size = " + GiftManager.getInstance().getGifts().size());
+        }catch (Exception e){
+            android.util.Log.d(TAG,"dealTxt error = " + e.getMessage());
+        }
     }
 }
