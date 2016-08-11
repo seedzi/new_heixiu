@@ -180,7 +180,7 @@ public class ImHelper {
                 for (final EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
                     //应用在后台，不需要刷新UI,通知栏提示新消息
-                    if(!/*easeUI*/EaseUI.getInstance().hasForegroundActivies()){
+                    if(!EaseUI.getInstance().hasForegroundActivies()){
                         getNotifier().onNewMsg(message);
                     }
                     if(EaseUserCacheManager.getInstance().getBeanById(message.getUserName())==null){
@@ -191,19 +191,6 @@ public class ImHelper {
                             }
                         }).start();
                     }
-                    // TODO
-                    /*
-                    try {
-                        android.util.Log.d(TAG, "收到消息");
-                        XiuxiuUserInfoResult info = new XiuxiuUserInfoResult();
-                        info.setXiuxiu_id(message.getUserName());
-                        info.setXiuxiu_name(message.getStringAttribute("em_from_nick_name"));
-                        info.setPic("");
-                        EaseUserCacheManager.getInstance().add(info);
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
-                    }
-                    */
                 }
             }
 
@@ -212,7 +199,6 @@ public class ImHelper {
                 android.util.Log.d("12345","onCmdMessageReceived");
                 try {
                     for (EMMessage message : messages) {
-                        EMLog.d(TAG, "收到透传消息");
                         //获取消息body
                         EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                         final String action = cmdMsgBody.action();//获取自定义action
@@ -229,40 +215,13 @@ public class ImHelper {
                                             .putExtra("xiuxiub", message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE_COST_XIUXIUB)));
                                 }
                             }
-                        }else if (EaseConstant.MESSAGE_ATTR_XIUXIU_BROADCAST_ACTION.equals(action)){
+                        }else if (EaseConstant.MESSAGE_ATTR_XIUXIU_BROADCAST_ACTION.equals(action)){//咻咻广播
                             XiuxiuBroadcastManager.getInstance().saveXiuxiuBroadcastMsg(message);
-                            String broadCastTxt = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST_CONTENT);
-                            android.util.Log.d("12345","broadCastTxt = " + broadCastTxt);
-                        }else{
-                            android.util.Log.d("12345","未进入拨打电话");
+                            //应用在后台，不需要刷新UI,通知栏提示新消息
+                            if(!EaseUI.getInstance().hasForegroundActivies()){
+                                getNotifier().onNewMsg(message);
+                            }
                         }
-
-                        /*
-                        //获取扩展属性 此处省略
-                        EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action, message.toString()));
-                        final String str = appContext.getString(com.hyphenate.easeui.R.string.receive_the_passthrough);
-
-                        final String CMD_TOAST_BROADCAST = "hyphenate.demo.cmd.toast";
-                        IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
-
-                        if (broadCastReceiver == null) {
-                            broadCastReceiver = new BroadcastReceiver() {
-
-                                @Override
-                                public void onReceive(Context context, Intent intent) {
-                                    // TODO Auto-generated method stub
-                                    Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
-                                }
-                            };
-
-                            //注册广播接收者
-                            appContext.registerReceiver(broadCastReceiver, cmdFilter);
-                        }
-
-                        Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
-                        broadcastIntent.putExtra("cmd_value", str + action);
-                        appContext.sendBroadcast(broadcastIntent, null);
-                        */
                     }
                 }catch (Exception e){
                 }

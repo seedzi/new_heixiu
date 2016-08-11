@@ -5,7 +5,8 @@
     android:paddingTop="2dp"
     android:paddingBottom="2dp">
     <RelativeLayout
-        android:layout_width="match_parent" android:layout_height="60dp">
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
         <com.hyphenate.easeui.widget.CircleImageView
             android:id="@+id/head_img"
             android:layout_marginLeft="10dp"
@@ -42,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#8b8b8b"
+            android:hint="暂无消息"
             android:textSize="@dimen/line_txt_size_normal"/>
 
         <TextView
@@ -53,7 +55,6 @@
             android:layout_height="wrap_content"
             android:textColor="#8b8b8b"
             android:text=""
-            android:hint="暂无消息"
             android:textSize="@dimen/line_txt_size_small"/>
 
     </RelativeLayout>
