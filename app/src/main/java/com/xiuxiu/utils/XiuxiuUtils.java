@@ -2,7 +2,10 @@ package com.xiuxiu.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.*;
+import android.os.Process;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
+import com.xiuxiu.SharePreferenceWrap;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuGiftResult;
@@ -41,6 +45,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by huzhi on 16-6-18.
@@ -556,5 +563,50 @@ public class XiuxiuUtils {
         }catch (Exception e){
             android.util.Log.d(TAG,"dealTxt error = " + e.getMessage());
         }
+    }
+
+    // ============================================================================================
+    //　后台线程
+    // ============================================================================================
+    private static ThreadPoolExecutor sExecutorService = new ThreadPoolExecutor(1, 2, 60L,
+            TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+
+    public static void runInNewThread(final Runnable runnable) {
+        runInNewThread(runnable, android.os.Process.THREAD_PRIORITY_BACKGROUND);
+    }
+    public static void runInNewThread(final Runnable runnable, final int threadPriority) {
+        if (runnable == null) {
+            return;
+        }
+        try {
+            sExecutorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Process.setThreadPriority(threadPriority);
+                    runnable.run();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ============================================================================================
+    //　清单文件配置
+    // ============================================================================================
+    public static final String SHARE_PREFERENCE_NAME = "xiuxiu_preference";
+    private  static   SharePreferenceWrap sharePreferenceWrap;
+    public static SharedPreferences getDefaultSharedPreferences(){
+        if(sharePreferenceWrap==null) {
+            sharePreferenceWrap = new SharePreferenceWrap(SHARE_PREFERENCE_NAME);
+        }
+        return sharePreferenceWrap;
+    }
+
+    public static boolean isXiuxiuBroadcastPrompt(){
+        return XiuxiuUtils.getDefaultSharedPreferences().getBoolean("has_xiuxiu_broadcast",false);
+    }
+    public static void saveXiuxiuBroadcastPrompt(boolean value){
+        XiuxiuUtils.getDefaultSharedPreferences().edit().putBoolean("has_xiuxiu_broadcast",value).commit();
     }
 }

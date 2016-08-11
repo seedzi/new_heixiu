@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
+    <RelativeLayout
+        android:layout_width="match_parent" android:layout_height="60dp">
+        <com.hyphenate.easeui.widget.CircleImageView
+            android:id="@+id/head_img"
+            android:layout_marginLeft="10dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_centerVertical="true"
+            android:src="#f4f3f2"/>
+
+        <com.xiuxiu.Xiuxiubroadcast.DotView
+            android:layout_height="10dp"
+            android:layout_width="10dp"
+            android:layout_marginLeft="43dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_toRightOf="@id/head_img"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="14dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="咻羞广播"
+            android:textSize="@dimen/line_txt_size_big"/>
+
+
+        <TextView
+            android:id="@+id/description"
+            android:text=""
+            android:layout_toRightOf="@id/head_img"
+            android:layout_below="@id/user_name"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8b8b8b"
+            android:textSize="@dimen/line_txt_size_normal"/>
+
+        <TextView
+            android:id="@+id/online_time"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8b8b8b"
+            android:text=""
+            android:hint="暂无消息"
+            android:textSize="@dimen/line_txt_size_small"/>
+
+    </RelativeLayout>
+    <View
+
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#b2b2b2"/><!--         android:layout_marginLeft="79dp" -->
+</com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy>

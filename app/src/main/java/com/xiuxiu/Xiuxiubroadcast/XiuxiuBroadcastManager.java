@@ -9,17 +9,24 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.HttpUrlManager;
 import com.xiuxiu.api.XiuxiuActiveUserResult;
+import com.xiuxiu.api.XiuxiuApi;
 import com.xiuxiu.api.XiuxiuLoginResult;
 import com.xiuxiu.api.XiuxiuQueryActiveUserResult;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.api.XiuxiuUserQueryResult;
+import com.xiuxiu.bean.XiuxiuBroadcastMsg;
+import com.xiuxiu.db.XiuxiuBroadcastMsgTable;
+import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.utils.Md5Util;
+import com.xiuxiu.utils.XiuxiuUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,19 +49,26 @@ public class XiuxiuBroadcastManager {
 
     private XiuxiuBroadcastManager(){}
 
-    public void sendXiuxiuBroadcast(List<XiuxiuUserInfoResult> list,String txt){
+    /**
+     * 发送咻咻广播
+     * @param list
+     * @param txt
+     */
+    public static void sendXiuxiuBroadcast(List<XiuxiuUserInfoResult> list,String txt){
         if(list==null){
             return;
         }
         for(XiuxiuUserInfoResult user:list){
-            EMMessage message = EMMessage.createTxtSendMessage(txt, user.getXiuxiu_id());
-            message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST,true);
-            //发送消息
-            EMClient.getInstance().chatManager().sendMessage(message);
+            EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
+            String action = EaseConstant.MESSAGE_ATTR_XIUXIU_BROADCAST_ACTION;
+            EMCmdMessageBody cmdBody = new EMCmdMessageBody(action);
+            cmdMsg.setReceipt(user.getXiuxiu_id());
+            cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST, true);
+            cmdMsg.setAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST_CONTENT,txt);
+            cmdMsg.addBody(cmdBody);
+            EMClient.getInstance().chatManager().sendMessage(cmdMsg);
         }
-
     }
-
 
     public List<XiuxiuUserInfoResult> getXiuxiuBroadcastUserList() {
         String params = getActiveXiuxiuIds();
@@ -64,9 +78,9 @@ public class XiuxiuBroadcastManager {
         return null;
     }
 
-    // ===============================================================================================
+    // =============================================================================================
     // 获取活跃用户id
-    // ===============================================================================================
+    // =============================================================================================
     private String getActiveXiuxiuIds(){
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
@@ -111,9 +125,9 @@ public class XiuxiuBroadcastManager {
 
 
 
-    // ===============================================================================================
+    // =============================================================================================
     // 获取用户信息
-    // ===============================================================================================
+    // =============================================================================================
     private List<XiuxiuUserInfoResult> queryUserList(String xiuxiuIds){
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()
@@ -144,4 +158,66 @@ public class XiuxiuBroadcastManager {
                 .build().toString();
         return url;
     }
+
+    // =============================================================================================
+    // 处理接受到的咻咻广播消息
+    // =============================================================================================
+    public void saveXiuxiuBroadcastMsg(final EMMessage message){
+        if(message==null){
+            return;
+        }
+        XiuxiuUtils.runInNewThread(new Runnable() {
+            @Override
+            public void run() {
+                //1.保持咻咻
+                XiuxiuBroadcastMsgTable.insert(XiuxiuBroadcastMsg.fromEmMessage2Bean(message));
+                //2.获取用户信息
+                if(EaseUserCacheManager.getInstance().getBeanById(message.getFrom())==null){
+                    XiuxiuApi.queryUserInfoSyn(message.getUserName());
+                }
+                XiuxiuUtils.saveXiuxiuBroadcastPrompt(true);
+                //3.通知刷新
+                notifyBroadcastMsg(XiuxiuBroadcastMsg.fromEmMessage2Bean(message));
+            }
+        });
+
+    }
+    // =============================================================================================
+    // 咻咻消息的广播接受者
+    // =============================================================================================
+
+    private List<XiuxiuBroadcastMsgObserver> mAppUpdateObservers = new ArrayList<XiuxiuBroadcastMsgObserver>();
+
+    public void notifyBroadcastMsg(XiuxiuBroadcastMsg msg) {
+        for (XiuxiuBroadcastMsgObserver observer : mAppUpdateObservers) {
+            observer.onBroadcastMsgNofify(msg);
+        }
+    }
+
+    public void registObserver(XiuxiuBroadcastMsgObserver observer) {
+        if (observer == null || mAppUpdateObservers.contains(observer)) {
+            return;
+        }
+        mAppUpdateObservers.add(observer);
+    }
+
+    public void unregistObserver(XiuxiuBroadcastMsgObserver observer) {
+        mAppUpdateObservers.remove(observer);
+    }
+
+    public void cleanAllObserver() {
+        mAppUpdateObservers.clear();
+    }
+
+    public static interface XiuxiuBroadcastMsgObserver {
+        void onBroadcastMsgNofify(XiuxiuBroadcastMsg msg);
+    }
+
+    // =============================================================================================
+    // 咻咻消息的广播的sharedprefenece
+    // =============================================================================================
+    public boolean isBroadCastPrompt(){
+        return false;
+    }
+
 }

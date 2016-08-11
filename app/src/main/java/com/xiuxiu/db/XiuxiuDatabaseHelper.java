@@ -55,6 +55,7 @@ public class XiuxiuDatabaseHelper extends SQLiteOpenHelper {
     private void init() {
         registTableHelper(new XiuxiuUserInfoTable());
         registTableHelper(new XiuxiuActionMsgTable());
+        registTableHelper(new XiuxiuBroadcastMsgTable());
     }
 
     @Override

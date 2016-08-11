@@ -2,12 +2,15 @@ package com.xiuxiu.main.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -15,7 +18,15 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.util.EMLog;
 import com.xiuxiu.R;
+import com.xiuxiu.XiuxiuApplication;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastListPage;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastManager;
+import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.bean.XiuxiuBroadcastMsg;
 import com.xiuxiu.chat.ChatPage;
+import com.xiuxiu.db.XiuxiuBroadcastMsgTable;
+import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.main.MainActivity;
 import com.xiuxiu.main.chat.widget.ContactItemView;
@@ -67,6 +78,10 @@ public class ConversationListManager {
      * 列表头部好友申请控件
      */
     private ContactItemView applicationItem;
+    /**
+     * 列表头部咻咻广播提示
+     */
+    private XiuxiuBroadcastHeadLayouy mXiuxiuBroadcastItem;
 
     // ===================================== 刷新罗辑 start =========================================//
     protected Handler handler = new Handler(){
@@ -146,7 +161,7 @@ public class ConversationListManager {
 
     private void setUpViews(Context context){
         mContext = context;
-        mLayout = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.list_layout,null);
+        mLayout = (ViewGroup)LayoutInflater.from(context).inflate(R.layout.list_layout, null);
         mPullToRefreshListView = (PullToRefreshListView) mLayout.findViewById(R.id.list);
         mEmptyView = mLayout.findViewById(R.id.empty_view);
         mLoadingView = mLayout.findViewById(R.id.loading_layout);
@@ -163,11 +178,14 @@ public class ConversationListManager {
                         Toast.makeText(MainActivity.getInstance(), R.string.Cant_chat_with_yourself, 0).show();
                     else {
                         // 进入聊天页面
-                        ChatPage.startActivity(MainActivity.getInstance(), username, username,false);
+                        ChatPage.startActivity(MainActivity.getInstance(), username, username, false);
                     }
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
         });
+
+        // 添加咻咻广播提示　和　好友申请
         applicationItem = new ContactItemView(mContext);
         applicationItem.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -178,7 +196,31 @@ public class ConversationListManager {
                 mContext.startActivity(intent);
             }
         });
-        mPullToRefreshListView.getRefreshableView().addHeaderView(applicationItem);
+        mXiuxiuBroadcastItem = (XiuxiuBroadcastHeadLayouy) LayoutInflater.from(mContext).inflate(R.layout.xiuxiu_broadcast_head_layout,null);
+        mXiuxiuBroadcastItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 进入申请与通知页面
+                Intent intent = new Intent(mContext, XiuxiuBroadcastListPage.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
+        });
+        LinearLayout ll = new LinearLayout(mContext);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ll.addView(mXiuxiuBroadcastItem);
+        ll.addView(applicationItem);
+        mPullToRefreshListView.getRefreshableView().addHeaderView(ll);
+
+        XiuxiuBroadcastManager.getInstance().registObserver(observer);
+
+        // 初始化数据
+        Cursor cursor =XiuxiuBroadcastMsgTable.queryCursor(1);
+        if(cursor!=null && cursor.moveToFirst()){
+            XiuxiuBroadcastMsg msg = XiuxiuBroadcastMsg.fromCursor2Bean(cursor);
+            setupXiuxiuBroadcastLayout(msg);
+        }
     }
 
     private void initData(Context context){
@@ -267,5 +309,44 @@ public class ConversationListManager {
                 }
             });
         }
+    }
+
+
+
+    XiuxiuBroadcastManager.XiuxiuBroadcastMsgObserver observer = new XiuxiuBroadcastManager.XiuxiuBroadcastMsgObserver() {
+        @Override
+        public void onBroadcastMsgNofify(final XiuxiuBroadcastMsg msg) {
+            if(msg!=null){
+                XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+//                        setupXiuxiuBroadcastLayout(msg);
+                    }
+                });
+            }
+        }
+    };
+
+    private void setupXiuxiuBroadcastLayout(XiuxiuBroadcastMsg msg){
+        if(msg==null){
+            return;
+        }
+        String content = "";
+        String timeTxt = "";
+        XiuxiuUserInfoResult info = EaseUserCacheManager.getInstance().getBeanById(msg.fromXiuxiuId);
+        if (info != null) {
+            content = info.getXiuxiu_name() + ": " + msg.content;
+        } else {
+            content = msg.fromXiuxiuId + ": " + msg.content;
+        }
+        timeTxt = com.xiuxiu.utils.DateUtils.getTextByTime(
+                XiuxiuApplication.getInstance().getApplicationContext(),
+                msg.updateTime,
+                R.string.date_fromate_anecdote);
+        mXiuxiuBroadcastItem.update(content, timeTxt);
+    }
+
+    public void onDestroy() {
+        XiuxiuBroadcastManager.getInstance().unregistObserver(observer);
     }
 }

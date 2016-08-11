@@ -81,6 +81,9 @@ public class ChatFragment extends Fragment implements ViewPager.OnPageChangeList
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if(mConversationListManager!=null){
+            mConversationListManager.onDestroy();
+        }
         if(mContactListManager!=null){
             mContactListManager.onDestroy();
         }

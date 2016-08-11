@@ -92,6 +92,13 @@
             android:name=".Xiuxiubroadcast.XiuxiuBroadCastSettingsPage"
             android:label="@string/app_name">
         </activity>
+
+        <!-- 咻咻消息列表　-->
+        <activity android:name="com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastListPage"
+            android:theme="@style/Theme"
+            android:label="@string/app_name">
+        </activity>
+
         <!-- 咻广播 -->
         <activity
             android:theme="@style/Theme"

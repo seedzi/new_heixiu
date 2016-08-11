@@ -28,6 +28,7 @@ import com.hyphenate.easeui.model.EmojiconExampleGroupData;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.xiuxiu.R;
+import com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastManager;
 import com.xiuxiu.api.XiuxiuApi;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
 import com.xiuxiu.call.voice.VoiceCallActivity;
@@ -220,17 +221,18 @@ public class ImHelper {
                                     message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_STATUS));
                             XiuxiuActionMsgManager.getInstance().notifyListener();
                             if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE)){
-                                android.util.Log.d("12345","进入拨打判断");
                                 if (!EMClient.getInstance().isConnected()) {
-                                    android.util.Log.d("12345","!EMClient.getInstance().isConnected()");
                                 } else { //拨打电话
-                                    android.util.Log.d("12345", "拨打电话");
                                     MainActivity.getInstance().startActivity(new Intent(MainActivity.getInstance(),
                                             VoiceCallActivity.class).putExtra("username", message.getFrom())
                                             .putExtra("isComingCall", false)
                                             .putExtra("xiuxiub", message.getStringAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_ACTION_CALL_VOICE_COST_XIUXIUB)));
                                 }
                             }
+                        }else if (EaseConstant.MESSAGE_ATTR_XIUXIU_BROADCAST_ACTION.equals(action)){
+                            XiuxiuBroadcastManager.getInstance().saveXiuxiuBroadcastMsg(message);
+                            String broadCastTxt = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_BROADCAST_CONTENT);
+                            android.util.Log.d("12345","broadCastTxt = " + broadCastTxt);
                         }else{
                             android.util.Log.d("12345","未进入拨打电话");
                         }
