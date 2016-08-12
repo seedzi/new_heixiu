@@ -24,8 +24,9 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
 	
 	private int emojiconColumns;
 	private int bigEmojiconColumns;
-	private final int defaultBigColumns = 4;
+	private final int defaultBigColumns = 7;//4 changed by huzhi
 	private final int defaultColumns = 7;
+
     private EaseEmojiconScrollTabBar tabBar;
     private EaseEmojiconIndicatorView indicatorView;
     private EaseEmojiconPagerView pagerView;
@@ -63,12 +64,9 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
 	}
 	
 	public void init(List<EaseEmojiconGroupEntity> groupEntities){
-        //huzhi
-        /**/
 	    if(groupEntities == null || groupEntities.size() == 0){
 	        return;
 	    }
-        android.util.Log.d("aaaaa","groupEntities.size()  = " + groupEntities.size() );
 	    for(EaseEmojiconGroupEntity groupEntity : groupEntities){
 	        emojiconGroupList.add(groupEntity);
 	        tabBar.addTab(groupEntity.getIcon());
@@ -83,7 +81,6 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
                 pagerView.setGroupPostion(position);
             }
         });
-
 	}
 	
 	
@@ -91,7 +88,7 @@ public class EaseEmojiconMenu extends EaseEmojiconMenuBase{
      * 添加表情组
      * @param groupEntity
      */
-    public void addEmojiconGroup(EaseEmojiconGroupEntity groupEntity){
+    public void addEmojiconGroup(EaseEmojiconGroupEntity groupEntity) {
         emojiconGroupList.add(groupEntity);
         pagerView.addEmojiconGroup(groupEntity, true);
         tabBar.addTab(groupEntity.getIcon());

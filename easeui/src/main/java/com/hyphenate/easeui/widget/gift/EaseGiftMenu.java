@@ -1,6 +1,7 @@
 package com.hyphenate.easeui.widget.gift;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
@@ -50,11 +51,20 @@ public class EaseGiftMenu extends FrameLayout {
 
         GridView giftGrid = (GridView) findViewById(R.id.gift_wall);
         giftGrid.setAdapter(new GiftAdpater());
-        giftGrid.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        giftGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(GiftManager.getInstance().getListener()!=null){
+                if (GiftManager.getInstance().getListener() != null) {
                     GiftManager.getInstance().getListener().onItemClick(position);
+                }
+            }
+        });
+
+        findViewById(R.id.chong_zhi).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(GiftManager.getInstance().getListener()!=null){
+                    GiftManager.getInstance().getListener().onWalletClick();
                 }
             }
         });

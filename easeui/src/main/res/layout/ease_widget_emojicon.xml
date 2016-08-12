@@ -8,7 +8,7 @@
 
     <com.hyphenate.easeui.widget.emojicon.EaseEmojiconPagerView 
         android:layout_width="match_parent"
-        android:layout_height="142dp"
+        android:layout_height="160dp"
         android:id="@+id/pager_view"
         />
     
@@ -29,6 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:id="@+id/tab_bar"
-         />
+        android:visibility="gone"/>
     
 </LinearLayout>

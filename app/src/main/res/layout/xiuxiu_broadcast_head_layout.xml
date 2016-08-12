@@ -13,7 +13,7 @@
             android:layout_width="43dp"
             android:layout_height="43dp"
             android:layout_centerVertical="true"
-            android:src="#f4f3f2"/>
+            android:src="@drawable/xiuxiu_broadcast_icon"/>
 
         <com.xiuxiu.Xiuxiubroadcast.DotView
             android:layout_height="10dp"

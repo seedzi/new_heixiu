@@ -25,6 +25,7 @@ import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EmojiconExampleGroupData;
+import com.hyphenate.easeui.model.EmojiconXiuxiuGroupData;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.xiuxiu.R;
@@ -412,7 +413,7 @@ public class ImHelper {
 
             @Override
             public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
-                EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
+                EaseEmojiconGroupEntity data = EmojiconXiuxiuGroupData.getData();
                 for (EaseEmojicon emojicon : data.getEmojiconList()) {
                     if (emojicon.getIdentityCode().equals(emojiconIdentityCode)) {
                         return emojicon;

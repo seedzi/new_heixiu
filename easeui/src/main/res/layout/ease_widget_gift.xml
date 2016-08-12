@@ -20,6 +20,7 @@
         android:layout_height="1px"
         android:background="#ededed"/>
     <TextView
+        android:id="@+id/chong_zhi"
         android:text="充值"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"

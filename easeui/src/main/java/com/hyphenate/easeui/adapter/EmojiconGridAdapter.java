@@ -29,7 +29,8 @@ public class EmojiconGridAdapter extends ArrayAdapter<EaseEmojicon>{
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             if(emojiconType == Type.BIG_EXPRESSION){
-                convertView = View.inflate(getContext(), R.layout.ease_row_big_expression, null);
+                convertView = View.inflate(getContext(), R.layout.ease_row_expression_xiuxiu, null); //changed by huzhi
+//                convertView = View.inflate(getContext(), R.layout.ease_row_big_expression, null);
             }else{
                 convertView = View.inflate(getContext(), R.layout.ease_row_expression, null);
             }

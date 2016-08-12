@@ -43,6 +43,7 @@ import com.xiuxiu.easeim.widget.ChatRowVoiceXiuxiu;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.qupai.RecordResult;
+import com.xiuxiu.user.WalletActivity;
 import com.xiuxiu.user.invitation.AddFriendsPage;
 import com.xiuxiu.utils.ToastUtil;
 import com.xiuxiu.utils.XiuxiuUtils;
@@ -673,6 +674,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                         });
                     }
                 }).start();
+            }
+
+            @Override
+            public void onWalletClick() {
+                WalletActivity.startActivity(getActivity());
             }
         });
     }

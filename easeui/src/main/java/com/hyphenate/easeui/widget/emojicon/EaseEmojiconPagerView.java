@@ -31,8 +31,8 @@ public class EaseEmojiconPagerView extends ViewPager{
     private int emojiconRows = 3;
     private int emojiconColumns = 7;
     
-    private int bigEmojiconRows = 2;
-    private int bigEmojiconColumns = 4;
+    private int bigEmojiconRows = 3;//2
+    private int bigEmojiconColumns = 7;//4
     
     private int firstGroupPageSize;
     
@@ -130,7 +130,7 @@ public class EaseEmojiconPagerView extends ViewPager{
             }else{
                 list.addAll(emojiconList.subList(i * itemSize, totalSize));
             }
-            if(emojiType != Type.BIG_EXPRESSION){
+            if(emojiType != Type.BIG_EXPRESSION){ //changed by huzhi
                 EaseEmojicon deleteIcon = new EaseEmojicon();
                 deleteIcon.setEmojiText(EaseSmileUtils.DELETE_KEY);
                 list.add(deleteIcon);

@@ -21,6 +21,7 @@ import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.model.EmojiconExampleGroupData;
+import com.hyphenate.easeui.model.EmojiconXiuxiuGroupData;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
@@ -153,7 +154,7 @@ public class EaseChatFragment extends EaseBaseFragment {
         inputMenu = (EaseChatInputMenu) getView().findViewById(R.id.input_menu);
         // init input menu changed by huzhi
         List<EaseEmojiconGroupEntity> emojiconGroupList = new ArrayList<EaseEmojiconGroupEntity>();
-        emojiconGroupList.add(EmojiconExampleGroupData.getData());
+        emojiconGroupList.add(EmojiconXiuxiuGroupData.getData());
         inputMenu.init(emojiconGroupList);
 //        inputMenu.init(null);
 

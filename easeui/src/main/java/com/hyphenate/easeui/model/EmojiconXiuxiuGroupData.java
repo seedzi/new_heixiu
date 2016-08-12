@@ -8,47 +8,9 @@ import com.hyphenate.easeui.utils.EaseSmileUtils;
 
 import java.util.Arrays;
 
-public class EmojiconExampleGroupData {
+public class EmojiconXiuxiuGroupData {
 
-    private static String[] emojis = new String[]{
-            EaseSmileUtils.ee_1,
-            EaseSmileUtils.ee_2,
-            EaseSmileUtils.ee_3,
-            EaseSmileUtils.ee_4,
-            EaseSmileUtils.ee_5,
-            EaseSmileUtils.ee_6,
-            EaseSmileUtils.ee_7,
-            EaseSmileUtils.ee_8,
-            EaseSmileUtils.ee_9,
-            EaseSmileUtils.ee_10,
-            EaseSmileUtils.ee_11,
-            EaseSmileUtils.ee_12,
-            EaseSmileUtils.ee_13,
-            EaseSmileUtils.ee_14,
-            EaseSmileUtils.ee_15,
-            EaseSmileUtils.ee_16,
-            EaseSmileUtils.ee_17,
-            EaseSmileUtils.ee_18,
-            EaseSmileUtils.ee_19,
-            EaseSmileUtils.ee_20,
-            EaseSmileUtils.ee_21,
-            EaseSmileUtils.ee_22,
-            EaseSmileUtils.ee_23,
-            EaseSmileUtils.ee_24,
-            EaseSmileUtils.ee_25,
-            EaseSmileUtils.ee_26,
-            EaseSmileUtils.ee_27,
-            EaseSmileUtils.ee_28,
-            EaseSmileUtils.ee_29,
-            EaseSmileUtils.ee_30,
-            EaseSmileUtils.ee_31,
-            EaseSmileUtils.ee_32,
-            EaseSmileUtils.ee_33,
-            EaseSmileUtils.ee_34,
-            EaseSmileUtils.ee_35,
 
-    };
-    
     private static int[] icons = new int[]{
         R.drawable.icon_001_cover,
         R.drawable.icon_002_cover,
@@ -107,7 +69,6 @@ public class EmojiconExampleGroupData {
             R.drawable.icon_026_cover,
     };
     
-    /*
     private static final EaseEmojiconGroupEntity DATA = createData();
     
     private static EaseEmojiconGroupEntity createData(){
@@ -129,24 +90,6 @@ public class EmojiconExampleGroupData {
     public static EaseEmojiconGroupEntity getData(){
         return DATA;
     }
-    */
 
 
-    private static final EaseEmojiconGroupEntity DATA = createData();
-
-    private static EaseEmojiconGroupEntity createData(){
-        EaseEmojiconGroupEntity emojiconGroupEntity = new EaseEmojiconGroupEntity();
-        EaseEmojicon[] datas = new EaseEmojicon[icons.length];
-        for(int i = 0; i < icons.length; i++){
-            datas[i] = new EaseEmojicon(icons[i], emojis[i], Type.NORMAL);
-        }
-        emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));
-        emojiconGroupEntity.setIcon(R.drawable.ee_2);
-        emojiconGroupEntity.setType(Type.NORMAL);
-        return emojiconGroupEntity;
-    }
-
-    public static EaseEmojiconGroupEntity getData(){
-        return DATA;
-    }
 }

@@ -7,4 +7,6 @@ public interface GiftItemClickListener {
 
     void onItemClick(int poistion);
 
+    void onWalletClick();
+
 }
