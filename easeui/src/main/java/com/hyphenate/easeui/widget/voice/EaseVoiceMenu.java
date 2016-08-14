@@ -3,6 +3,7 @@ package com.hyphenate.easeui.widget.voice;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -30,9 +31,13 @@ public class EaseVoiceMenu extends FrameLayout{
 
     private ImageView mBt;
 
+    private Chronometer mChronometer;
+
     public void init(Context context){
         LayoutInflater.from(context).inflate(R.layout.ease_widget_voice, this);
         mBt = (ImageView) findViewById(R.id.voice_press_bt);
+        mChronometer = (Chronometer) findViewById(R.id.chronometer);
+        mChronometer.setText("按住说话");
     }
 
     public void setOnBtPressListener(OnTouchListener l){

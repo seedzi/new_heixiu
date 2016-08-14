@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#f2f0eb"
-    > <!-- -->
+    android:background="#f4f3f2"
+    > <!--f2f0eb -->
 
     <com.hyphenate.easeui.widget.EaseTitleBar
         android:id="@+id/title_bar"

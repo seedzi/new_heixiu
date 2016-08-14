@@ -1,14 +1,21 @@
 package com.hyphenate.easeui.widget;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -99,7 +106,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
                 if (EaseChatRowVoicePlayClickListener.isPlaying)
                     EaseChatRowVoicePlayClickListener.currentPlayListener.stopPlayVoice();
                 v.setPressed(true);
-                startRecording();
+                startRecording(v);
             } catch (Exception e) {
                 v.setPressed(false);
             }
@@ -115,11 +122,11 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             v.setPressed(false);
             if (event.getY() < 0) {
                 // discard the recorded audio.
-                discardRecording();
+                discardRecording(v);
             } else {
                 // stop recording and send voice file
                 try {
-                    int length = stopRecoding();
+                    int length = stopRecoding(v);
                     if (length > 0) {
                         if (recorderCallback != null) {
                             recorderCallback.onVoiceRecordComplete(getVoiceFilePath(), length);
@@ -136,7 +143,7 @@ public class EaseVoiceRecorderView extends RelativeLayout {
             }
             return true;
         default:
-            discardRecording();
+            discardRecording(v);
             return false;
         }
     }
@@ -153,14 +160,31 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         void onVoiceRecordComplete(String voiceFilePath, int voiceTimeLength);
     }
 
-    public void startRecording() {
+    public void startRecording(View v) {
         if (!EaseCommonUtils.isExitsSdcard()) {
             Toast.makeText(context, R.string.Send_voice_need_sdcard_support, Toast.LENGTH_SHORT).show();
             return;
         }
+        Chronometer chronometer = null;
         try {
+            //huzhi
+            chronometer= (Chronometer) ((ViewGroup) v.getParent()).findViewById(R.id.chronometer);
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+
+            //huzhi
+            AnimatorSet bouncer = new AnimatorSet();
+            PropertyValuesHolder pvhX = PropertyValuesHolder.ofFloat("scaleX", 1F, 1.2F);
+            PropertyValuesHolder pvhY = PropertyValuesHolder.ofFloat("scaleY", 1F,1.2F);
+            Animator bigAnimation = ObjectAnimator.ofPropertyValuesHolder(v,pvhX, pvhY).setDuration(50);
+            PropertyValuesHolder pvhX1 = PropertyValuesHolder.ofFloat("scaleX", 1.2F, 1F);
+            PropertyValuesHolder pvhY1 = PropertyValuesHolder.ofFloat("scaleY", 1.2F, 1F);
+            Animator smallAnimation = ObjectAnimator.ofPropertyValuesHolder(v, pvhX1, pvhY1).setDuration(50);
+            bouncer.play(smallAnimation).after(bigAnimation);
+            bouncer.start();
+
             wakeLock.acquire();
-            this.setVisibility(View.VISIBLE);
+//            this.setVisibility(View.VISIBLE); //huzhi
             recordingHint.setText(context.getString(R.string.move_up_to_cancel));
             recordingHint.setBackgroundColor(Color.TRANSPARENT);
             voiceRecorder.startRecording(context);
@@ -170,8 +194,11 @@ public class EaseVoiceRecorderView extends RelativeLayout {
                 wakeLock.release();
             if (voiceRecorder != null)
                 voiceRecorder.discardRecording();
-            this.setVisibility(View.INVISIBLE);
+//            this.setVisibility(View.INVISIBLE); //huzhi
             Toast.makeText(context, R.string.recoding_fail, Toast.LENGTH_SHORT).show();
+            chronometer.stop();
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.setText("按住说话");
             return;
         }
     }
@@ -186,21 +213,35 @@ public class EaseVoiceRecorderView extends RelativeLayout {
         recordingHint.setBackgroundColor(Color.TRANSPARENT);
     }
 
-    public void discardRecording() {
+    public void discardRecording(View v) {
+        //huzhi
+        Chronometer chronometer= (Chronometer) ((ViewGroup) v.getParent()).findViewById(R.id.chronometer);
+        chronometer.start();
+        chronometer.stop();
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.setText("按住说话");
+
         if (wakeLock.isHeld())
             wakeLock.release();
         try {
             // 停止录音
             if (voiceRecorder.isRecording()) {
                 voiceRecorder.discardRecording();
-                this.setVisibility(View.INVISIBLE);
+//                this.setVisibility(View.INVISIBLE); //huzhi
             }
         } catch (Exception e) {
         }
     }
 
-    public int stopRecoding() {
-        this.setVisibility(View.INVISIBLE);
+    public int stopRecoding(View v) {
+        //huzhi
+        Chronometer chronometer= (Chronometer) ((ViewGroup) v.getParent()).findViewById(R.id.chronometer);
+        chronometer.start();
+        chronometer.stop();
+        chronometer.setBase(SystemClock.elapsedRealtime());
+        chronometer.setText("按住说话");
+
+//        this.setVisibility(View.INVISIBLE); //huzhi
         if (wakeLock.isHeld())
             wakeLock.release();
         return voiceRecorder.stopRecoding();
