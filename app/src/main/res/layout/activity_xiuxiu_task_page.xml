@@ -30,44 +30,58 @@
             android:textSize="@dimen/line_txt_size_big"/>
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_marginTop="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:weightSum="3">
 
-        <ImageView
-            android:id="@+id/video"
-            android:layout_width="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_height="wrap_content"
-            android:src="@drawable/xiuxiu_task_video"/>
 
         <ImageView
             android:id="@+id/pic"
-            android:layout_marginRight="20dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/video"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/xiuxiu_task_pic"/>
+            android:src="@drawable/xiuxiu_task_pic"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
+
+
+        <ImageView
+            android:id="@+id/video"
+            android:layout_width="0dp"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
+            android:src="@drawable/xiuxiu_task_video"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
+
 
         <ImageView
             android:id="@+id/voice"
-            android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/video"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/xiuxiu_task_voice"/>
+            android:src="@drawable/xiuxiu_task_voice"
+            android:scaleType="centerInside"
+            android:layout_weight="1"/>
 
-    </RelativeLayout>
-
-    <LinearLayout
+    </LinearLayout>
+    <com.xiuxiu.widget.TriangleView
+        android:id="@+id/triangle"
+        android:layout_height="15dp"
+        android:layout_width="match_parent"
         android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+    <LinearLayout
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="170dp"
         android:background="@drawable/heixiu_broadcast_edit_bg"
         android:orientation="vertical">
         <EditText
@@ -93,30 +107,36 @@
         
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:paddingBottom="10dp"
             android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/pay_txt"
+                android:layout_centerVertical="true"
                 android:text="愿意支付:"
                 android:textSize="13sp"
+                android:gravity="center"
                 android:textColor="#ffffff"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/xiu_bi"
+                android:layout_centerVertical="true"
                 android:text="咻币"
                 android:layout_alignParentRight="true"
                 android:textSize="13sp"
                 android:textColor="#ffffff"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:gravity="center"
+                android:layout_height="match_parent" />
 
             <EditText
                 android:id="@+id/xiu_bi_size"
+                android:layout_centerVertical="true"
                 android:text="20"
                 android:layout_marginRight="3dp"
                 android:layout_toLeftOf="@id/xiu_bi"
@@ -125,7 +145,7 @@
                 android:textSize="13sp"
                 android:textColor="#00b8d0"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@null"/>
 
         </RelativeLayout>

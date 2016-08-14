@@ -133,6 +133,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     ImageView xiuxiuTaskBt;
     private int _xDelta;
     private int _yDelta;
+
+
+    private int lastPosition ;
     @Override
     protected void setUpView() {
         setChatFragmentListener(this);
@@ -142,7 +145,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         RelativeLayout rootView = (RelativeLayout)inputMenu.getParent();
         xiuxiuTaskBt = new ImageView(getActivity().getApplicationContext());
         xiuxiuTaskBt.setImageResource(R.drawable.xiuxiu_task_bt_selector);
-        RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        final RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         rl.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         rl.addRule(RelativeLayout.BELOW, R.id.title_bar);
@@ -154,22 +157,22 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 XiuxiuTaskPage.startActivity4Result(ChatFragment.this, REQUEST_CODE_XIUXIU);
             }
         });
+
         xiuxiuTaskBt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                final int X = (int) event.getRawX();
                 final int Y = (int) event.getRawY();
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN:
                         RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) xiuxiuTaskBt
                                 .getLayoutParams();
                         _yDelta = Y - lParams.topMargin;
+                        lastPosition = Y;
                         break;
                     case MotionEvent.ACTION_UP:
-                        break;
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        break;
-                    case MotionEvent.ACTION_POINTER_UP:
+                        if(Math.abs(Y-lastPosition)>5){
+                            return true;
+                        }
                         break;
                     case MotionEvent.ACTION_MOVE:
                         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) xiuxiuTaskBt
@@ -185,7 +188,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                         break;
                 }
                 xiuxiuTaskBt.requestLayout();
-                return true;
+                return false;
             }
         });
 
@@ -229,6 +232,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_XIUXIU &&resultCode!=Activity.RESULT_OK && isWhenCreateEnterXiuxiuTaskPage ){
+            getActivity().finish();
+        }
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode) {
                 case REQUEST_CODE_SELECT_VIDEO: //发送选中的视频

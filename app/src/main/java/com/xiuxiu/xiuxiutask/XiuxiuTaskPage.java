@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
@@ -23,6 +24,7 @@ import com.xiuxiu.easeim.xiuxiumsg.XiuxiuSettingsConstant;
 import com.xiuxiu.qupai.QuPaiManager;
 import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.utils.ToastUtil;
+import com.xiuxiu.widget.TriangleView;
 
 import java.io.File;
 
@@ -64,6 +66,8 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
 
     private String mDuration = "";
 
+    private TriangleView mTriangleView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,8 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
     }
 
     private void setupViews(){
+
+        mTriangleView = (TriangleView) findViewById(R.id.triangle);
         mVideoBt = findViewById(R.id.video);
         mPicBt = findViewById(R.id.pic);
         mVoiceBt = findViewById(R.id.voice);
@@ -87,21 +93,13 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
         findViewById(R.id.xiuxiu_bt).setOnClickListener(this);
         mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice() + "");
         findViewById(R.id.pic).performClick();
+
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.video:
-                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())) {
-                    mEditText.setHint("填写你对索要图片的期望和要求...(只能查看三次)");
-                }else{
-                    mEditText.setHint("告诉对方这是一段怎样的视频...");
-                }
-                mXiuxiuTitle = XIUXIU_TITLE_VIDEO_TXT;
-                mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuVideoPrice()+"");
-                break;
             case R.id.pic:
                 if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){
                     mEditText.setHint("填写你对索要视频的期望和要求...(只能查看三次)");
@@ -110,6 +108,17 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                 }
                 mXiuxiuTitle = XIUXIU_TITLE_IMG_TXT;
                 mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuImgPrice()+"");
+                mTriangleView.setPosition(0);
+                break;
+            case R.id.video:
+                if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())) {
+                    mEditText.setHint("填写你对索要图片的期望和要求...(只能查看三次)");
+                }else{
+                    mEditText.setHint("告诉对方这是一段怎样的视频...");
+                }
+                mXiuxiuTitle = XIUXIU_TITLE_VIDEO_TXT;
+                mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuVideoPrice()+"");
+                mTriangleView.setPosition(1);
                 break;
             case R.id.voice:
                 if(XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())) {
@@ -119,6 +128,7 @@ public class XiuxiuTaskPage extends BaseActivity implements View.OnClickListener
                 }
                 mXiuxiuTitle = XIUXIU_TITLE_VOICE_TXT;
                 mXiuxiuBSizeEdt.setText(XiuxiuSettingsConstant.getXiuxiuYuyinPrice()+"");
+                mTriangleView.setPosition(2);
                 break;
             case R.id.xiuxiu_bt:
                 if(TextUtils.isEmpty(mEditText.getText().toString())){
