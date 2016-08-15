@@ -13,7 +13,7 @@ public class PersonalPreference {
 
     private Map<String, SharedPreferences> factory;
 
-    private static final String defaults = "yuekuapp";
+    private static final String defaults = "xiuxiuapp";
 
     private PersonalPreference() {
         if (factory == null) {

@@ -40,6 +40,7 @@ import com.xiuxiu.chat.ChatPage;
 import com.xiuxiu.easeim.Constant;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
+import com.xiuxiu.easeim.XiuxiuSayHelloManager;
 import com.xiuxiu.user.invitation.InviteMessgeDao;
 import com.xiuxiu.user.invitation.UserDao;
 import com.xiuxiu.user.voice.VoicePlayManager;
@@ -202,11 +203,19 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
             ((TextView)((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(0)).setText("发消息");
             ((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(1).setVisibility(View.GONE);
             ((ViewGroup)findViewById(R.id.xiuxiu_ta_layout)).getChildAt(1).setVisibility(View.GONE);
-        }else{
-
         }
-        if(ImHelper.getInstance().getContactList().get(xiuxiuId)==null) {
-            getXiuxiuTimes();
+        int times = XiuxiuSayHelloManager.getInstance().getCallTimes();
+        if(times>=0){
+            mCallTimes = times;
+            TextView tv = (TextView) findViewById(R.id.say_hello_txt);
+            tv.setText("今天还有" + mCallTimes + "次免费机会");
+            if(times==3){//如果３次times　相当于重置招呼数
+                XiuxiuSayHelloManager.getInstance().clear();
+            }
+        }else{
+            if(ImHelper.getInstance().getContactList().get(xiuxiuId)==null) {
+                getXiuxiuTimes();
+            }
         }
     }
 
@@ -296,6 +305,8 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                enterConversationPage(false);
+                /*
                 if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){
                     enterConversationPage(false);
                     return;
@@ -331,6 +342,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                         }
                     }).start();
                 }
+                */
             }
         });
 

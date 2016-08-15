@@ -57,6 +57,15 @@
         </receiver>
 
 
+        <!-- 监听系统日期变化-->
+        <receiver android:name="com.xiuxiu.DateTimeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+
+
+
         <provider
             android:name="com.xiuxiu.provider.XiuxiuProvider"
             android:authorities="com.xiuxiu"

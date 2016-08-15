@@ -33,6 +33,7 @@ import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.XiuxiuUserInfoResult;
+import com.xiuxiu.easeim.XiuxiuSayHelloManager;
 import com.xiuxiu.easeim.widget.ChatRowGift;
 import com.xiuxiu.easeim.widget.ChatRowImgNan2NvXiuxiu;
 import com.xiuxiu.easeim.widget.ChatRowImgNv2NanXiuxiu;
@@ -662,7 +663,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         GiftManager.getInstance().setListener(new GiftItemClickListener() {
             @Override
             public void onItemClick(final int poistion) {
-                XiuxiuUtils.showProgressDialog(getActivity(),"加载中...");
+                XiuxiuUtils.showProgressDialog(getActivity(), "加载中...");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -689,4 +690,78 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         });
     }
 
+    // =============================================================================================
+    // 对父类的发送消息进行拦截处理　(招呼扣费)
+    // =============================================================================================
+    @Override
+    protected void sendTextMessage(final String content) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
+    @Override
+    protected void sendBigExpressionMessage(final String name, final String identityCode){
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityCode);
+                sendMessage(message);
+            }
+        }, getActivity());
+
+    }
+    @Override
+    protected void sendVoiceMessage(final String filePath, final int length) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
+    @Override
+    protected void sendImageMessage(final String imagePath) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
+    @Override
+    protected void sendLocationMessage(final double latitude, final double longitude, final String locationAddress) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createLocationSendMessage(latitude, longitude, locationAddress, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
+    @Override
+    protected void sendVideoMessage(final String videoPath,final String thumbPath,final int videoLength) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createVideoSendMessage(videoPath, thumbPath, videoLength, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
+    @Override
+    protected void sendFileMessage(final String filePath) {
+        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+            @Override
+            public void onSuccess() {
+                EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
+                sendMessage(message);
+            }
+        }, getActivity());
+    }
 }

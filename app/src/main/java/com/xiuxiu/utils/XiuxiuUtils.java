@@ -169,6 +169,39 @@ public class XiuxiuUtils {
     }
 
     // ============================================================================================
+    //　获取当天咻咻招呼次数
+    // ============================================================================================
+    public static int getXiuxiuTimes(){
+        RequestFuture<String> future = RequestFuture.newFuture();
+        XiuxiuApplication.getInstance().getQueue()
+                .add(new StringRequest(getXiuxiuTimesUrl(), future, future));
+        try {
+            String response = future.get();
+            android.util.Log.d(TAG,"getXiuxiuTimes()  response = " + response);
+            Gson gson = new Gson();
+            XiuxiuTimsResult res = gson.fromJson(response, XiuxiuTimsResult.class);
+            if(res!=null&&res.isSuccess()){
+                return res.getTimes();
+            }
+
+        }catch (Exception e){}
+        return 0;
+    }
+
+    private static String getXiuxiuTimesUrl() {
+        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
+                .appendQueryParameter("m", HttpUrlManager.GET_XX_TIMES)
+                .appendQueryParameter("password", Md5Util.md5())
+                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
+                .appendQueryParameter("limitType", "call")
+                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
+                .build().toString();
+        android.util.Log.d(TAG, "url = " + url);
+        return url;
+    }
+
+    // ============================================================================================
     //　消耗打招呼
     // ============================================================================================
 
@@ -468,7 +501,7 @@ public class XiuxiuUtils {
     }
 
     public static void showProgressDialog(Context context){
-        mProgressDialog = ProgressDialog.show(context, "提示", "正在上传中...");
+        mProgressDialog = ProgressDialog.show(context, "提示", "正在加载中...");
     }
 
     public static void dismisslProgressDialog(){
