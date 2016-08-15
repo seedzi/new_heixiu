@@ -47,49 +47,7 @@
         android:layout_height="wrap_content">
 
     </LinearLayout>
-<!--
-    <include layout="@layout/recharge_item_layout" />
 
-    <View
-        android:layout_marginLeft="13dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-    <include layout="@layout/recharge_item_layout" />
-
-    <View
-        android:layout_marginLeft="13dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-    <include layout="@layout/recharge_item_layout" />
-
-    <View
-        android:layout_marginLeft="13dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-    <include layout="@layout/recharge_item_layout" />
-
-    <View
-        android:layout_marginLeft="13dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-    <include layout="@layout/recharge_item_layout" />
-
-    <View
-        android:layout_marginLeft="13dp"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#8b8b8b"/>
-
-    <include layout="@layout/recharge_item_layout" />
--->
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

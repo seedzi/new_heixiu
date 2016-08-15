@@ -33,35 +33,10 @@ public class ChatRowGift extends EaseChatRow {
     protected void onFindViewById() {
         giftImg = (ImageView) findViewById(R.id.gift_img);
 
-        RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getContext())*1/2,
-                ScreenUtils.getScreenWidth(getContext())*1/2);
-        giftImg.setLayoutParams(rl);
+//        RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getContext())*1/4,
+//                ScreenUtils.getScreenWidth(getContext())*1/4);
+//        giftImg.setLayoutParams(rl);
 
-        int type = 0;
-        try {
-            type = message.getIntAttribute(EaseConstant.MESSAGE_ATTR_GIFT_TYPE);
-        } catch (Exception e){}
-        switch (type){
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            default:
-                break;
-        }
-        giftImg.setImageResource(R.drawable.head_default);
     }
 
     @Override
@@ -71,6 +46,42 @@ public class ChatRowGift extends EaseChatRow {
 
     @Override
     protected void onSetUpView() {
+
+        int type = 0;
+        try {
+            type = message.getIntAttribute(EaseConstant.MESSAGE_ATTR_GIFT_TYPE);
+        } catch (Exception e){}
+
+        giftImg.setImageResource(R.drawable.head_default);
+
+        switch (type){
+            case 0:
+                giftImg.setImageResource(R.drawable.gift_01);
+                break;
+            case 1:
+                giftImg.setImageResource(R.drawable.gift_02);
+                break;
+            case 2:
+                giftImg.setImageResource(R.drawable.gift_03);
+                break;
+            case 3:
+                giftImg.setImageResource(R.drawable.gift_04);
+                break;
+            case 4:
+                giftImg.setImageResource(R.drawable.gift_05);
+                break;
+            case 5:
+                giftImg.setImageResource(R.drawable.gift_06);
+                break;
+            case 6:
+                giftImg.setImageResource(R.drawable.gift_07);
+                break;
+            case 7:
+                giftImg.setImageResource(R.drawable.gift_08);
+                break;
+            default:
+                break;
+        }
 
     }
 

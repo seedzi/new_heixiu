@@ -30,9 +30,11 @@
             android:id="@+id/checked"
             android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"/>
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_centerVertical="true"
+            android:button="@null"
+            android:background="@drawable/wallet_recharge_item_selector"/>
 
         <TextView
             android:id="@+id/rmb"
