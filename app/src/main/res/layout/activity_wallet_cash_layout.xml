@@ -122,7 +122,7 @@
         android:gravity="center"
         android:textSize="13sp"
         android:textColor="#ffffff"
-        android:text="微信提现"
+        android:text="支付宝提现"
         android:layout_marginLeft="26dp"
         android:layout_marginRight="26dp"
         android:background="@drawable/wallet_bt_bg"/>
