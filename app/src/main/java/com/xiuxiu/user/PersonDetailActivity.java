@@ -295,6 +295,15 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         }
         mPhotoAdpater.notifyDataSetChanged();
 
+        if(TextUtils.isEmpty(XiuxiuUserInfoResult.getInstance().getGet_gift())){
+            findViewById(R.id.gift_layout).setVisibility(View.GONE);
+            findViewById(R.id.gift_layout_line).setVisibility(View.GONE);
+        }else{
+            findViewById(R.id.gift_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.gift_layout_line).setVisibility(View.VISIBLE);
+            setGifts(XiuxiuUserInfoResult.getInstance().getGiftList());
+        }
+
         setupPhotoWall();
 
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
@@ -310,8 +319,66 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                 enterConversationPage(true);
             }
         });
+    }
 
+    private void setGifts(List<XiuxiuUserInfoResult.Gift> list){
+        if(list==null){
+            return;
+        }
+        int i = 0;
+        for(XiuxiuUserInfoResult.Gift gift: list){
+            if(i==0){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_1));
+            }else if(i==1){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_2));
+            }else if(i==2){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_3));
+            }else if(i==3){
+                setGiftItem(gift,(ViewGroup)findViewById(R.id.gift_item_4));
+            }
+            i++;
+        }
+    }
 
+    private void setGiftItem(XiuxiuUserInfoResult.Gift gift,ViewGroup layout){
+        TextView sizeTv = (TextView) layout.findViewById(R.id.gift_size);
+        sizeTv.setText("x "+gift.size);
+        ImageView giftImg = (ImageView) layout.findViewById(R.id.gift_img);
+        TextView giftName = (TextView) layout.findViewById(R.id.gift_name);
+        switch (gift.type){
+            case 0:
+                giftImg.setImageResource(R.drawable.gift_01);
+                giftName.setText("鲜花");
+                break;
+            case 1:
+                giftImg.setImageResource(R.drawable.gift_02);
+                giftName.setText("香蕉");
+                break;
+            case 2:
+                giftImg.setImageResource(R.drawable.gift_03);
+                giftName.setText("套套");
+                break;
+            case 3:
+                giftImg.setImageResource(R.drawable.gift_04);
+                giftName.setText("蛋糕");
+                break;
+            case 4:
+                giftImg.setImageResource(R.drawable.gift_05);
+                giftName.setText("红心");
+                break;
+            case 5:
+                giftImg.setImageResource(R.drawable.gift_06);
+                giftName.setText("钻戒");
+                break;
+            case 6:
+                giftImg.setImageResource(R.drawable.gift_07);
+                giftName.setText("香水");
+                break;
+            case 7:
+                giftImg.setImageResource(R.drawable.gift_08);
+                giftName.setText("跑车");
+                break;
+        }
     }
 
     private void enterConversationPage(boolean enterXiuxiu){

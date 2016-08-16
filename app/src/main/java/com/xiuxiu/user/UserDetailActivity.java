@@ -184,6 +184,40 @@ public class UserDetailActivity extends BaseActivity implements View.OnClickList
         sizeTv.setText("x "+gift.size);
         ImageView giftImg = (ImageView) layout.findViewById(R.id.gift_img);
         TextView giftName = (TextView) layout.findViewById(R.id.gift_name);
+        switch (gift.type){
+            case 0:
+                giftImg.setImageResource(R.drawable.gift_01);
+                giftName.setText("鲜花");
+                break;
+            case 1:
+                giftImg.setImageResource(R.drawable.gift_02);
+                giftName.setText("香蕉");
+                break;
+            case 2:
+                giftImg.setImageResource(R.drawable.gift_03);
+                giftName.setText("套套");
+                break;
+            case 3:
+                giftImg.setImageResource(R.drawable.gift_04);
+                giftName.setText("蛋糕");
+                break;
+            case 4:
+                giftImg.setImageResource(R.drawable.gift_05);
+                giftName.setText("红心");
+                break;
+            case 5:
+                giftImg.setImageResource(R.drawable.gift_06);
+                giftName.setText("钻戒");
+                break;
+            case 6:
+                giftImg.setImageResource(R.drawable.gift_07);
+                giftName.setText("香水");
+                break;
+            case 7:
+                giftImg.setImageResource(R.drawable.gift_08);
+                giftName.setText("跑车");
+                break;
+        }
     }
 
 
