@@ -1,15 +1,10 @@
 package com.xiuxiu.easeim;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.hyphenate.chat.EMMessage;
 import com.xiuxiu.SharePreferenceWrap;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.XiuxiuLoginResult;
@@ -19,9 +14,6 @@ import com.xiuxiu.utils.XiuxiuUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +39,13 @@ public class XiuxiuSayHelloManager {
     private int mCallTimes;
 
     public int getCallTimes(){
+        android.util.Log.d(TAG,"getCallTimes() times = " + mCallTimes);
         return mCallTimes;
+    }
+
+    public void setCallTimes(int times){
+        android.util.Log.d(TAG,"setCallTimes() times = " + times);
+        mCallTimes = times;
     }
 
     private XiuxiuSayHelloManager(){
@@ -76,6 +74,7 @@ public class XiuxiuSayHelloManager {
     }
 
     public void clear(){
+        android.util.Log.d(TAG,"clear()");
         SharePreferenceWrap sharePreferenceWrap = new SharePreferenceWrap();
         sharePreferenceWrap.putString(SHARE_PREFERENCE_NAME,"");
         mData.clear();
@@ -89,7 +88,7 @@ public class XiuxiuSayHelloManager {
     /**
      * 根据咻羞id判断是否能打招呼
      */
-    public boolean isCallSayHell(String xiuxiuId){
+    public boolean isCanSayHell(String xiuxiuId){
         //1.判断是否是女性
         if(!XiuxiuUserInfoResult.isMale(XiuxiuUserInfoResult.getInstance().getSex())){
             return true;
@@ -128,11 +127,12 @@ public class XiuxiuSayHelloManager {
     }
 
 
-    public void sayHell(final String toXiuxiuId,final Callback callback,final FragmentActivity ac){
+    public void sayHello(final String toXiuxiuId, final Callback callback, final FragmentActivity ac){
+        android.util.Log.d(TAG,"sayHello" );
         if(TextUtils.isEmpty(toXiuxiuId)){
             return;
         }
-        if(isCallSayHell(toXiuxiuId)){
+        if(isCanSayHell(toXiuxiuId)){
             callback.onSuccess();
         }else{
             XiuxiuUtils.showProgressDialog(ac);
@@ -143,6 +143,7 @@ public class XiuxiuSayHelloManager {
                         mCallTimes = XiuxiuUtils.getXiuxiuTimes();
                     }
                     mCallTimes = mCallTimes -1;
+                    android.util.Log.d(TAG,"mCallTimes = " + mCallTimes);
                     XiuxiuUtils.costXiuxiuCallTimes();
                     if(mCallTimes>=0){
                         XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {

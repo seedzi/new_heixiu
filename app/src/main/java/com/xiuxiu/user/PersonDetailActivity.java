@@ -199,22 +199,22 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.xiuxiu_ta_layout).setVisibility(View.VISIBLE);
 
-        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){
+        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){ //是好友
             ((TextView)((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(0)).setText("发消息");
             ((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(1).setVisibility(View.GONE);
             ((ViewGroup)findViewById(R.id.xiuxiu_ta_layout)).getChildAt(1).setVisibility(View.GONE);
-        }
-        int times = XiuxiuSayHelloManager.getInstance().getCallTimes();
-        if(times>=0){
-            mCallTimes = times;
-            TextView tv = (TextView) findViewById(R.id.say_hello_txt);
-            tv.setText("今天还有" + mCallTimes + "次免费机会");
-            if(times==3){//如果３次times　相当于重置招呼数
-                XiuxiuSayHelloManager.getInstance().clear();
-            }
-        }else{
-            if(ImHelper.getInstance().getContactList().get(xiuxiuId)==null) {
-                getXiuxiuTimes();
+        }else{//非好友
+            int times = XiuxiuSayHelloManager.getInstance().getCallTimes();
+            if(times>=0){
+                mCallTimes = times;
+                TextView tv = (TextView) findViewById(R.id.say_hello_txt);
+                tv.setText("今天还有" + mCallTimes + "次免费机会");
+                if(times==3){//如果３次times　相当于重置招呼数
+                    XiuxiuSayHelloManager.getInstance().clear();
+                }
+            }else{
+                TextView tv = (TextView) findViewById(R.id.say_hello_txt);
+                tv.setText("今天还有3次免费机会");
             }
         }
     }
@@ -297,52 +297,10 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
 
         setupPhotoWall();
 
-        /**
-         * 1.如果是好友，直接聊天
-         * 2.首先扣免费招呼
-         * 3.免费招呼扣完，直接扣咻b
-         */
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 enterConversationPage(false);
-                /*
-                if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){
-                    enterConversationPage(false);
-                    return;
-                }
-                if(mCallTimes>0){
-                    mCallTimes = mCallTimes -1;
-                    TextView tv = (TextView) findViewById(R.id.say_hello_txt);
-                    tv.setText("今天还有" + mCallTimes + "次免费机会");
-                    XiuxiuUtils.costXiuxiuCallTimes();
-                    enterConversationPage(false);
-                }else{
-                    showProgressDialog();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(XiuxiuUtils.costUserCoin("call","1")){
-                                mUiHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dismisslProgressDialog();
-                                        enterConversationPage(false);
-                                    }
-                                });
-                            }else{
-                                mUiHandler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        dismisslProgressDialog();
-                                        ToastUtil.showMessage(PersonDetailActivity.this, "咻咻b不够了，请您充值！");
-                                    }
-                                });
-                            }
-                        }
-                    }).start();
-                }
-                */
             }
         });
 
@@ -490,23 +448,6 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
 
-
-    // ============================================================================================
-    //　进度框
-    // ============================================================================================
-
-    private ProgressDialog mProgressDialog;
-
-    private void showProgressDialog(){
-        mProgressDialog = ProgressDialog.show(this, "提示", "正在加载中...");
-    }
-
-    private void dismisslProgressDialog(){
-        if(mProgressDialog!=null){
-            mProgressDialog.dismiss();
-        }
-    }
-
     // ============================================================================================
     // 删除好友
     // ============================================================================================
@@ -550,50 +491,6 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                 .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
                 .appendQueryParameter("remote_id", xiuxiu_id)
-                .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
-                .build().toString();
-        android.util.Log.d(TAG, "url = " + url);
-        return url;
-    }
-
-
-    // ============================================================================================
-    //　获取打招呼次数
-    // ============================================================================================
-
-    private Response.Listener<String> mXiuxiuTimesListener = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            android.util.Log.d(TAG,"咻咻招呼 response = " + response);
-            Gson gson = new Gson();
-            XiuxiuTimsResult res = gson.fromJson(response, XiuxiuTimsResult.class);
-            if(res!=null&&res.isSuccess()){
-                mCallTimes = res.getTimes();
-                if(mCallTimes>=0) {
-                    TextView tv = (TextView) findViewById(R.id.say_hello_txt);
-                    tv.setText("今天还有" + mCallTimes + "次免费机会");
-                }
-            }
-        }
-    };
-    private Response.ErrorListener mXiuxiuTimesErroListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            android.util.Log.d(TAG, "error = " + error);
-        }
-    };
-
-    private void getXiuxiuTimes() {
-        XiuxiuApplication.getInstance().getQueue()
-                .add(new StringRequest(getXiuxiuTimesUrl(), mXiuxiuTimesListener, mXiuxiuTimesErroListener));
-    }
-    private String getXiuxiuTimesUrl() {
-        String url = Uri.parse(HttpUrlManager.commondUrl()).buildUpon()
-                .appendQueryParameter("m", HttpUrlManager.GET_XX_TIMES)
-                .appendQueryParameter("password", Md5Util.md5())
-                .appendQueryParameter("user_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter("xiuxiu_id", XiuxiuLoginResult.getInstance().getXiuxiu_id())
-                .appendQueryParameter("limitType", "call")
                 .appendQueryParameter("cookie", XiuxiuLoginResult.getInstance().getCookie())
                 .build().toString();
         android.util.Log.d(TAG, "url = " + url);

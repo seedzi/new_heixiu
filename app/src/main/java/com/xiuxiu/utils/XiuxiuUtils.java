@@ -34,6 +34,7 @@ import com.xiuxiu.db.XiuxiuUserInfoTable;
 import com.xiuxiu.easeim.EaseUserCacheManager;
 import com.xiuxiu.easeim.ImHelper;
 import com.xiuxiu.easeim.ImManager;
+import com.xiuxiu.easeim.XiuxiuSayHelloManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgTable;
 import com.xiuxiu.main.MainActivity;
@@ -90,16 +91,18 @@ public class XiuxiuUtils {
         PathUtil.getInstance().initDirs("xiuxiu", "im", context);
         //10.获取礼物列表
         getGiftsDispath();
+
     }
 
     private static void doSomthingOnAppStartInBackground(final Context context) {
-        /*
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                //1.获取咻咻免费招呼数
+                XiuxiuSayHelloManager.getInstance().setCallTimes(XiuxiuUtils.getXiuxiuTimes());
             }
-        }).start();*/
+        }).start();
     }
 
     // ============================================================================================

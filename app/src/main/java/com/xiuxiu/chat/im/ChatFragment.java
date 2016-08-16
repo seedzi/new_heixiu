@@ -21,12 +21,10 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseConstant;
-import com.hyphenate.easeui.model.EmojiconExampleGroupData;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
-import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.gift.GiftItemClickListener;
 import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
@@ -43,7 +41,6 @@ import com.xiuxiu.easeim.widget.ChatRowVoiceCall;
 import com.xiuxiu.easeim.widget.ChatRowVoiceXiuxiu;
 import com.xiuxiu.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiu.qupai.QuPaiManager;
-import com.xiuxiu.qupai.RecordResult;
 import com.xiuxiu.user.WalletActivity;
 import com.xiuxiu.user.invitation.AddFriendsPage;
 import com.xiuxiu.utils.ToastUtil;
@@ -695,7 +692,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     // =============================================================================================
     @Override
     protected void sendTextMessage(final String content) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createTxtSendMessage(content, toChatUsername);
@@ -705,7 +702,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendBigExpressionMessage(final String name, final String identityCode){
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityCode);
@@ -716,7 +713,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendVoiceMessage(final String filePath, final int length) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createVoiceSendMessage(filePath, length, toChatUsername);
@@ -726,7 +723,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendImageMessage(final String imagePath) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
@@ -736,7 +733,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendLocationMessage(final double latitude, final double longitude, final String locationAddress) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createLocationSendMessage(latitude, longitude, locationAddress, toChatUsername);
@@ -746,7 +743,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendVideoMessage(final String videoPath,final String thumbPath,final int videoLength) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createVideoSendMessage(videoPath, thumbPath, videoLength, toChatUsername);
@@ -756,7 +753,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     }
     @Override
     protected void sendFileMessage(final String filePath) {
-        XiuxiuSayHelloManager.getInstance().sayHell(toChatUsername, new XiuxiuSayHelloManager.Callback() {
+        XiuxiuSayHelloManager.getInstance().sayHello(toChatUsername, new XiuxiuSayHelloManager.Callback() {
             @Override
             public void onSuccess() {
                 EMMessage message = EMMessage.createFileSendMessage(filePath, toChatUsername);
