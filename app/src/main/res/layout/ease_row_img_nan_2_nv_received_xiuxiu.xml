@@ -33,7 +33,7 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/ease_chatto_bg"
+            android:background="@drawable/xiuxiu_task_received_bg"
             >
 
             <RelativeLayout
@@ -45,9 +45,9 @@
                     android:id="@+id/img"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="#a6a6a6"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/xiuxiu_pic_icon"/>
                 <TextView
                     android:id="@+id/xiuxiu_ask_title"
                     android:layout_toRightOf="@id/img"
@@ -55,13 +55,14 @@
                     android:textSize="13sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"/>
+                    android:layout_marginLeft="5dp"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/xiuxiu_ask_content"
                     android:layout_toRightOf="@id/img"
                     android:layout_below="@id/xiuxiu_ask_title"
                     android:text="绝对值"
-                    android:maxLines="3"
+                    android:maxLines="2"
                     android:textSize="13sp"
                     android:textColor="#8b8b8b"
                     android:layout_width="wrap_content"
@@ -72,14 +73,14 @@
                 <TextView
                     android:id="@+id/pay_txt"
                     android:layout_toRightOf="@id/img"
-                    android:layout_below="@id/xiuxiu_ask_content"
+                    android:layout_alignBottom="@id/img"
                     android:text="愿意支付："
                     android:textSize="13sp"
                     android:textColor="#8b8b8b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp"/><!--       android:layout_below="@id/xiuxiu_ask_content" -->
 
                 <TextView
                     android:id="@+id/xiuxiu_bi"
@@ -109,7 +110,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#8b8b8b"/>
+                    android:background="#d4d4d4"/>
 
                 <TextView
                     android:id="@+id/xiuxiu_status"
@@ -131,6 +132,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
+                        android:textColor="#000000"
                         android:text="拒绝"/>
 
                     <TextView
@@ -139,10 +141,11 @@
                         android:layout_alignParentRight="true"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
+                        android:textColor="@color/app_theme_color"
                         android:text="同意"/>
 
                     <View
-                        android:background="#8b8b8b"
+                        android:background="#d4d4d4"
                         android:layout_centerHorizontal="true"
                         android:layout_width="1dp"
                         android:layout_height="30dp"/>

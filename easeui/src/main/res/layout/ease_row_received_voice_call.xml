@@ -39,7 +39,7 @@
             <ImageView
                 android:layout_marginLeft="4dp"
                 android:id="@+id/iv_call_icon"
-               android:layout_width="wrap_content"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ease_chat_voice_call_receive" 

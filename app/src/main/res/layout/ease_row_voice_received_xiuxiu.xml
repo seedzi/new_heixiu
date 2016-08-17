@@ -21,20 +21,20 @@
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="@dimen/margin_chat_activity"
+            android:layout_marginLeft="@dimen/margin_chat_activity"
             android:background="@drawable/ease_default_avatar"/>
 
         <RelativeLayout
             android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/margin_chat_activity"
-            android:layout_toLeftOf="@id/iv_userhead"
+            android:layout_marginLeft="@dimen/margin_chat_activity"
+            android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/ease_chatto_bg"
-            >
+            android:background="@drawable/xiuxiu_task_received_bg">
+
             <RelativeLayout
                 android:id="@+id/content_layout"
                 android:layout_width="wrap_content"
@@ -42,16 +42,26 @@
 
                 <ImageView
                     android:id="@+id/img"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/call_voice_answer"/>
+                    android:src="@drawable/xiuxiu_voice_icon"/>
+                <TextView
+                    android:id="@+id/xiuxiu_ask_title"
+                    android:layout_toRightOf="@id/img"
+                    android:text="我给你发了一张咻照"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/xiuxiu_ask_content"
-                    android:layout_below="@id/img"
-                    android:text="能YA再接,别墨迹啊"
-                    android:maxLines="3"
+                    android:layout_toRightOf="@id/img"
+                    android:layout_below="@id/xiuxiu_ask_title"
+                    android:text="绝对值"
+                    android:maxLines="2"
                     android:textSize="13sp"
                     android:textColor="#8b8b8b"
                     android:layout_width="wrap_content"
@@ -61,25 +71,35 @@
 
                 <TextView
                     android:id="@+id/pay_txt"
-                    android:layout_below="@id/xiuxiu_ask_content"
+                    android:layout_toRightOf="@id/img"
+                    android:layout_alignBottom="@id/img"
                     android:text="愿意支付："
                     android:textSize="13sp"
                     android:textColor="#8b8b8b"
-                    android:layout_alignParentLeft="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp"/><!--       android:layout_below="@id/xiuxiu_ask_content" -->
 
                 <TextView
                     android:id="@+id/xiuxiu_bi"
                     android:layout_marginRight="5dp"
-                    android:layout_below="@id/xiuxiu_ask_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignBottom="@id/pay_txt"
                     android:textColor="#8b8b8b"
-                    android:text="咻币"
+                    android:text="咻币/分钟"
                     android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/xiuxiu_bi_size"
+                    android:layout_toLeftOf="@id/xiuxiu_bi"
+                    android:layout_alignBottom="@id/pay_txt"
+                    android:textColor="#00b8d0"
+                    android:text="20"
+                    android:layout_marginBottom="-5px"
+                    android:textSize="23sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -89,7 +109,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#8b8b8b"/>
+                    android:background="#d4d4d4"/>
 
                 <TextView
                     android:id="@+id/xiuxiu_status"
@@ -111,6 +131,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
+                        android:textColor="#000000"
                         android:text="拒绝"/>
 
                     <TextView
@@ -119,10 +140,11 @@
                         android:layout_alignParentRight="true"
                         android:layout_width="100dp"
                         android:layout_height="30dp"
+                        android:textColor="@color/app_theme_color"
                         android:text="同意"/>
 
                     <View
-                        android:background="#8b8b8b"
+                        android:background="#d4d4d4"
                         android:layout_centerHorizontal="true"
                         android:layout_width="1dp"
                         android:layout_height="30dp"/>
@@ -137,7 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bubble"
+            android:layout_toRightOf="@id/bubble"
             android:clickable="true"
             android:src="@drawable/ease_msg_state_failed_resend"
             android:visibility="gone" />
@@ -148,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bubble"
+            android:layout_toRightOf="@id/bubble"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
             android:visibility="invisible" />
@@ -159,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bubble"
+            android:layout_toRightOf="@id/bubble"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
             android:visibility="invisible" />
@@ -169,7 +191,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/bubble"
+            android:layout_toRightOf="@id/bubble"
             android:visibility="visible" />
     </RelativeLayout>
 

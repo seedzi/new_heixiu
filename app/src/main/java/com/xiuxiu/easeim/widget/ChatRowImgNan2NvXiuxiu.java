@@ -50,7 +50,6 @@ public class ChatRowImgNan2NvXiuxiu extends EaseChatRow implements View.OnClickL
 
     public ChatRowImgNan2NvXiuxiu(Context context, EMMessage message, int position, BaseAdapter adapter) {
         super(context, message, position, adapter);
-        android.util.Log.d("12345","ChatRowImgNan2NvXiuxiu()");
     }
 
     @Override

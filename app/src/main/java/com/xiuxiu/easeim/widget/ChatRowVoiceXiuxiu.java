@@ -60,7 +60,7 @@ public class ChatRowVoiceXiuxiu extends EaseChatRow implements View.OnClickListe
     @Override
     protected void onFindViewById() {
         mContentTv = (TextView) findViewById(R.id.xiuxiu_ask_content);
-        mXiuxiuBSizeTv = (TextView) findViewById(R.id.xiuxiu_bi);
+        mXiuxiuBSizeTv = (TextView) findViewById(R.id.xiuxiu_bi_size);
         mAgreeTv = (TextView) findViewById(R.id.agree_bt);
         mRefuseTv = (TextView) findViewById(R.id.refuse_bt);
         mXiuxiuStatusTv = (TextView) findViewById(R.id.xiuxiu_status);
@@ -83,7 +83,7 @@ public class ChatRowVoiceXiuxiu extends EaseChatRow implements View.OnClickListe
             if(mContentTv!=null)
                 mContentTv.setText(mXiuxiuTaskBean.content);
             if(mXiuxiuBSizeTv!=null)
-                mXiuxiuBSizeTv.setText(mXiuxiuTaskBean.xiuxiub + "咻币/分钟");
+                mXiuxiuBSizeTv.setText(mXiuxiuTaskBean.xiuxiub);
             if(mPayTxtTv!=null){
                 try {
                     if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU_NAN_2_NV)){
