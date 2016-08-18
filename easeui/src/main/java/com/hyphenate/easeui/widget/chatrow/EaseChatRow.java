@@ -96,7 +96,7 @@ public abstract class EaseChatRow extends LinearLayout {
         setClickListener();
     }
 
-    private void setUpBaseView() {
+    protected void setUpBaseView() {
         // 设置用户昵称头像，bubble背景等
         TextView timestamp = (TextView) findViewById(R.id.timestamp);
         if (timestamp != null) {

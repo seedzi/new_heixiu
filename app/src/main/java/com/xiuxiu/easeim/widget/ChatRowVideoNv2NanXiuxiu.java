@@ -21,6 +21,7 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.model.EaseImageCache;
 import com.hyphenate.easeui.ui.EaseShowVideoActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowFile;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
@@ -36,6 +37,7 @@ import com.xiuxiu.utils.ToastUtil;
 import com.xiuxiu.utils.XiuxiuUtils;
 
 import java.io.File;
+import java.util.Date;
 
 /**
  * Created by huzhi on 16-7-25.
@@ -51,9 +53,12 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
     private TextView timeLengthView;
     private ImageView playView;
 
-    private TextView mStatusTv;
+
     private TextView mCostXiuxiuBTv;
     private TextView mXiuxiuContentTv;
+
+    private TextView mStatusTv;
+    private ImageView mStatusIv;
 
     @Override
     protected void onInflatView() {
@@ -73,6 +78,7 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
         mStatusTv = (TextView) findViewById(R.id.status);
         mCostXiuxiuBTv = (TextView) findViewById(R.id.cost_xiuxiu_b);
         mXiuxiuContentTv = (TextView) findViewById(R.id.xiuxiu_content);
+        mStatusIv = (ImageView)findViewById(R.id.xiuxiu_status_icon);
     }
 
     @Override
@@ -88,9 +94,7 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
         mCostXiuxiuBTv.setVisibility(View.VISIBLE);
         mXiuxiuContentTv.setVisibility(View.VISIBLE);
         mXiuxiuContentTv.setText(xiuxiuContent);
-        mCostXiuxiuBTv.setText("需支付" + xiuxiuB + "咻币");
-
-        setStatus();
+        mCostXiuxiuBTv.setText("" + xiuxiuB);
 
         EMVideoMessageBody videoBody = (EMVideoMessageBody) message.getBody();
         // final File image=new File(PathUtil.getInstance().getVideoPath(),
@@ -112,6 +116,7 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
                 String size = TextFormater.getDataSize(videoBody.getVideoFileLength());
                 sizeView.setText(size);
             }
+            setStatus();
         } else {
             if (videoBody.getLocalUrl() != null && new File(videoBody.getLocalUrl()).exists()) {
                 String size = TextFormater.getDataSize(new File(videoBody.getLocalUrl()).length());
@@ -243,14 +248,78 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
     }
 
     private void setStatus(){
-        if (!ChatRowUtils.isPaid(message) && ChatRowUtils.isOverdue(message.getMsgTime(), EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG)) {
-            mStatusTv.setText("已过期");
-        }else if (ChatRowUtils.isPaid(message)){
-            mStatusTv.setText("已支付");
-        }else{
-            mStatusTv.setText("未接受");
+        android.util.Log.d(TAG,"setStatus");
+        if( message.direct() == EMMessage.Direct.RECEIVE) {
+            mStatusIv.setVisibility(View.VISIBLE);
+            if (!ChatRowUtils.isPaid(message) && ChatRowUtils.isOverdue(message.getMsgTime(), EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG)) {
+                mStatusTv.setVisibility(View.GONE);
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_invalid); //已过期
+                return;
+            }
+            if (ChatRowUtils.isPaid(message)){
+                mStatusTv.setVisibility(View.GONE);
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_viewed);//已查看
+            }else{
+                mStatusTv.setVisibility(View.GONE);
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_no_viewed);//未查看
+            }
+        } else {
+            mStatusTv.setVisibility(View.GONE);
+            mStatusIv.setVisibility(View.VISIBLE);
+
+            // 咻咻状态 (如果是发送消息　只有发送成功才有咻咻状态)
+            if (!ChatRowUtils.isPaid(message) && ChatRowUtils.isOverdue(message.getMsgTime(), EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG)) {
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_invalid); //已过期
+            }else if (ChatRowUtils.isPaid(message)){
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_viewed);//已查看
+            }else{
+                mStatusIv.setImageResource(R.drawable.xiuxiu_task_status_no_viewed);//未查看
+            }
         }
     }
+
+
+    /**
+     * 处理发送消息  覆盖父类
+     */
+    @Override
+    protected void handleSendMessage() {
+
+        mStatusIv.setVisibility(View.GONE);
+        mStatusTv.setVisibility(View.GONE);
+
+        setMessageSendCallback();
+        switch (message.status()) {
+            case SUCCESS:
+                progressBar.setVisibility(View.GONE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.GONE);
+                statusView.setVisibility(View.GONE);
+                setStatus();
+                break;
+            case FAIL:
+                progressBar.setVisibility(View.GONE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.GONE);
+                statusView.setVisibility(View.VISIBLE);
+                break;
+            case INPROGRESS:
+                progressBar.setVisibility(View.VISIBLE);
+                if(percentageView != null){
+                    percentageView.setVisibility(View.VISIBLE);
+                    percentageView.setText(message.progress() + "%");
+                }
+                statusView.setVisibility(View.GONE);
+                break;
+            default:
+                progressBar.setVisibility(View.GONE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.GONE);
+                statusView.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
 
     // ============================================================================================
     // 付费对话框
@@ -309,4 +378,36 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
         builder.create().show();
     }
 
+
+
+    // 覆盖父类方法　避免干扰子类
+    @Override
+    protected void setUpBaseView() {
+        // 设置用户昵称头像，bubble背景等
+        TextView timestamp = (TextView) findViewById(com.hyphenate.easeui.R.id.timestamp);
+        if (timestamp != null) {
+            if (position == 0) {
+                timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                timestamp.setVisibility(View.VISIBLE);
+            } else {
+                // 两条消息时间离得如果稍长，显示时间
+                EMMessage prevMessage = (EMMessage) adapter.getItem(position - 1);
+                if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
+                    timestamp.setVisibility(View.GONE);
+                } else {
+                    timestamp.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                    timestamp.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        //设置头像和nick
+        if(message.direct() == EMMessage.Direct.SEND){
+            EaseUserUtils.setUserAvatar(context, EMClient.getInstance().getCurrentUser(), userAvatarView);
+            //发送方不显示nick
+//            UserUtils.setUserNick(EMChatManager.getInstance().getCurrentUser(), usernickView);
+        }else{
+            EaseUserUtils.setUserAvatar(context, message.getFrom(), userAvatarView);
+            EaseUserUtils.setUserNick(message.getFrom(), usernickView);
+        }
+    }
 }

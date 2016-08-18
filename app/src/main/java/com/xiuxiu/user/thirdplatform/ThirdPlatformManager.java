@@ -85,12 +85,15 @@ public class ThirdPlatformManager {
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
 //                        Toast.makeText(mAc, "get info succeed", Toast.LENGTH_SHORT).show();
-                        nickname = map.get("nickname");
-                        city = map.get("province");
-                        openId = map.get("openid");
-                        headimgpath = map.get("headimgurl");
-                        sex = map.get("sex");
+                        if(map!=null){
+                            nickname = map.get("nickname");
+                            city = map.get("province");
+                            openId = map.get("openid");
+                            headimgpath = map.get("headimgurl");
+                            sex = map.get("sex");
+                        }else{
 
+                        }
                         login();
                     }
 
