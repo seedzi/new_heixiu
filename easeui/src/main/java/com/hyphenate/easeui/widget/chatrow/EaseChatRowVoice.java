@@ -1,9 +1,11 @@
 package com.hyphenate.easeui.widget.chatrow;
 
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMVoiceMessageBody;
 import com.hyphenate.easeui.R;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import android.content.Context;
@@ -80,6 +82,15 @@ public class EaseChatRowVoice extends EaseChatRowFile{
                 progressBar.setVisibility(View.INVISIBLE);
 
             }
+
+            if (!message.isAcked() && message.getChatType() == EMMessage.ChatType.Chat) {
+                try {
+                    EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
+                } catch (HyphenateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             return;
         }
 
@@ -105,5 +116,46 @@ public class EaseChatRowVoice extends EaseChatRowFile{
             EaseChatRowVoicePlayClickListener.currentPlayListener.stopPlayVoice();
         }
     }
-    
+
+    @Override
+    protected void handleSendMessage() {
+        setMessageSendCallback();
+        switch (message.status()) {
+            case SUCCESS:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.INVISIBLE);
+                break;
+            case FAIL:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            case INPROGRESS:
+                progressBar.setVisibility(View.VISIBLE);
+                if(percentageView != null){
+                    percentageView.setVisibility(View.VISIBLE);
+                    percentageView.setText(message.progress() + "%");
+                }
+                statusView.setVisibility(View.INVISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            default:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+        }
+    }
 }

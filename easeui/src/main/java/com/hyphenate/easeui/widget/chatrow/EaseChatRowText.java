@@ -1,5 +1,12 @@
 package com.hyphenate.easeui.widget.chatrow;
 
+import android.content.Context;
+import android.text.Spannable;
+import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import android.widget.TextView.BufferType;
+
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -8,14 +15,7 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.utils.EaseSmileUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
-import android.content.Context;
-import android.text.Spannable;
-import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-import android.widget.TextView.BufferType;
-
-public class EaseChatRowText extends EaseChatRow{
+public class EaseChatRowText extends EaseChatRow {
 
 	private TextView contentView;
 
@@ -51,8 +51,9 @@ public class EaseChatRowText extends EaseChatRow{
             case CREATE: 
                 progressBar.setVisibility(View.GONE);
                 statusView.setVisibility(View.VISIBLE);
-                // 发送消息
-//                sendMsgInBackground(message);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
                 break;
             case SUCCESS: // 发送成功
                 progressBar.setVisibility(View.GONE);
@@ -61,10 +62,16 @@ public class EaseChatRowText extends EaseChatRow{
             case FAIL: // 发送失败
                 progressBar.setVisibility(View.GONE);
                 statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
                 break;
             case INPROGRESS: // 发送中
                 progressBar.setVisibility(View.VISIBLE);
                 statusView.setVisibility(View.GONE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
                 break;
             default:
                break;

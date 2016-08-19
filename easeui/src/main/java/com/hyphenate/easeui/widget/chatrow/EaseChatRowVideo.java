@@ -12,6 +12,7 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.model.EaseImageCache;
 import com.hyphenate.easeui.ui.EaseShowVideoActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
@@ -21,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +41,7 @@ public class EaseChatRowVideo extends EaseChatRowFile{
 	@Override
 	protected void onInflatView() {
 		inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
-				R.layout.ease_row_received_video : R.layout.ease_row_sent_video, this);
+                R.layout.ease_row_received_video : R.layout.ease_row_sent_video, this);
 	}
 
 	@Override
@@ -94,7 +96,14 @@ public class EaseChatRowVideo extends EaseChatRowFile{
                 }
 
             }
-
+            if (!message.isAcked() && message.getChatType() == ChatType.Chat) {
+                try {
+                    EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
+                } catch (HyphenateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             return;
         }
         //处理发送方消息
@@ -169,7 +178,47 @@ public class EaseChatRowVideo extends EaseChatRowFile{
         }
         
     }
-    
-    
+
+
+    protected void handleSendMessage() {
+        setMessageSendCallback();
+        switch (message.status()) {
+            case SUCCESS:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.INVISIBLE);
+                break;
+            case FAIL:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            case INPROGRESS:
+                progressBar.setVisibility(View.VISIBLE);
+                if(percentageView != null){
+                    percentageView.setVisibility(View.VISIBLE);
+                    percentageView.setText(message.progress() + "%");
+                }
+                statusView.setVisibility(View.INVISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            default:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+        }
+    }
 
 }

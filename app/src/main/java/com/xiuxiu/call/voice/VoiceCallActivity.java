@@ -189,6 +189,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             callStateTextView.setText(st1);
                         }
                     });
+                    android.util.Log.d(TAG,"CONNECTING");
                     break;
                 case CONNECTED: // 双方已经建立连接
                     runOnUiThread(new Runnable() {
@@ -199,9 +200,11 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             callStateTextView.setText(st3);
                         }
                     });
+                    android.util.Log.d(TAG, "CONNECTED");
                     break;
 
                 case ACCEPTED: // 电话接通成功
+                    android.util.Log.d(TAG, "ACCEPTED");
                     handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
@@ -254,7 +257,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     }
                                     @Override
                                     public void onFailure() {
-                                        android.util.Log.d("12345","onFailure");
+                                        android.util.Log.d(TAG,"onFailure  您的余额已经不够");
                                         ToastUtil.showMessage(VoiceCallActivity.this,"您的余额已经不够！");
                                         CallCostMoneyManager.getInstance().stopLoop();
                                         hangupBtn.performClick();
@@ -265,6 +268,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                     }
                     break;
                 case NETWORK_UNSTABLE:
+                    android.util.Log.d(TAG,"  NETWORK_UNSTABLE");
                     runOnUiThread(new Runnable() {
                         public void run() {
                             netwrokStatusVeiw.setVisibility(View.VISIBLE);
@@ -298,6 +302,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                     });
                     break;
                 case DISCONNNECTED: // 电话断了
+                    android.util.Log.d(TAG,"  DISCONNNECTED");
                     handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {

@@ -1,6 +1,14 @@
 package com.hyphenate.easeui.widget.chatrow;
 
-import java.io.File;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMFileMessageBody;
@@ -12,19 +20,11 @@ import com.hyphenate.easeui.model.EaseImageCache;
 import com.hyphenate.easeui.ui.EaseShowBigImageActivity;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseImageUtils;
-import com.hyphenate.util.EMLog;
+import com.hyphenate.exceptions.HyphenateException;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.File;
 
-public class EaseChatRowImage extends EaseChatRowFile{
+public class EaseChatRowImage extends EaseChatRowFile {
 
     protected ImageView imageView;
     private EMImageMessageBody imgBody;
@@ -47,6 +47,7 @@ public class EaseChatRowImage extends EaseChatRowFile{
     
     @Override
     protected void onSetUpView() {
+        android.util.Log.d("123456","onSetUpView");
         imgBody = (EMImageMessageBody) message.getBody();
         // 接收方向的消息
         if (message.direct() == EMMessage.Direct.RECEIVE) {
@@ -64,6 +65,14 @@ public class EaseChatRowImage extends EaseChatRowFile{
                     thumbPath = EaseImageUtils.getThumbnailImagePath(imgBody.getLocalUrl());
                 }
                 showImageView(thumbPath, imageView, imgBody.getLocalUrl(), message);
+            }
+            if (!message.isAcked() && message.getChatType() == ChatType.Chat) {
+                try {
+                    EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
+                } catch (HyphenateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
             return;
         }
@@ -169,4 +178,45 @@ public class EaseChatRowImage extends EaseChatRowFile{
         }
     }
 
+    @Override
+    protected void handleSendMessage() {
+        setMessageSendCallback();
+        switch (message.status()) {
+            case SUCCESS:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.INVISIBLE);
+                break;
+            case FAIL:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            case INPROGRESS:
+                progressBar.setVisibility(View.VISIBLE);
+                if(percentageView != null){
+                    percentageView.setVisibility(View.VISIBLE);
+                    percentageView.setText(message.progress() + "%");
+                }
+                statusView.setVisibility(View.INVISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+            default:
+                progressBar.setVisibility(View.INVISIBLE);
+                if(percentageView != null)
+                    percentageView.setVisibility(View.INVISIBLE);
+                statusView.setVisibility(View.VISIBLE);
+
+                deliveredView.setVisibility(View.GONE);
+                ackedView.setVisibility(View.GONE);
+                break;
+        }
+    }
 }

@@ -141,6 +141,7 @@ public abstract class EaseChatRow extends LinearLayout {
             ackedView.setBackgroundResource(R.drawable.xiuxiu_conversation_read);
             ackedView.setText("");
             if (message.isAcked()) {
+                android.util.Log.d("123456","message.isAcked()");
                 if (deliveredView != null) {
                     deliveredView.setVisibility(View.INVISIBLE);
                 }
