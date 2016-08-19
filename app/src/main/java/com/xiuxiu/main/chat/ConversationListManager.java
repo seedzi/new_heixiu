@@ -3,6 +3,8 @@ package com.xiuxiu.main.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.LayoutInflater;
