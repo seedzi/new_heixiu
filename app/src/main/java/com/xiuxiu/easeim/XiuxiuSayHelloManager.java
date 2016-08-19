@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
+import com.xiuxiu.CommonLib;
 import com.xiuxiu.SharePreferenceWrap;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.api.XiuxiuLoginResult;
@@ -194,7 +195,11 @@ public class XiuxiuSayHelloManager {
                                         callback.onSuccess();
                                     }
                                 } else {
-                                    ToastUtil.showMessage(ac,"支付失败！");
+                                    if (CommonLib.isNetworkConnected(ac)) {
+                                        ToastUtil.showMessage(ac, "可能您的余额不够,支付失败,请您充值!");
+                                    } else {
+                                        ToastUtil.showMessage(ac, "网络连接错误!");
+                                    }
                                 }
                                 XiuxiuUtils.dismisslProgressDialog();
                             }

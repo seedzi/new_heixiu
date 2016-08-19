@@ -29,6 +29,7 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowFile;
 import com.hyphenate.util.DateUtils;
+import com.xiuxiu.CommonLib;
 import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.chat.ChatPage;
@@ -424,7 +425,11 @@ public class ChatRowImgNv2NanXiuxiu extends EaseChatRowFile{
 
                     @Override
                     public void onFailure() {
-                        ToastUtil.showMessage(getContext(), "支付失败!");
+                        if (CommonLib.isNetworkConnected(getContext())) {
+                            ToastUtil.showMessage(getContext(), "可能您的余额不够,支付失败,请您充值!");
+                        } else {
+                            ToastUtil.showMessage(getContext(), "网络连接错误!");
+                        }
                         XiuxiuUtils.dismisslProgressDialog();
                     }
                 });

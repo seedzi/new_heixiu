@@ -27,6 +27,7 @@ import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
 import com.hyphenate.util.TextFormater;
+import com.xiuxiu.CommonLib;
 import com.xiuxiu.R;
 import com.xiuxiu.XiuxiuApplication;
 import com.xiuxiu.chat.im.ChatFragment;
@@ -363,8 +364,11 @@ public class ChatRowVideoNv2NanXiuxiu extends EaseChatRowFile {
 
                     @Override
                     public void onFailure() {
-                        ToastUtil.showMessage(getContext(), "支付失败!");
-                        XiuxiuUtils.dismisslProgressDialog();
+                        if (CommonLib.isNetworkConnected(getContext())) {
+                            ToastUtil.showMessage(getContext(), "可能您的余额不够,支付失败,请您充值!");
+                        } else {
+                            ToastUtil.showMessage(getContext(), "网络连接错误!");
+                        }
                     }
                 });
             }
