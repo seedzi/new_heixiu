@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="172dp"
     android:orientation="vertical">
-
-
     <GridView
         android:id="@+id/gift_wall"
         android:background="#ededed"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:numColumns="4"
         android:verticalSpacing="2px"
-        android:horizontalSpacing="1px"
-        android:layout_marginBottom="2dp"/>
-
+        android:horizontalSpacing="1px"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -22,12 +18,11 @@
     <TextView
         android:id="@+id/chong_zhi"
         android:text="充值"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textSize="15sp"
         android:paddingRight="20dp"
         android:textColor="#00b8d0"
         android:gravity="right|center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="20dp" /><!--         android:paddingTop="10dp"
+        android:paddingBottom="10dp" -->
 </LinearLayout>

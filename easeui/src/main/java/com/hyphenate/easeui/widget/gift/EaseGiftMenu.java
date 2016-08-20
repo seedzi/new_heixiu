@@ -99,13 +99,13 @@ public class EaseGiftMenu extends FrameLayout {
             Holder holder = null;
             if(convertView == null){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.ease_item_gift,null);
-                gl = new GridView.LayoutParams(mGiftItemWidth, mGiftItemHeight);
-                ll = new LinearLayout.LayoutParams(mGiftItemWidth/2, mGiftItemHeight/2);
-                ll.gravity = Gravity.CENTER_HORIZONTAL;
-                convertView.setLayoutParams(gl);
+//                gl = new GridView.LayoutParams(mGiftItemWidth, mGiftItemHeight);
+//                ll = new LinearLayout.LayoutParams(mGiftItemWidth/2, EaseCommonUtils.dip2px(getContext(),30));//mGiftItemHeight/2
+//                ll.gravity = Gravity.CENTER_HORIZONTAL;
+//                convertView.setLayoutParams(gl);
                 holder = new Holder();
                 holder.giftIv = (ImageView) convertView.findViewById(R.id.gift_img);
-                holder.giftIv.setLayoutParams(ll);
+//                holder.giftIv.setLayoutParams(ll);
                 holder.titleTv = (TextView) convertView.findViewById(R.id.gift_title);
                 holder.priceTv = (TextView) convertView.findViewById(R.id.gift_price);
                 convertView.setTag(holder);
