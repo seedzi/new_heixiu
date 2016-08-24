@@ -16,6 +16,9 @@ import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.widget.gift.GiftManager;
 import com.hyphenate.util.PathUtil;
 import com.xiuxiu.R;
@@ -644,5 +647,33 @@ public class XiuxiuUtils {
     }
     public static void saveXiuxiuBroadcastPrompt(boolean value){
         XiuxiuUtils.getDefaultSharedPreferences().edit().putBoolean("has_xiuxiu_broadcast",value).commit();
+    }
+
+    // ============================================================================================
+    //　通知栏咻咻消息的生成
+    // ============================================================================================
+    public static String getXiuxiuNotifMsgDisplay(EMMessage message){
+        String ticker = "";
+        try{
+            String action = "";
+            if( message.getBody() instanceof EMCmdMessageBody) {
+                EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                action = cmdMsgBody.action();//获取自定义action
+            }
+            if(!TextUtils.isEmpty(action) && EaseConstant.MESSAGE_ATTR_XIUXIU_BROADCAST_ACTION.equals(action)){
+                ticker = "咻羞广播";
+            }else if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_XIUXIU)){
+                ticker = "咻羞消息";
+                if(message.getIntAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE) ==EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_IMG){
+                    ticker = "咻羞图片";
+                }else if(message.getIntAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE) ==EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VOICE){
+                    ticker = "咻羞语音";
+                }else if(message.getIntAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE) ==EaseConstant.MESSAGE_ATTR_XIUXIU_TYPE_VIDEO){
+                    ticker = "咻羞视频";
+                }
+            }
+        }catch (Exception e){
+        }
+        return ticker;
     }
 }

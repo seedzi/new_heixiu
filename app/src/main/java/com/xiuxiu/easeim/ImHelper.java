@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import com.xiuxiu.user.invitation.InviteMessage;
 import com.xiuxiu.user.invitation.InviteMessage.InviteMesageStatus;
 import com.xiuxiu.user.invitation.InviteMessgeDao;
 import com.xiuxiu.user.invitation.UserDao;
+import com.xiuxiu.utils.XiuxiuUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -456,6 +458,12 @@ public class ImHelper {
                 if(message.getType() == EMMessage.Type.TXT){
                     ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
                 }
+
+                String txt = XiuxiuUtils.getXiuxiuNotifMsgDisplay(message);
+                if(!TextUtils.isEmpty(txt)){
+                    ticker = txt;
+                }
+
                 EaseUser user = getUserInfo(message.getFrom());
                 if(user != null){
                     return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
