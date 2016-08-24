@@ -322,7 +322,7 @@ public class ConversationListManager {
                 XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                     @Override
                     public void run() {
-//                        setupXiuxiuBroadcastLayout(msg);
+                        setupXiuxiuBroadcastLayout(msg);
                     }
                 });
             }
