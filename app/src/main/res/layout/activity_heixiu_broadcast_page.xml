@@ -39,7 +39,7 @@
         android:textSize="12sp"
         android:text="当前有198位女生在线,预计1分09秒回应你的广播."/>
 
-    <com.xiuxiu.widget.HeixiuHeadImgLayout
+    <com.xiuxiuchat.widget.HeixiuHeadImgLayout
         android:id="@+id/xiuxiu_head_img_layout"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="17dp"

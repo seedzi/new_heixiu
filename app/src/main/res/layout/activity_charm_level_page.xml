@@ -67,7 +67,7 @@
         android:background="#ffffff"
         android:orientation="vertical">
         
-        <com.xiuxiu.widget.VipGradeView
+        <com.xiuxiuchat.widget.VipGradeView
             android:id="@+id/vip_grade_view"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"

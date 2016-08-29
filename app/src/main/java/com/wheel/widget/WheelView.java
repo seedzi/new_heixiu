@@ -36,7 +36,7 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 import com.wheel.widget.adapters.WheelViewAdapter;
-import com.xiuxiu.R;
+import com.xiuxiuchat.R;
 
 /**
  * Numeric wheel view.

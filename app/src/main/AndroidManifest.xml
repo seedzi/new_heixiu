@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xiuxiu"
+    package="com.xiuxiuchat"
     android:versionCode="1"
     android:versionName="0.0.1">
 
@@ -33,14 +33,13 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
 
     <application
-        android:name=".XiuxiuApplication"
+        android:name="com.xiuxiuchat.XiuxiuApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        <!-- 设置环信应用的appkey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="17710671059#gougou" />
+
         <!-- 声明sdk所需的service SDK核心功能-->
         <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
         <!-- 声明sdk所需的receiver -->
@@ -58,7 +57,7 @@
 
 
         <!-- 监听系统日期变化-->
-        <receiver android:name="com.xiuxiu.DateTimeReceiver">
+        <receiver android:name="com.xiuxiuchat.DateTimeReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED"/>
             </intent-filter>
@@ -67,42 +66,40 @@
 
 
         <provider
-            android:name="com.xiuxiu.provider.XiuxiuProvider"
-            android:authorities="com.xiuxiu"
+            android:name="com.xiuxiuchat.provider.XiuxiuProvider"
+            android:authorities="com.xiuxiuchat"
             android:exported="false" >
         </provider>
 
 
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.main.MainActivity"
+            android:name="com.xiuxiuchat.main.MainActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 邀请-->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.invitation.InvitationPage"
+            android:name="com.xiuxiuchat.user.invitation.InvitationPage"
             android:label="@string/app_name">
         </activity>
-        HeixiuBroadCastSettingsPage
 
         <!-- 嘿咻设置  (价格设置) -->
-        HeixiuSettingsPage
         <activity
             android:theme="@style/Theme"
-            android:name=".user.XiuxiuSettingsPage"
+            android:name="com.xiuxiuchat.user.XiuxiuSettingsPage"
             android:label="@string/app_name">
         </activity>
         <!-- 咻广播设置 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".Xiuxiubroadcast.XiuxiuBroadCastSettingsPage"
+            android:name="com.xiuxiuchat.Xiuxiubroadcast.XiuxiuBroadCastSettingsPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 咻咻消息列表　-->
-        <activity android:name="com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastListPage"
+        <activity android:name="com.xiuxiuchat.Xiuxiubroadcast.XiuxiuBroadcastListPage"
             android:theme="@style/Theme"
             android:label="@string/app_name">
         </activity>
@@ -110,19 +107,19 @@
         <!-- 咻广播 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".Xiuxiubroadcast.XiuxiuBroadCastPage"
+            android:name="com.xiuxiuchat.Xiuxiubroadcast.XiuxiuBroadCastPage"
             android:label="@string/app_name">
         </activity>
         <!-- 魅力等级 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.CharmLevelActivity"
+            android:name="com.xiuxiuchat.user.CharmLevelActivity"
             android:label="@string/app_name">
         </activity>
         <!-- 钱包页面 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.WalletActivity"
+            android:name="com.xiuxiuchat.user.WalletActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <!-- 自定义的动作 -->
@@ -133,20 +130,20 @@
         <!-- 钱包充值 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.wallet.WalletRechargePage"
+            android:name="com.xiuxiuchat.user.wallet.WalletRechargePage"
             android:label="@string/app_name">
         </activity>
         <!-- 钱包提现 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.WalletCashPage"
+            android:name="com.xiuxiuchat.user.WalletCashPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 拉黑举报 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.PullBlackReportActivity"
+            android:name="com.xiuxiuchat.user.PullBlackReportActivity"
             android:label="@string/app_name">
 
 
@@ -154,33 +151,33 @@
         <!-- 用户详情页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.UserDetailActivity"
+            android:name="com.xiuxiuchat.user.UserDetailActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户详情编辑页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.UserEditDetailActivity"
+            android:name="com.xiuxiuchat.user.UserEditDetailActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户文本信息编辑页面 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.UserTxtEditActivity"
+            android:name="com.xiuxiuchat.user.UserTxtEditActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户注册页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.register.RegisterPage"
+            android:name="com.xiuxiuchat.user.register.RegisterPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 启动页面 -->
-        <activity android:name=".WelcomePage"
+        <activity android:name="com.xiuxiuchat.WelcomePage"
             android:theme="@style/Theme"
             android:label="@string/app_name">
             <!-- -->
@@ -194,12 +191,12 @@
         <!-- 用户登陆 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.login.LoginPage"
+            android:name="com.xiuxiuchat.user.login.LoginPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户登录后的资料编辑页面 -->
-        <activity android:name=".user.login.LoginUserDataEditPage"
+        <activity android:name="com.xiuxiuchat.user.login.LoginUserDataEditPage"
             android:theme="@style/Theme"
             android:label="@string/app_name">
         </activity>
@@ -207,7 +204,7 @@
         <!-- 用户的资料页面 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.PersonDetailActivity"
+            android:name="com.xiuxiuchat.user.PersonDetailActivity"
             android:label="@string/app_name">
         </activity>
 
@@ -215,7 +212,7 @@
         <!-- 用户资料修改 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.login.PersonalDataPage"
+            android:name="com.xiuxiuchat.user.login.PersonalDataPage"
             android:label="@string/app_name">
 
         </activity>
@@ -223,7 +220,7 @@
         <!-- 聊天祥情页 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.chat.ChatPage"
+            android:name="com.xiuxiuchat.chat.ChatPage"
             android:launchMode="singleTask"
             android:label="@string/app_name">
         </activity>
@@ -231,41 +228,41 @@
         <!-- 设置 -->
         <activity
             android:theme="@style/Theme"
-            android:name="com.xiuxiu.user.SetupPage"
+            android:name="com.xiuxiuchat.user.SetupPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 用户语音编辑 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.voice.VoiceIntroductionActivity"
+            android:name="com.xiuxiuchat.user.voice.VoiceIntroductionActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 咻羞任务 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".xiuxiutask.XiuxiuTaskPage"
+            android:name="com.xiuxiuchat.xiuxiutask.XiuxiuTaskPage"
             android:label="@string/app_name">
         </activity>
 
         <activity
             android:theme="@style/Theme"
-            android:name=".user.UserEditCityActivity"
+            android:name="com.xiuxiuchat.user.UserEditCityActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- 编辑用户城市 -->
         <activity
             android:theme="@style/Theme"
-            android:name=".user.invitation.NewFriendsMsgActivity"
+            android:name="com.xiuxiuchat.user.invitation.NewFriendsMsgActivity"
             android:label="@string/app_name">
         </activity>
 
 
         <!-- 微信支付结果页面 -->
         <activity
-            android:name=".wxapi.WXPayEntryActivity"
+            android:name="com.xiuxiuchat.wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"/>
@@ -273,24 +270,24 @@
         <!-- 图片显示页面 -->
         <activity
             android:theme="@style/Transparent"
-            android:name="com.xiuxiu.user.UserImagePageActivity"
+            android:name="com.xiuxiuchat.user.UserImagePageActivity"
             android:label="@string/app_name">
         </activity>
 
         <!-- DialogActivity          android:theme="@style/Theme" -->
         <activity
             android:theme="@android:style/Theme.Translucent"
-            android:name="com.xiuxiu.utils.DialogActivity"
+            android:name="com.xiuxiuchat.utils.DialogActivity"
             android:label="@string/app_name">
         </activity>
 
-        <activity android:name=".user.invitation.AddFriendsPage"
+        <activity android:name="com.xiuxiuchat.user.invitation.AddFriendsPage"
             android:theme="@style/Theme"
             android:label="@string/app_name">
         </activity>
 
         <!-- 财富等级 -->
-        <activity android:name="com.xiuxiu.user.WealthLevelActivity"
+        <activity android:name="com.xiuxiuchat.user.WealthLevelActivity"
             android:theme="@style/Theme"
             android:label="@string/app_name">
         </activity>
@@ -299,12 +296,12 @@
         <!-- 趣拍透明页面-->
         <activity
             android:theme="@style/Theme.Transparent"
-            android:name="com.xiuxiu.xiuxiutask.XiuxiuQupaiPage"
+            android:name="com.xiuxiuchat.xiuxiutask.XiuxiuQupaiPage"
             android:label="@string/app_name">
         </activity>
 
         <!-- 通话页面 -->
-        <activity android:name="com.xiuxiu.call.voice.VoiceCallActivity"
+        <activity android:name="com.xiuxiuchat.call.voice.VoiceCallActivity"
             android:theme="@style/Theme"
             android:label="@string/app_name">
         </activity>
@@ -329,13 +326,13 @@
         </activity>
         <!-- choose video -->
         <activity
-            android:name="com.xiuxiu.chat.im.ImageGridActivity"
+            android:name="com.xiuxiuchat.chat.im.ImageGridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
-            android:name="com.xiuxiu.chat.im.RecorderVideoActivity"
+            android:name="com.xiuxiuchat.chat.im.RecorderVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" >
@@ -354,7 +351,7 @@
             android:excludeFromRecents="true"/>
         <!-- ###################注册SDK使用的Activity###################### -->
         <activity
-            android:name="com.xiuxiu.wxapi.WXEntryActivity"
+            android:name="com.xiuxiuchat.wxapi.WXEntryActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
@@ -364,6 +361,7 @@
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:theme="@style/Theme.UMDefault"
             android:excludeFromRecents="true"/> -->
+        <!-- 友盟appkey 渠道 -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5729959767e58e9905000715" >
@@ -372,6 +370,7 @@
             android:value="000001"
             android:name="UMENG_CHANNEL">
         </meta-data>
-
+        <!-- 设置环信应用的appkey -->
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="17710671059#gougou" />
     </application>
 </manifest>

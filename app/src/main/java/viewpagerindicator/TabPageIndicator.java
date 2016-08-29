@@ -32,8 +32,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.xiuxiu.R;
-import com.xiuxiu.utils.ScreenUtils;
+import com.xiuxiuchat.R;
+import com.xiuxiuchat.utils.ScreenUtils;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;

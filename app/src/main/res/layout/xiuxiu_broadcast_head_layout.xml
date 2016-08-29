@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy xmlns:android="http://schemas.android.com/apk/res/android"
+<com.xiuxiuchat.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingTop="2dp"
@@ -15,7 +15,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/xiuxiu_broadcast_icon"/>
 
-        <com.xiuxiu.Xiuxiubroadcast.DotView
+        <com.xiuxiuchat.Xiuxiubroadcast.DotView
             android:layout_height="10dp"
             android:layout_width="10dp"
             android:layout_marginLeft="43dp"
@@ -63,4 +63,4 @@
         android:layout_height="1px"
         android:layout_marginLeft="79dp"
         android:background="#dfdfdf"/><!--   b2b2b2      -->
-</com.xiuxiu.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy>
+</com.xiuxiuchat.Xiuxiubroadcast.XiuxiuBroadcastHeadLayouy>

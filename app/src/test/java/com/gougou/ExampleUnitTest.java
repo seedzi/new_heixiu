@@ -1,4 +1,4 @@
-package com.xiuxiu;
+package com.xiuxiuchat;
 
 import org.junit.Test;
 

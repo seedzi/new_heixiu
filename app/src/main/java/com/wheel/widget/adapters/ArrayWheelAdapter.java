@@ -17,8 +17,6 @@ package com.wheel.widget.adapters;
 
 import android.content.Context;
 
-import com.xiuxiu.R;
-
 /**
  * The simple Array wheel adapter
  * @param <T> the element type

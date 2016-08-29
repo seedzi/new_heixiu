@@ -70,7 +70,7 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
-    <com.xiuxiu.widget.TriangleView
+    <com.xiuxiuchat.widget.TriangleView
         android:id="@+id/triangle"
         android:layout_height="15dp"
         android:layout_width="match_parent"
@@ -154,6 +154,7 @@
 
 
     <TextView
+        android:id="@+id/bottom_txt"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="3dp"

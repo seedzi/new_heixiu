@@ -30,7 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-import com.xiuxiu.R;
+import com.xiuxiuchat.R;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 
 @SuppressLint("ViewConstructor")

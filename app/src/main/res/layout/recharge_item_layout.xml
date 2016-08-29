@@ -9,7 +9,7 @@
         android:background="#ffffff">
         <ImageView
             android:id="@+id/icon"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
 
         <CheckBox
             android:id="@+id/checked"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_width="50px"
             android:layout_height="50px"
@@ -43,6 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#00b8d0"
+            android:textSize="12sp"
             android:text="￥30"
             android:layout_centerVertical="true"/>
         <TextView
@@ -53,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffff0000"
+            android:textSize="12sp"
             android:text="888咻币"
             android:layout_centerVertical="true"/>
 
