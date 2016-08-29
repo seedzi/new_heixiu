@@ -40,7 +40,6 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
     }
-
 }
 
 dependencies {
@@ -59,5 +58,6 @@ dependencies {
     compile files('libs/happy-dns-0.2.7.jar')
     compile files('libs/httpclient-4.4.1.1.jar')
     compile files('libs/libammsdk.jar')
-    compile files('libs/utdid4all-1.0.4.jar')
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.umeng:fb:5.4.0'
 }

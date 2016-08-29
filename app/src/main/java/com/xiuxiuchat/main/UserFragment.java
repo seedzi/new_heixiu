@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.umeng.fb.FeedbackAgent;
 import com.xiuxiuchat.R;
 import com.xiuxiuchat.api.HttpUrlManager;
 import com.xiuxiuchat.api.XiuxiuLoginResult;
@@ -242,8 +243,8 @@ public class UserFragment extends Fragment implements View.OnClickListener{
                 XiuxiuSettingsPage.startActivity(getActivity());
                 break;
             case R.id.feedback:
-//                FeedbackAgent agent = new FeedbackAgent(context);
-//                agent.startFeedbackActivity();
+                FeedbackAgent agent = new FeedbackAgent(getActivity());
+                agent.startFeedbackActivity();
                 break;
         }
     }
