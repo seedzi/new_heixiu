@@ -57,9 +57,9 @@ public class LoginPage extends BaseActivity implements View.OnClickListener{
         int id = v.getId();
         switch (id){
             case R.id.qq_login_bt:
-                finish();
-                enterRegister();
-//                ThirdPlatformManager.getInstance().thirdLoginQQ();
+//                finish();
+//                enterRegister();
+                ThirdPlatformManager.getInstance().thirdLoginQQ();
                 break;
             case R.id.wechat_login_bt:
                 ThirdPlatformManager.getInstance().thirdLoginWechat();

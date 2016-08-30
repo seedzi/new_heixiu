@@ -41,6 +41,7 @@ public class ThirdPlatformManager {
         PlatformConfig.setWeixin("wxd9dc87e781c9202a", "2ceb6c986762f065e44a90fdc8f9cd0a");
         //2.qq初始化
         PlatformConfig.setQQZone("1105329971","QYEP6efwoIapKsMx");
+        //APP ID                  1105329971   APP KEY         QYEP6efwoIapKsMx
     }
 
     public static ThirdPlatformManager getInstance(){
@@ -73,7 +74,6 @@ public class ThirdPlatformManager {
     // 微信登录
     // =============================================================================================
     public void thirdLoginWechat(){
-//        showProgressDialog();
         if(mShareAPI == null) {
             mShareAPI = UMShareAPI.get(mAc);
         }
@@ -81,11 +81,9 @@ public class ThirdPlatformManager {
         UMAuthListener umAuthListener = new UMAuthListener() {
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-//                Toast.makeText(mAc, "Authorize succeed", Toast.LENGTH_SHORT).show();
                 mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-//                        Toast.makeText(mAc, "get info succeed", Toast.LENGTH_SHORT).show();
                         if(map!=null){
                             nickname = map.get("nickname");
                             city = map.get("province");
@@ -97,31 +95,23 @@ public class ThirdPlatformManager {
                         }
                         login();
                     }
-
                     @Override
                     public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
                         Toast.makeText( mAc, "get info fail", Toast.LENGTH_SHORT).show();
-//                        dismisslProgressDialog();
                     }
-
                     @Override
                     public void onCancel(SHARE_MEDIA share_media, int i) {
                         Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-//                        dismisslProgressDialog();
                     }
                 });
             }
-
             @Override
             public void onError(SHARE_MEDIA platform, int action, Throwable t) {
                 Toast.makeText( mAc, "Authorize fail", Toast.LENGTH_SHORT).show();
-//                dismisslProgressDialog();
             }
-
             @Override
             public void onCancel(SHARE_MEDIA platform, int action) {
                 Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-//                dismisslProgressDialog();
             }
         };
         mShareAPI.doOauthVerify(mAc, platform, umAuthListener);
@@ -132,6 +122,7 @@ public class ThirdPlatformManager {
     // =============================================================================================
 
     public void thirdLoginQQ(){
+        android.util.Log.d("77777","thirdLoginQQ()");
         if(mShareAPI == null) {
             mShareAPI = UMShareAPI.get(mAc);
         }
@@ -139,44 +130,45 @@ public class ThirdPlatformManager {
         UMAuthListener umAuthListener = new UMAuthListener() {
             @Override
             public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+                android.util.Log.d("77777","onComplete()");
                 mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
                     @Override
                     public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                        android.util.Log.d("77777","nei onComplete()");
                         for (Map.Entry<String, String> entry : map.entrySet()) {
-                            android.util.Log.d(TAG,"Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                            android.util.Log.d("77777","Key = " + entry.getKey() + ", Value = " + entry.getValue());
                         }
-
                         if(map!=null){
                             nickname = map.get("nickname");
                             city = map.get("province");
                             openId = map.get("openid");
                             headimgpath = map.get("headimgurl");
                             sex = map.get("sex");
-                        }else{
-
                         }
-//                        login();
+                        login();
                     }
 
                     @Override
                     public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                        android.util.Log.d("77777","onError()");
                         Toast.makeText( mAc, "get info fail", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancel(SHARE_MEDIA share_media, int i) {
+                        android.util.Log.d("77777","onCancel()");
                         Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
-
             @Override
             public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+                android.util.Log.d("77777","onError()");
                 Toast.makeText( mAc, "Authorize fail", Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onCancel(SHARE_MEDIA platform, int action) {
+                android.util.Log.d("77777","onCancel()");
                 Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
             }
         };
@@ -187,7 +179,6 @@ public class ThirdPlatformManager {
     public void onActivityResult4ThirdPlatform(int requestCode, int resultCode, Intent data){
         mShareAPI.onActivityResult(requestCode, resultCode, data);
     }
-
 
     // ========================================= Volley  login ===================================//
     private Response.Listener<String> mRefreshListener = new Response.Listener<String>() {

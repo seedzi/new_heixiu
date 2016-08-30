@@ -43,8 +43,6 @@ public class XiuxiuApplication extends MultiDexApplication{
         mQueue = Volley.newRequestQueue(this.getApplicationContext());
         //环信初始化
         ImHelper.getInstance().init(getApplicationContext());
-        //初始化第三方登陆
-        initThirdLogin();
         //init Volley
         mQueue = Volley.newRequestQueue(this.getApplicationContext());
         //初始化数据库
@@ -73,10 +71,6 @@ public class XiuxiuApplication extends MultiDexApplication{
                 .memoryCacheExtraOptions(480, 1600)
                 .build();
         ImageLoader.getInstance().init(config);
-    }
-
-    private void initThirdLogin(){
-        PlatformConfig.setWeixin("wxe684fcac0ecbcc99", "e968b57d7e3d5ad48f76ffb6c03dcbfb");
     }
 
     public Handler getUIHandler(){
