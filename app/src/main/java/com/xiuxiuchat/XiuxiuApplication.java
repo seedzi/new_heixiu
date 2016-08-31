@@ -14,9 +14,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.umeng.socialize.sso.UMQQSsoHandler;
 import com.xiuxiuchat.db.XiuxiuDatabaseHelper;
 import com.xiuxiuchat.easeim.ImHelper;
-import com.umeng.socialize.PlatformConfig;
 
 
 /**
@@ -49,6 +49,18 @@ public class XiuxiuApplication extends MultiDexApplication{
         XiuxiuDatabaseHelper.getInstance(getApplicationContext());
         // 初始化图片加载器
         initImageLoader(getApplicationContext());
+        // 第三方登录
+        initThirdPlatform();
+    }
+
+    private void initThirdPlatform(){
+        /*
+        //1.微信初始化
+        PlatformConfig.setWeixin("wxd9dc87e781c9202a", "2ceb6c986762f065e44a90fdc8f9cd0a");
+        //2.qq初始化
+        PlatformConfig.setQQZone("1105329971", "QYEP6efwoIapKsMx");
+        //APP ID                  1105329971   APP KEY         QYEP6efwoIapKsMx
+        */
     }
 
     private void initImageLoader(Context context) {

@@ -338,17 +338,23 @@
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
 
-        <!-- ###################   友盟   ################### -->
 
+
+
+
+
+
+
+        <!-- ###################   友盟   ################### -->
         <!-- 反馈 -->
         <activity
             android:name="com.umeng.fb.ConversationActivity"/>
-
-
+        <!--
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:theme="@style/Theme.UMDefault"
             android:excludeFromRecents="true"/>
+            -->
         <!-- ###################注册SDK使用的Activity###################### -->
         <activity
             android:name="com.xiuxiuchat.wxapi.WXEntryActivity"
@@ -358,6 +364,24 @@
             android:screenOrientation="portrait" />
 
         <!-- #######################友盟QQ第三方登录####################### -->
+
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="1105329971" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.tencent.connect.common.AssistActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:screenOrientation="portrait">
+        </activity>
+        <!--
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -366,14 +390,14 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent1105329971" /><!-- tencent100424468  -->
+                <data android:scheme="tencent1105329971" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
+            -->
         <!-- 友盟appkey 渠道 -->
         <meta-data
             android:name="UMENG_APPKEY"

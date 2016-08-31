@@ -1,9 +1,11 @@
 package com.xiuxiuchat.user.thirdplatform;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
@@ -12,11 +14,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.umeng.socialize.PlatformConfig;
-import com.umeng.socialize.UMAuthListener;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.controller.UMServiceFactory;
+import com.umeng.socialize.controller.UMSocialService;
+import com.umeng.socialize.controller.listener.SocializeListeners;
+import com.umeng.socialize.exception.SocializeException;
 import com.umeng.socialize.sso.UMQQSsoHandler;
+import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.socialize.weixin.controller.UMWXHandler;
 import com.xiuxiuchat.XiuxiuApplication;
 import com.xiuxiuchat.api.HttpUrlManager;
 import com.xiuxiuchat.api.XiuxiuLoginResult;
@@ -26,6 +31,7 @@ import com.xiuxiuchat.utils.Md5Util;
 import com.xiuxiuchat.utils.XiuxiuUtils;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by huzhi on 16-5-31.
@@ -37,11 +43,6 @@ public class ThirdPlatformManager {
     private static ThirdPlatformManager mInstance;
 
     private ThirdPlatformManager(){
-        //1.微信初始化
-        PlatformConfig.setWeixin("wxd9dc87e781c9202a", "2ceb6c986762f065e44a90fdc8f9cd0a");
-        //2.qq初始化
-        PlatformConfig.setQQZone("1105329971","QYEP6efwoIapKsMx");
-        //APP ID                  1105329971   APP KEY         QYEP6efwoIapKsMx
     }
 
     public static ThirdPlatformManager getInstance(){
@@ -52,8 +53,6 @@ public class ThirdPlatformManager {
     }
 
     private FragmentActivity mAc;
-    private UMShareAPI mShareAPI;
-    private SHARE_MEDIA platform;
 
     private String openId;
     private String nickname;
@@ -68,53 +67,67 @@ public class ThirdPlatformManager {
 
     public void setActivity(FragmentActivity ac){
         mAc = ac;
+        //参数1为当前Activity， 参数2为开发者在QQ互联申请的APP ID，参数3为开发者在QQ互联申请的APP kEY.
+        UMQQSsoHandler qqSsoHandler = new UMQQSsoHandler(mAc, "1105329971",
+                "QYEP6efwoIapKsMx");
+        qqSsoHandler.addToSocialSDK();
+
+        // 添加微信平台
+        UMWXHandler wxHandler = new UMWXHandler(mAc,"wxd9dc87e781c9202a","2ceb6c986762f065e44a90fdc8f9cd0a");
+        wxHandler.addToSocialSDK();
+
     }
 
+//    UMShareAPI  mShareAPI;
+    UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.login");
     // =============================================================================================
     // 微信登录
     // =============================================================================================
     public void thirdLoginWechat(){
-        if(mShareAPI == null) {
-            mShareAPI = UMShareAPI.get(mAc);
-        }
-        platform = SHARE_MEDIA.WEIXIN;
-        UMAuthListener umAuthListener = new UMAuthListener() {
+        SocializeListeners.UMAuthListener umAuthListener = new SocializeListeners.UMAuthListener() {
             @Override
-            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-                mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
-                    @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                        if(map!=null){
-                            nickname = map.get("nickname");
-                            city = map.get("province");
-                            openId = map.get("openid");
-                            headimgpath = map.get("headimgurl");
-                            sex = map.get("sex");
-                        }else{
+            public void onStart(SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "开始授权", Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权完成", Toast.LENGTH_SHORT).show();
+                mController.getPlatformInfo(mAc, SHARE_MEDIA.WEIXIN, new SocializeListeners.UMDataListener() {
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onComplete(int i, Map<String, Object> map) {
+                        if(map!=null){
+                            Set<String> keys = map.keySet();
+//                            for (String key : keys) {
+//                                android.util.Log.d("77777", "key = " + key + ",value = " + map.get(key));
+//                            }
+                            nickname = (String) map.get("nickname");
+                            city = (String) map.get("province");
+                            openId = (String) map.get("openid");
+                            headimgpath = (String) map.get("headimgurl");
+                            sex = String.valueOf(map.get("sex"));
                         }
                         login();
                     }
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        Toast.makeText( mAc, "get info fail", Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
-                        Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-                    }
                 });
             }
+
             @Override
-            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-                Toast.makeText( mAc, "Authorize fail", Toast.LENGTH_SHORT).show();
+            public void onError(SocializeException e, SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
-            public void onCancel(SHARE_MEDIA platform, int action) {
-                Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
+            public void onCancel(SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权取消", Toast.LENGTH_SHORT).show();
             }
         };
-        mShareAPI.doOauthVerify(mAc, platform, umAuthListener);
+        mController.doOauthVerify(mAc, SHARE_MEDIA.WEIXIN,umAuthListener);
+
     }
 
     // =============================================================================================
@@ -122,62 +135,64 @@ public class ThirdPlatformManager {
     // =============================================================================================
 
     public void thirdLoginQQ(){
-        android.util.Log.d("77777","thirdLoginQQ()");
-        if(mShareAPI == null) {
-            mShareAPI = UMShareAPI.get(mAc);
-        }
-        platform = SHARE_MEDIA.QQ;
-        UMAuthListener umAuthListener = new UMAuthListener() {
+
+        SocializeListeners.UMAuthListener umAuthListener = new SocializeListeners.UMAuthListener() {
             @Override
-            public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
-                android.util.Log.d("77777","onComplete()");
-                mShareAPI.getPlatformInfo(mAc, platform, new UMAuthListener(){
+            public void onStart(SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "开始授权", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onComplete(Bundle bundle, SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权完成", Toast.LENGTH_SHORT).show();
+                mController.getPlatformInfo(mAc, SHARE_MEDIA.QQ, new SocializeListeners.UMDataListener() {
                     @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                        android.util.Log.d("77777","nei onComplete()");
-                        for (Map.Entry<String, String> entry : map.entrySet()) {
-                            android.util.Log.d("77777","Key = " + entry.getKey() + ", Value = " + entry.getValue());
-                        }
-                        if(map!=null){
-                            nickname = map.get("nickname");
-                            city = map.get("province");
-                            openId = map.get("openid");
-                            headimgpath = map.get("headimgurl");
-                            sex = map.get("sex");
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onComplete(int i, Map<String, Object> map) {
+                        if (map != null) {
+                            Set<String> keys = map.keySet();
+//                            for (String key : keys) {
+//                                android.util.Log.d("77777", "key = " + key + ",value = " + map.get(key));
+//                            }
+                            nickname = (String) map.get("screen_name");
+                            city = (String) map.get("province");
+                            openId = (String) map.get("openid");
+                            headimgpath = (String) map.get("profile_image_url");
+                            String sextxt = (String) map.get("gender");
+                            if(sextxt.equals("男")){
+                                sex = "1";
+                            }else{ //其它都是女性
+                                sex = "0";
+                            }
                         }
                         login();
                     }
-
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        android.util.Log.d("77777","onError()");
-                        Toast.makeText( mAc, "get info fail", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
-                        android.util.Log.d("77777","onCancel()");
-                        Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
-                    }
                 });
             }
+
             @Override
-            public void onError(SHARE_MEDIA platform, int action, Throwable t) {
-                android.util.Log.d("77777","onError()");
-                Toast.makeText( mAc, "Authorize fail", Toast.LENGTH_SHORT).show();
+            public void onError(SocializeException e, SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权失败", Toast.LENGTH_SHORT).show();
             }
+
             @Override
-            public void onCancel(SHARE_MEDIA platform, int action) {
-                android.util.Log.d("77777","onCancel()");
-                Toast.makeText( mAc, "onCancel cancel", Toast.LENGTH_SHORT).show();
+            public void onCancel(SHARE_MEDIA share_media) {
+                Toast.makeText(mAc, "授权取消", Toast.LENGTH_SHORT).show();
             }
         };
-        mShareAPI.doOauthVerify(mAc, platform, umAuthListener);
+        mController.doOauthVerify(mAc, SHARE_MEDIA.QQ,umAuthListener);
     }
 
-    // ========================================= 微信登录结果返回 ===================================//
+    // ========================================= QQ微信登录结果返回 ===================================//
     public void onActivityResult4ThirdPlatform(int requestCode, int resultCode, Intent data){
-        mShareAPI.onActivityResult(requestCode, resultCode, data);
+//        mShareAPI.onActivityResult(requestCode, resultCode, data);
+        UMSsoHandler ssoHandler = mController.getConfig().getSsoHandler(requestCode);
+        if(ssoHandler != null){
+            ssoHandler.authorizeCallBack(requestCode, resultCode, data);
+        }
     }
 
     // ========================================= Volley  login ===================================//
