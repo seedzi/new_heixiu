@@ -41,6 +41,7 @@ import com.xiuxiuchat.easeim.widget.ChatRowVoiceCall;
 import com.xiuxiuchat.easeim.widget.ChatRowVoiceXiuxiu;
 import com.xiuxiuchat.easeim.xiuxiumsg.XiuxiuActionMsgManager;
 import com.xiuxiuchat.qupai.QuPaiManager;
+import com.xiuxiuchat.user.PersonDetailActivity;
 import com.xiuxiuchat.user.WalletActivity;
 import com.xiuxiuchat.user.invitation.AddFriendsPage;
 import com.xiuxiuchat.utils.ToastUtil;
@@ -329,6 +330,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     @Override
     public void onAvatarClick(String username) {
         android.util.Log.d(TAG, "onAvatarClick()");
+        PersonDetailActivity.startActivity(getActivity(),username,false);
     }
 
     @Override

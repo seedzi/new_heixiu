@@ -134,7 +134,7 @@ public class WealthHeadLayout extends RelativeLayout implements View.OnClickList
             return;
         }
         try{
-            PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), false);
+            PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), true);
         }catch (Exception e){}
     }
 }

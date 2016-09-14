@@ -87,7 +87,7 @@ public class WealthListManager implements PullToRefreshBase.OnRefreshListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try{
                     XiuxiuUserInfoResult xiuxiuUser = adapter.getItem(position-2);
-                    PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), false);
+                    PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), true);
                 }catch (Exception e){}
             }
         });

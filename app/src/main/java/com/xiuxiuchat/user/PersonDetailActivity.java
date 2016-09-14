@@ -66,9 +66,10 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
 
     private static String TAG = PersonDetailActivity.class.getSimpleName();
 
-    public static void startActivity(Context context,String xiuxiu_id,boolean isFromContactList){
+    public static void startActivity(Context context,String xiuxiu_id,boolean isShowBottomLayout){
         Intent intent = new Intent(context,PersonDetailActivity.class);
         intent.putExtra("xiuxiu_id", xiuxiu_id);
+        intent.putExtra("isShowBottomLayout", isShowBottomLayout);
         context.startActivity(intent);
     }
 
@@ -201,6 +202,12 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.xiuxiu_ta_layout).setVisibility(View.VISIBLE);
 
+        boolean isShowBottomLayout = getIntent ().getBooleanExtra("isShowBottomLayout",false);
+        if(isShowBottomLayout){
+            findViewById(R.id.bottom_layout).setVisibility(View.VISIBLE);
+        }else{
+            findViewById(R.id.bottom_layout).setVisibility(View.GONE);
+        }
     }
 
     /**

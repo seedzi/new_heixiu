@@ -88,7 +88,7 @@ public class OnLineListManager implements  PullToRefreshBase.OnRefreshListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 XiuxiuUserInfoResult xiuxiuUser = adapter.getItem(position-1);
-                PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(),false);
+                PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(),true);
             }
         });
         adapter = new OnLineAdapter(mAc);

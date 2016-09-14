@@ -134,7 +134,7 @@ public class CharmHeadLayout extends FrameLayout implements View.OnClickListener
             return;
         }
         try{
-            PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), false);
+            PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), true);
         }catch (Exception e){}
     }
 }

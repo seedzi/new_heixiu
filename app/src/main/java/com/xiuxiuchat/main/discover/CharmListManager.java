@@ -93,7 +93,7 @@ public class CharmListManager implements  PullToRefreshBase.OnRefreshListener {
                 try{
                     android.util.Log.d(TAG,"position = " + position);
                     XiuxiuUserInfoResult xiuxiuUser = adapter.getItem(position-2);
-                    PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), false);
+                    PersonDetailActivity.startActivity(MainActivity.getInstance(), xiuxiuUser.getXiuxiu_id(), true);
                 }catch (Exception e){
                     android.util.Log.d(TAG,"exception = " + e.toString());
                 }
