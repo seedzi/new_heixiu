@@ -30,6 +30,8 @@ import com.xiuxiuchat.api.HttpUrlManager;
 import com.xiuxiuchat.api.XiuxiuUserInfoResult;
 import com.xiuxiuchat.easeim.EaseUserCacheManager;
 import com.xiuxiuchat.easeim.XiuxiuCommonUtils;
+import com.xiuxiuchat.main.MainActivity;
+import com.xiuxiuchat.user.PersonDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +92,7 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
         // holder.list_itease_layout.setBackgroundResource(com.hyphenate.easeui.R.drawable.ease_mm_listitem);
 
         // 获取与此用户/群组的会话
-        EMConversation conversation = getItem(position);
+        final EMConversation conversation = getItem(position);
         // 获取用户username或者群组groupid
         String username = conversation.getUserName();
         if (conversation.getType() == EMConversation.EMConversationType.GroupChat) {
@@ -177,6 +179,13 @@ public class ConversationListAdapter extends ArrayAdapter<EMConversation> {
         if(timeSize != 0)
             holder.time.setTextSize(TypedValue.COMPLEX_UNIT_PX, timeSize);
         */
+
+        holder.avatar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                PersonDetailActivity.startActivity(MainActivity.getInstance(), conversation.getUserName(), true);
+            }
+        });
         return convertView;
 
     }
