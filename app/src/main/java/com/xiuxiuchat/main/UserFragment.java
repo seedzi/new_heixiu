@@ -135,6 +135,9 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         UiUtil.findImageViewById(mInviteFriendsLayout, R.id.img).setImageResource(R.drawable.user_icon_add_friends);
         UiUtil.findTextViewById(mInviteFriendsLayout, R.id.tag_txt).setText("邀请返现金");
         mInviteFriendsLayout.setOnClickListener(this);
+        //邀请朋友去掉了
+        mInviteFriendsLayout.setVisibility(View.GONE);
+        mRootView.findViewById(R.id.invite_friends_line).setVisibility(View.GONE);
 
         //意见反馈
         mSetUpLayout = (ViewGroup) mRootView.findViewById(R.id.feedback);

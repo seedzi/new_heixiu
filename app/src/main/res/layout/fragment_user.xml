@@ -108,6 +108,7 @@
         <include android:id="@+id/wallet" layout="@layout/user_item_layout"/>
 
         <View
+            android:id="@+id/invite_friends_line"
             android:layout_marginLeft="13dp"
             android:layout_width="match_parent"
             android:layout_height="1px"
