@@ -1,5 +1,7 @@
 package com.xiuxiuchat.Xiuxiubroadcast;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +11,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 
+import com.xiuxiuchat.CommonLib;
 import com.xiuxiuchat.R;
+import com.xiuxiuchat.XiuxiuApplication;
 import com.xiuxiuchat.api.XiuxiuUserInfoResult;
 import com.xiuxiuchat.base.BaseActivity;
 import com.xiuxiuchat.utils.ToastUtil;
@@ -66,12 +70,10 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                     public void run() {
                         XiuxiuUtils.dismisslProgressDialog();
                         if(mData==null){
-                            android.util.Log.d(TAG,"mData==null");
                             return;
                         }
                         List<String> urls = new ArrayList<String>();
                         for(XiuxiuUserInfoResult info:mData){
-                            android.util.Log.d(TAG,"info.getPic() = " + info.getPic());
                             urls.add(info.getPic());
                         }
                         mHeixiuHeadImgLayout.setData(urls);
@@ -106,9 +108,10 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                             mUiHandler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ToastUtil.showMessage(XiuxiuBroadCastPage.this,"今天咻广播已经发出");
+                                    ToastUtil.showMessage(XiuxiuBroadCastPage.this,"咻广播已经发出");
                                     XiuxiuBroadcastManager.getInstance().sendXiuxiuBroadcast(mData, mEdit.getText().toString());
                                     XiuxiuUtils.dismisslProgressDialog();
+                                    finish();
                                 }
                             });
                         }else{
@@ -125,6 +128,6 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                 }).start();
                 break;
         }
-
     }
+
 }
