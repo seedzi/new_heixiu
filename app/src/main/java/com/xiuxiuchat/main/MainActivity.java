@@ -8,11 +8,17 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.xiuxiuchat.R;
 import com.xiuxiuchat.base.BaseActivity;
 import com.xiuxiuchat.easeim.Constant;
+import com.xiuxiuchat.easeim.ImHelper;
 import com.xiuxiuchat.main.chat.ChatFragment;
 import com.xiuxiuchat.main.chat.ConversationListManager;
+
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -78,5 +84,60 @@ public class MainActivity extends BaseActivity {
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+    }
+
+    /**
+     * 消息监听者
+     */
+    EMMessageListener messageListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            // 提示新消息
+            for (EMMessage message : messages) {
+                ImHelper.getInstance().getNotifier().onNewMsg(message);
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageReadAckReceived(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {}
+    };
+
+    private void refreshUIWithMessage() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // 刷新bottom bar消息未读数
+//                updateUnreadLabel();
+                // 当前页面如果为聊天历史页面，刷新此页面
+                if(TabsFragmentManager.getInstance().getCurrentFragment()instanceof ChatFragment){
+                    ConversationListManager.getInstance().refresh();
+                }
+            }
+        });
     }
 }
