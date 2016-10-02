@@ -32,6 +32,7 @@ import com.xiuxiuchat.user.WealthLevelActivity;
 import com.xiuxiuchat.user.XiuxiuSettingsPage;
 import com.xiuxiuchat.user.invitation.InvitationPage;
 import com.xiuxiuchat.user.login.LoginPage;
+import com.xiuxiuchat.utils.ToastUtil;
 import com.xiuxiuchat.utils.UiUtil;
 
 import java.net.URLDecoder;
@@ -137,7 +138,7 @@ public class UserFragment extends Fragment implements View.OnClickListener{
         mInviteFriendsLayout.setOnClickListener(this);
         //邀请朋友去掉了
         mInviteFriendsLayout.setVisibility(View.GONE);
-        mRootView.findViewById(R.id.invite_friends_line).setVisibility(View.GONE);
+        mRootView.findViewById(R.id.invite_friends_line);
 
         //意见反馈
         mSetUpLayout = (ViewGroup) mRootView.findViewById(R.id.feedback);
@@ -243,7 +244,13 @@ public class UserFragment extends Fragment implements View.OnClickListener{
                 WalletActivity.startActivity(getActivity());
                 break;
             case R.id.xiuxiu_settings:
-                XiuxiuSettingsPage.startActivity(getActivity());
+                if(isFemale){
+                    if(XiuxiuUserInfoResult.getInstance().getCharmValue()>=3){
+                        XiuxiuSettingsPage.startActivity(getActivity());
+                    }else{
+                        ToastUtil.showMessage(getActivity(),"魅力等级达到３级才可以设置.");
+                    }
+                }
                 break;
             case R.id.feedback:
                 FeedbackAgent agent = new FeedbackAgent(getActivity());
