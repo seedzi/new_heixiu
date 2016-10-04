@@ -35,6 +35,7 @@ import java.util.List;
 
 import com.xiuxiuchat.api.HttpUrlManager;
 import com.xiuxiuchat.api.XiuxiuUserInfoResult;
+import com.xiuxiuchat.chat.im.ChatFragment;
 import com.xiuxiuchat.easeim.DataSyncManager;
 import com.xiuxiuchat.easeim.EaseUserCacheManager;
 import com.xiuxiuchat.user.invitation.InviteMessage.InviteMesageStatus;
@@ -103,7 +104,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			if(xiuxiuUserInfoResult!=null && xiuxiuUserInfoResult.getPics()!=null){
 				ImageLoader.getInstance().displayImage(HttpUrlManager.QI_NIU_HOST+ xiuxiuUserInfoResult.getPics().get(0),holder.avator);
 			}
-			android.util.Log.d("AAAAA","msg.getStatus() = " + msg.getStatus());
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
 			if (msg.getStatus() == InviteMesageStatus.BEAGREED) {
@@ -213,7 +213,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				}
 				// 调用sdk的同意方法
 				try {
-
+					ChatFragment.sendAgreeFriendMessage(msg.getFrom());
 					if (msg.getStatus() == InviteMesageStatus.BEINVITEED) {//同意好友请求
 						EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
 					} else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //同意加群申请

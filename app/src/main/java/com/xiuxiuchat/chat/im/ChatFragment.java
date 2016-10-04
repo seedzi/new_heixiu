@@ -40,6 +40,7 @@ import com.xiuxiuchat.easeim.widget.ChatRowVideoNv2NanXiuxiu;
 import com.xiuxiuchat.easeim.widget.ChatRowVoiceCall;
 import com.xiuxiuchat.easeim.widget.ChatRowVoiceXiuxiu;
 import com.xiuxiuchat.easeim.xiuxiumsg.XiuxiuActionMsgManager;
+import com.xiuxiuchat.main.chat.ContactListManager;
 import com.xiuxiuchat.qupai.QuPaiManager;
 import com.xiuxiuchat.user.PersonDetailActivity;
 import com.xiuxiuchat.user.WalletActivity;
@@ -212,6 +213,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     public void onResume() {
         super.onResume();
         XiuxiuActionMsgManager.getInstance().addListener(listener);
+
+        //是否是好友 目前暂时这样处理
+        if(ContactListManager.getInstance().isInContactList(username)){
+            getView().findViewById(R.id.right_layout).setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -762,5 +768,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
                 sendMessage(message);
             }
         }, getActivity());
+    }
+
+    /**
+     * 发送同意添加好友的消息
+     */
+    public static void sendAgreeFriendMessage(String toUsername){
+        EMMessage message = EMMessage.createTxtSendMessage("我已通过你的好友申请,可以聊天了.", toUsername);
+        EMClient.getInstance().chatManager().sendMessage(message);
     }
 }

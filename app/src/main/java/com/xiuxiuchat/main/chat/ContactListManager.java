@@ -199,6 +199,20 @@ public class ContactListManager {
         }
     }
 
+    public boolean isInContactList(String userName){
+        synchronized (this.contactsMap) {
+            if(contactList!=null){
+                for(EaseUser easeUser:contactList){
+                    if(easeUser!=null && easeUser.getUsername().equals(userName)){
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
 
     class ContactSyncListener implements ImHelper.DataSyncListener {
         @Override
