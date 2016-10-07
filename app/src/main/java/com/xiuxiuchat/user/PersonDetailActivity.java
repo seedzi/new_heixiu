@@ -300,6 +300,10 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null) { //是好友
+                    enterConversationPage(false);
+                    return;
+                }
                 if(mCallTimes<=0){
                     showConfirmDialog();
                 }else{

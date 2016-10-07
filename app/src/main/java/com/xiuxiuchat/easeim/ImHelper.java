@@ -196,7 +196,6 @@ public class ImHelper {
 
             @Override
             public void onCmdMessageReceived(List<EMMessage> messages) {
-                android.util.Log.d("12345","onCmdMessageReceived");
                 try {
                     for (EMMessage message : messages) {
                         //获取消息body
@@ -543,7 +542,7 @@ public class ImHelper {
             /*getUserProfileManager().getCurrentUserInfo();*/
         }
         user = getContactList().get(username);
-        if(user == null){
+        if(user == null || TextUtils.isEmpty(user.getAvatar())){
             XiuxiuUserInfoResult xiuxiuUserInfoResult = EaseUserCacheManager.getInstance().getBeanById(username);
             if(xiuxiuUserInfoResult!=null) {
                 user = XiuxiuUserInfoResult.toEaseUser(xiuxiuUserInfoResult);
@@ -859,7 +858,7 @@ public class ImHelper {
         }
 
         @Override
-        public void onContactAgreed(String username) {
+        public void onContactAgreed(final String username) {
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getFrom().equals(username)) {
@@ -874,6 +873,17 @@ public class ImHelper {
             msg.setStatus(InviteMesageStatus.BEAGREED);
             notifyNewIviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+
+
+
+            if(EaseUserCacheManager.getInstance().getBeanById(username)==null) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        XiuxiuApi.queryUserInfoSyn(username);
+                    }
+                }).start();
+            }
         }
 
         @Override
