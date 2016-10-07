@@ -116,11 +116,11 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                             });
                         }else{
                             mUiHandler.post(new Runnable() {
-
                                 @Override
                                 public void run() {
-                                    ToastUtil.showMessage(XiuxiuBroadCastPage.this, "今天咻广播次数已经用完");
+//                                    ToastUtil.showMessage(XiuxiuBroadCastPage.this, "今天咻广播次数已经用完");
                                     XiuxiuUtils.dismisslProgressDialog();
+                                    showConfirmDialog(null,XiuxiuBroadCastPage.this);
                                 }
                             });
                         }
@@ -130,4 +130,51 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
         }
     }
 
+
+
+    // ============================================================================================
+    // 确认付费对话框
+    // ============================================================================================
+    private void showConfirmDialog(final Runnable callback, final FragmentActivity ac) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ac);
+        builder.setMessage("咻咻广播次数已达到上限,确认付费购买吗？");
+        builder.setTitle("提示");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                XiuxiuUtils.showProgressDialog(ac);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final boolean isSccess = XiuxiuUtils.costUserCoin("call", "1");
+                        XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isSccess) {
+                                    if (callback != null) {
+                                        callback.run();
+                                    }
+                                } else {
+                                    if (CommonLib.isNetworkConnected(ac)) {
+                                        ToastUtil.showMessage(ac, "可能您的余额不够,支付失败,请您充值!");
+                                    } else {
+                                        ToastUtil.showMessage(ac, "网络连接错误!");
+                                    }
+                                }
+                                XiuxiuUtils.dismisslProgressDialog();
+                            }
+                        });
+                    }
+                }).start();
+
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
 }
