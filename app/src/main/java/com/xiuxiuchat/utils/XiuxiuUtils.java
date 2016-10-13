@@ -258,27 +258,6 @@ public class XiuxiuUtils {
     // ============================================================================================
     //　扣除咻咻b
     // ============================================================================================
-    public static void costUserCoinAsyn(final String costType,final String costCoin,final CallBack callBack){
-        if(callBack!=null){
-            callBack.onPre();
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(costUserCoin(costType,costCoin)){
-                    if(callBack!=null){
-                        callBack.onSccusee();
-                    }
-                }else{
-                    if(callBack!=null){
-                        callBack.onFailure();
-                    }
-                }
-            }
-        }).start();
-    }
-
-
     public static boolean costUserCoin(String costType,String costCoin){
         RequestFuture<String> future = RequestFuture.newFuture();
         XiuxiuApplication.getInstance().getQueue()

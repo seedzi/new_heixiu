@@ -255,7 +255,6 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
                 PersonDetailActivity.this,
                 result.getActive_time(),
                 R.string.date_fromate_anecdote);
-        android.util.Log.d("AAAA","getActive_time = " + result.getActive_time());
         mOnLineTime.setText(timeTxt);
 
         if(TextUtils.isEmpty(mXiuxiuUserInfoResult.getGet_gift())){
@@ -400,7 +399,8 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void refreshXiuxiuTimes(){
-        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null){ //是好友
+        //1.是好友  2.已经打过招呼
+        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null || XiuxiuSayHelloManager.getInstance().isCanSayHell(xiuxiuId)){
             ((TextView)((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(0)).setText("发消息");
             ((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(1).setVisibility(View.GONE);
             ((ViewGroup)findViewById(R.id.xiuxiu_ta_layout)).getChildAt(1).setVisibility(View.GONE);
