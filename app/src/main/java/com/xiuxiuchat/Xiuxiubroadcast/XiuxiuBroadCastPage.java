@@ -120,7 +120,13 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                                 public void run() {
 //                                    ToastUtil.showMessage(XiuxiuBroadCastPage.this, "今天咻广播次数已经用完");
                                     XiuxiuUtils.dismisslProgressDialog();
-                                    showConfirmDialog(null,XiuxiuBroadCastPage.this);
+                                    showConfirmDialog(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ToastUtil.showMessage(XiuxiuBroadCastPage.this,"咻广播已经发出");
+                                            finish();
+                                        }
+                                    }, XiuxiuBroadCastPage.this);
                                 }
                             });
                         }
