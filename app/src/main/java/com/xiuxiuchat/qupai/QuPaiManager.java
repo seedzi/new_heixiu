@@ -118,7 +118,7 @@ public class QuPaiManager {
                 }
                 @Override
                 public boolean hasImporter() {
-                    return true;//是否需要导入功能
+                    return false;//是否需要导入功能
                 }
                 @Override
                 public boolean hasGuide() {
