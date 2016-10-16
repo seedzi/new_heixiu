@@ -104,14 +104,13 @@ public class RegisterPage extends BaseActivity implements View.OnClickListener{
                                                 isEnterFirstLoginPage = true;
                                             }
                                         }
-                                        LoginUserDataEditPage.startActivity(RegisterPage.this);
-                                        /*
+//                                        LoginUserDataEditPage.startActivity(RegisterPage.this);
                                         if(res.getIsFirstLogin()|| isEnterFirstLoginPage){
                                             LoginUserDataEditPage.startActivity(RegisterPage.this);
                                         }else {
                                             finish();
                                             MainActivity.startActivity(RegisterPage.this);
-                                        }*/
+                                        }
                                     }
                                 });
                             }

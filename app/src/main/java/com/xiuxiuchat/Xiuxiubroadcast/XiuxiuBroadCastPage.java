@@ -152,7 +152,7 @@ public class XiuxiuBroadCastPage extends BaseActivity implements View.OnClickLis
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final boolean isSccess = XiuxiuUtils.costUserCoin("call", "1");
+                        final boolean isSccess = XiuxiuUtils.costUserCoin("3", "3");
                         XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                             @Override
                             public void run() {

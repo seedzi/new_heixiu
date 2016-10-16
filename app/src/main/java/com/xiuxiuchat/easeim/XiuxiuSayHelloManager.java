@@ -185,7 +185,7 @@ public class XiuxiuSayHelloManager {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final boolean isSccess = XiuxiuUtils.costUserCoin("call", "1");
+                        final boolean isSccess = XiuxiuUtils.costUserCoin("1", "1");
                         XiuxiuApplication.getInstance().getUIHandler().post(new Runnable() {
                             @Override
                             public void run() {

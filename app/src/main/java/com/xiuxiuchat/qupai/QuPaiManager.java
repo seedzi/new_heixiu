@@ -180,17 +180,6 @@ public class QuPaiManager {
     /**
      * 进入录制页面
      */
-    public void showRecordPage(Fragment f,int requestCode){
-        if(mQupaiService==null){
-            android.util.Log.d(TAG,"showRecordPage==NULL");
-            return;
-        }
-//        mQupaiService.showRecordPage(f, requestCode, false);
-    }
-
-    /**
-     * 进入录制页面
-     */
     public void showRecordPage(android.app.Fragment f,int requestCode){
         if(mQupaiService==null){
             android.util.Log.d(TAG,"showRecordPage==NULL");
