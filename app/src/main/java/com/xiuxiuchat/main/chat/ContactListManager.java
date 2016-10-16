@@ -200,6 +200,9 @@ public class ContactListManager {
     }
 
     public boolean isInContactList(String userName){
+        if(this.contactsMap==null){
+            return false;
+        }
         synchronized (this.contactsMap) {
             if(contactList!=null){
                 for(EaseUser easeUser:contactList){

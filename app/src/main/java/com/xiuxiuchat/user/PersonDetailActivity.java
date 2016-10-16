@@ -299,7 +299,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
         findViewById(R.id.say_hello_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null) { //是好友
+                if(XiuxiuSayHelloManager.getInstance().isCanSayHell(xiuxiuId)) {
                     enterConversationPage(false);
                     return;
                 }
@@ -400,7 +400,7 @@ public class PersonDetailActivity extends BaseActivity implements View.OnClickLi
 
     private void refreshXiuxiuTimes(){
         //1.是好友  2.已经打过招呼
-        if(ImHelper.getInstance().getContactList().get(xiuxiuId)!=null || XiuxiuSayHelloManager.getInstance().isCanSayHell(xiuxiuId)){
+        if( XiuxiuSayHelloManager.getInstance().isCanSayHell(xiuxiuId)){
             ((TextView)((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(0)).setText("发消息");
             ((ViewGroup)findViewById(R.id.say_hello_layout)).getChildAt(1).setVisibility(View.GONE);
             ((ViewGroup)findViewById(R.id.xiuxiu_ta_layout)).getChildAt(1).setVisibility(View.GONE);
