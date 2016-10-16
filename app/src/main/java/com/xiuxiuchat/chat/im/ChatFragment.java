@@ -565,6 +565,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
         message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_TXT_CONTENT, xiuxiuTaskBean.content);
         message.setAttribute(EaseConstant.MESSAGE_ATTR_XIUXIU_B_SIZE,xiuxiuTaskBean.xiuxiub);
         sendMessage(message);
+
+        QuPaiManager.getInstance().upload(new File(xiuxiuTaskBean.videoPath), new File(xiuxiuTaskBean.thumbPath)); //上传到服务器
     }
 
 

@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.duanqu.qupai.auth.AuthService;
 import com.duanqu.qupai.auth.QupaiAuthListener;
+import com.duanqu.qupai.bean.QupaiUploadTask;
 import com.duanqu.qupai.engine.session.MovieExportOptions;
 import com.duanqu.qupai.engine.session.ProjectOptions;
 import com.duanqu.qupai.engine.session.ThumbnailExportOptions;
@@ -15,9 +16,14 @@ import com.duanqu.qupai.engine.session.UISettings;
 import com.duanqu.qupai.engine.session.VideoSessionCreateInfo;
 import com.duanqu.qupai.sdk.android.QupaiManager;
 import com.duanqu.qupai.sdk.android.QupaiService;
+import com.duanqu.qupai.upload.QupaiUploadListener;
+import com.duanqu.qupai.upload.UploadService;
 import com.xiuxiuchat.SharePreferenceWrap;
 import com.xiuxiuchat.XiuxiuApplication;
 import com.xiuxiuchat.api.XiuxiuLoginResult;
+
+import java.io.File;
+import java.util.UUID;
 
 /**
  * Created by huzhi on 16-7-23.
@@ -29,7 +35,6 @@ public class QuPaiManager {
     private static final String TAG = QuPaiManager.class.getSimpleName();
 
     private static final String KEY_ACCESS_TOKEN = "access_toke";
-
 
     private static QuPaiManager mInstance;
 
@@ -196,4 +201,32 @@ public class QuPaiManager {
         sharePreferenceWrap.putString(KEY_ACCESS_TOKEN, "");
         mQupaiService = null;
     }
+
+    public void upload(final File _VideoFile,final File _Thumbnail){
+        String sapce =  "xiuxiu_id_" + XiuxiuLoginResult.getInstance().getXiuxiu_id();
+        android.util.Log.d(TAG,"upload");
+        UploadService uploadService = UploadService.getInstance();
+            uploadService.setQupaiUploadListener(new QupaiUploadListener() {
+                @Override
+                public void onUploadProgress(String uuid, long uploadedBytes, long totalBytes) {
+                    android.util.Log.d(TAG,"onUploadProgress");
+                }
+                @Override
+                public void onUploadError(String uuid, int errorCode, String message) {
+                    android.util.Log.d(TAG,"onUploadError message = " + message);
+                }
+                @Override
+                public void onUploadComplte(String uuid, int responseCode, String responseMessage) {
+                    android.util.Log.d(TAG,"onUploadComplte");
+                }
+            });
+            String uuid = UUID.randomUUID().toString();
+            QupaiUploadTask task = uploadService.createTask(XiuxiuApplication.getInstance().getApplicationContext()
+                , uuid, _VideoFile, _Thumbnail, mAccessToken, sapce, 0, "video", "video");
+            try {
+                uploadService.startUpload(task);
+            } catch (IllegalArgumentException exc) {
+                android.util.Log.d(TAG,"exc = " + exc.getMessage());
+            }
+        }
 }
